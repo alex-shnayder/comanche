@@ -1,0 +1,27 @@
+{
+  "name": "comanche",
+  "version": "0.0.0",
+  "description": "",
+  "repository": "alex-shnayder/comanche",
+  "homepage": "https://github.com/alex-shnayder/comanche#readme",
+  "bugs": "https://github.com/alex-shnayder/comanche/issues",
+  "license": "ISC",
+  "scripts": {
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write --print-width 80 --tab-width 2 --no-semi --single-quote --trailing-comma=es5",
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "main": "src/index.js",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-plugin-import": "^2.2.0",
+    "husky": "^0.13.3",
+    "lint-staged": "^3.4.0",
+    "prettier": "^1.2.2"
+  }
+}
