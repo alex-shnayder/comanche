@@ -54,7 +54,7 @@ module.exports = class Option {
   alias(alias) {
     let isArray = Array.isArray(alias)
 
-    if (typeof alias !== 'string' || !isArray) {
+    if (typeof alias !== 'string' && !isArray) {
       throw new TypeError(
         'The argument to alias() must be either a string or a non-empty array'
       )

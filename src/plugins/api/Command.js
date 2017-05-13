@@ -114,8 +114,8 @@ class Command {
     return Object.assign(
       {
         names,
-        commands: this.commands.map((command) => command.build()),
-        options: this.options.map((option) => option.build()),
+        commands: this.commands.map((command) => command.getConfig()),
+        options: this.options.map((option) => option.getConfig()),
       },
       this.config
     )
