@@ -2,12 +2,11 @@ const Command = require('./Command')
 const Option = require('./Option')
 
 class ExecutableCommand extends Command {
-  constructor(lifecycle, name, parent) {
-    super(name, parent)
-    this.lifecycle = lifecycle
-  }
-
   on(command, handler) {
+    if (!this.lifecycle) {
+      throw new Error('on() cannot be used on a non-executable command')
+    }
+
     if (typeof command !== 'string' || !command) {
       throw new TypeError('A command must be a string')
     }
@@ -22,10 +21,18 @@ class ExecutableCommand extends Command {
   }
 
   run(command, options) {
+    if (!this.lifecycle) {
+      throw new Error('run() cannot be used on a non-executable command')
+    }
+
     return this.lifecycle.tootAsync('run', command, options)
   }
 
   start() {
+    if (!this.lifecycle) {
+      throw new Error('start() cannot be used on a non-executable command')
+    }
+
     return this.lifecycle.tootSync('start', this.getConfig())
   }
 }

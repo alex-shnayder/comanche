@@ -2,6 +2,13 @@ const { next } = require('hooter/effects')
 const ExecutableCommand = require('./ExecutableCommand')
 
 module.exports = function apiPlugin(lifecycle) {
+  class ComancheApp extends ExecutableCommand {
+    constructor(...args) {
+      super(...args)
+      this.lifecycle = lifecycle
+    }
+  }
+
   lifecycle.hook('init', function* (Class) {
     if (Class) {
       console.warn(
@@ -10,6 +17,6 @@ module.exports = function apiPlugin(lifecycle) {
       )
     }
 
-    return yield next(ExecutableCommand.bind(null, lifecycle))
+    return yield next(ComancheApp)
   })
 }
