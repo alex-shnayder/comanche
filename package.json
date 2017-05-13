@@ -6,6 +6,15 @@
   "homepage": "https://github.com/alex-shnayder/comanche#readme",
   "bugs": "https://github.com/alex-shnayder/comanche/issues",
   "license": "ISC",
+  "keywords": [
+    "cli",
+    "bin",
+    "args",
+    "argv",
+    "command",
+    "cmd",
+    "console"
+  ],
   "scripts": {
     "precommit": "lint-staged"
   },
@@ -23,5 +32,8 @@
     "husky": "^0.13.3",
     "lint-staged": "^3.4.0",
     "prettier": "^1.2.2"
+  },
+  "dependencies": {
+    "hooter": "^0.11.0"
   }
 }
