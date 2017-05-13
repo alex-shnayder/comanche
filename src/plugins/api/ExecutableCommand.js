@@ -3,12 +3,16 @@ const Option = require('./Option')
 
 class ExecutableCommand extends Command {
   on(command, handler) {
-    if (!this.lifecycle) {
-      throw new Error('on() cannot be used on a non-executable command')
+    if (!this.lifecycle || this.parent) {
+      throw new Error('on() can only be used on the root command (the app)')
     }
 
     if (typeof command !== 'string' || !command) {
       throw new TypeError('A command must be a string')
+    }
+
+    if (command.includes('*') || command.includes(' ')) {
+      throw new TypeError('A command must not contain asterisks or spaces')
     }
 
     if (typeof handler !== 'function') {
@@ -21,16 +25,16 @@ class ExecutableCommand extends Command {
   }
 
   run(command, options) {
-    if (!this.lifecycle) {
-      throw new Error('run() cannot be used on a non-executable command')
+    if (!this.lifecycle || this.parent) {
+      throw new Error('run() can only be used on the root command (the app)')
     }
 
     return this.lifecycle.tootAsync('run', command, options)
   }
 
   start() {
-    if (!this.lifecycle) {
-      throw new Error('start() cannot be used on a non-executable command')
+    if (!this.lifecycle || this.parent) {
+      throw new Error('start() can only be used on the root command (the app)')
     }
 
     return this.lifecycle.tootSync('start', this.getConfig())

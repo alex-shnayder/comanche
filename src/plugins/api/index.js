@@ -2,7 +2,7 @@ const { next } = require('hooter/effects')
 const ExecutableCommand = require('./ExecutableCommand')
 
 module.exports = function apiPlugin(lifecycle) {
-  class ComancheApp extends ExecutableCommand {
+  class ExecutableCommandWithLifecycle extends ExecutableCommand {
     constructor(...args) {
       super(...args)
       this.lifecycle = lifecycle
@@ -17,6 +17,6 @@ module.exports = function apiPlugin(lifecycle) {
       )
     }
 
-    return yield next(ComancheApp)
+    return yield next(ExecutableCommandWithLifecycle)
   })
 }
