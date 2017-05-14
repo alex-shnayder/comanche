@@ -35,7 +35,9 @@ class Option {
     }
 
     this.command = command
-    this.config = {}
+    this.config = {
+      type: 'boolean',
+    }
     this.set(config)
   }
 
@@ -112,6 +114,18 @@ class Option {
     value = arguments.length === 0 ? false : value
     this.config.required = value
     return this
+  }
+
+  type(type) {
+    if (!type || typeof type !== 'string') {
+      throw new TypeError('A type must be a non-empty string')
+    }
+
+    this.config.type = type
+  }
+
+  option(...args) {
+    return this.command.option(...args)
   }
 
   getConfig() {
