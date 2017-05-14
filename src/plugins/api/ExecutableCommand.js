@@ -9,11 +9,19 @@ class ExecutableCommand extends Command {
     }
 
     if (typeof command !== 'string' || !command) {
-      throw new TypeError('A command must be a string')
+      throw new TypeError('A command pattern must be a string')
     }
 
-    if (command.includes('*') || command.includes(' ')) {
-      throw new TypeError('A command must not contain asterisks or spaces')
+    if (!/[a-z0-9._-]/.test(command)) {
+      throw new Error(
+        'A command pattern can only contain letters, numbers, underscores, hyphens and dots'
+      )
+    }
+
+    if (command.charAt(0) === '-') {
+      throw new Error(
+        'A hyphen is not allowed as the first character of a command pattern'
+      )
     }
 
     if (typeof handler !== 'function') {

@@ -1,3 +1,19 @@
+const paramCase = require('param-case')
+
+function normalizeName(value, entity) {
+  if (typeof value !== 'string' || value.length === 0) {
+    throw new Error(`A command ${entity} must be a non-empty string`)
+  }
+
+  if (value.charAt(0) === '-') {
+    throw new Error(
+      `A hyphen is not allowed as the first character of a command ${entity}`
+    )
+  }
+
+  return paramCase(value)
+}
+
 class Command {
   constructor(name, parent) {
     if (!name) {
@@ -61,11 +77,7 @@ class Command {
   }
 
   name(name) {
-    if (typeof name !== 'string' || name.length === 0) {
-      throw new TypeError('A name must be a non-empty string')
-    }
-
-    this.config.name = name
+    this.config.name = normalizeName(name, 'name')
     return this
   }
 
@@ -74,15 +86,17 @@ class Command {
 
     if (typeof alias !== 'string' || !isArray) {
       throw new TypeError(
-        'The argument to alias() must be either a string or a non-empty array'
+        'The argument of alias() must be either a string or an array'
       )
     }
 
-    if (alias.length === 0) {
-      throw new Error('The argument to alias() must not be empty')
+    if (isArray) {
+      alias = [normalizeName(alias, 'alias')]
+    } else {
+      alias = alias.map((a) => normalizeName(a, 'alias'))
     }
 
-    this.config.alias = isArray ? alias : [alias]
+    this.config.alias = alias
     return this
   }
 

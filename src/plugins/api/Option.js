@@ -1,4 +1,28 @@
-module.exports = class Option {
+const paramCase = require('param-case')
+
+function normalizeName(value, entity) {
+  if (typeof value !== 'string' || value.length === 0) {
+    throw new Error(`An option ${entity} must be a non-empty string`)
+  }
+
+  if (value.charAt(0) === '-') {
+    value = value.substr(1)
+  }
+
+  if (value.charAt(0) === '-') {
+    value = value.substr(1)
+  }
+
+  if (value.charAt(0) === '-') {
+    throw new Error(
+      `A hyphen is not allowed as the first character of an option ${entity}`
+    )
+  }
+
+  return paramCase(value)
+}
+
+class Option {
   constructor(name, command) {
     if (!name) {
       throw new Error('Either a name or config is required to define an option')
@@ -38,15 +62,11 @@ module.exports = class Option {
   }
 
   name(name) {
-    if (typeof name !== 'string' || name.length === 0) {
-      throw new TypeError('A name must be a non-empty string')
-    }
+    name = normalizeName(name, 'name')
 
     let config = this.config
     config.name = name
-    config.names = config.aliases
-      ? [config.name, ...config.aliases]
-      : [config.name]
+    config.names = config.alias ? [config.name, ...config.alias] : [config.name]
 
     return this
   }
@@ -54,21 +74,21 @@ module.exports = class Option {
   alias(alias) {
     let isArray = Array.isArray(alias)
 
-    if (typeof alias !== 'string' && !isArray) {
+    if (typeof alias !== 'string' || !isArray) {
       throw new TypeError(
-        'The argument to alias() must be either a string or a non-empty array'
+        'The argument of alias() must be either a string or an array'
       )
     }
 
-    if (alias.length === 0) {
-      throw new Error('The argument to alias() must not be empty')
+    if (isArray) {
+      alias = [normalizeName(alias, 'alias')]
+    } else {
+      alias = alias.map((a) => normalizeName(a, 'alias'))
     }
 
     let config = this.config
-    config.aliases = isArray ? alias : [alias]
-    config.names = config.aliases
-      ? [config.name, ...config.aliases]
-      : [config.name]
+    config.alias = isArray ? alias : [alias]
+    config.names = config.alias ? [config.name, ...config.alias] : [config.name]
 
     return this
   }
@@ -83,7 +103,13 @@ module.exports = class Option {
   }
 
   required(value) {
-    value = arguments.length === 0 || value ? true : false
+    if (typeof value !== 'undefined' && typeof value !== 'boolean') {
+      throw new Error(
+        'The argument of required() must be either boolean or undefined'
+      )
+    }
+
+    value = arguments.length === 0 ? false : value
     this.config.required = value
     return this
   }
@@ -92,3 +118,5 @@ module.exports = class Option {
     return Object.assign({}, this.config)
   }
 }
+
+module.exports = Option
