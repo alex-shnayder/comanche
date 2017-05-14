@@ -84,16 +84,16 @@ class Command {
   alias(alias) {
     let isArray = Array.isArray(alias)
 
-    if (typeof alias !== 'string' || !isArray) {
+    if (typeof alias !== 'string' && !isArray) {
       throw new TypeError(
         'The argument of alias() must be either a string or an array'
       )
     }
 
     if (isArray) {
-      alias = [normalizeName(alias, 'alias')]
-    } else {
       alias = alias.map((a) => normalizeName(a, 'alias'))
+    } else {
+      alias = [normalizeName(alias, 'alias')]
     }
 
     this.config.alias = alias
