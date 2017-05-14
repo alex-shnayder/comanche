@@ -1,3 +1,4 @@
+const { next } = require('hooter/effects')
 const Command = require('./Command')
 const Option = require('./Option')
 
@@ -19,17 +20,22 @@ class ExecutableCommand extends Command {
       throw new TypeError('A handler must be a function')
     }
 
-    return this.lifecycle.filter(`invoke.${command}`).subscribe((e) => {
-      return handler(...e.args)
+    return this.lifecycle.hook(`invoke.${command}`, function* (
+      options,
+      context,
+      ...args
+    ) {
+      context = yield handler(options, context, ...args)
+      return yield next(options, context, ...args).or(context)
     })
   }
 
-  run(command, options) {
+  run(command, options, context) {
     if (!this.lifecycle || this.parent) {
       throw new Error('run() can only be used on the root command (the app)')
     }
 
-    return this.lifecycle.tootAsync('run', command, options)
+    return this.lifecycle.tootAsync('run', [{ command, options }], context)
   }
 
   start() {

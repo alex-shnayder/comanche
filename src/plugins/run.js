@@ -1,26 +1,24 @@
 const { next } = require('hooter/effects')
 
 module.exports = function runPlugin(lifecycle) {
-  lifecycle.hookBefore('run', function* (command, options) {
-    // Make sure options are always an object
-
-    if (typeof command !== 'string' || !command) {
-      throw new TypeError('A command must be a string')
+  lifecycle.hookBefore('run', function* (commands) {
+    if (!Array.isArray(commands) || commands.length === 0) {
+      throw new Error('The first argument of run must be an array of commands')
     }
 
-    if (/[\s*]/.test(command)) {
-      throw new Error('A command must not contain spaces or asterisks')
-    }
-
-    if (options && typeof options !== 'object') {
-      throw new TypeError('Options must be an object')
-    }
-
-    return yield next(command, options || {})
+    return yield next(commands)
   })
 
-  lifecycle.hookAfter('run', function* (command, options) {
-    yield lifecycle.toot('validate', command, options)
-    yield lifecycle.toot(`invoke.${command}`, options)
+  lifecycle.hookAfter('run', function* (commands) {
+    yield lifecycle.toot('validate', commands)
+
+    let context
+
+    for (let i = 0; i < commands.length; i++) {
+      let { command, options } = commands[i]
+      context = yield lifecycle.toot(`invoke.${command}`, options, context)
+    }
+
+    return context
   })
 }
