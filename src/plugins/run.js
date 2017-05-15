@@ -11,8 +11,6 @@ module.exports = function runPlugin(lifecycle) {
   })
 
   lifecycle.hookAfter('run', function* (commands) {
-    yield lifecycle.toot('validate', commands)
-
     let context
 
     for (let i = 0; i < commands.length; i++) {
