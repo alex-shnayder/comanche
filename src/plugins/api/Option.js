@@ -1,5 +1,3 @@
-const { normalizeOptionName: normalizeName } = require('../../common')
-
 function validateName(name) {
   if (typeof name !== 'string' || name.length === 0) {
     throw new Error('An option name or alias must be a non-empty string')
@@ -16,6 +14,18 @@ function validateName(name) {
       'An option name or alias may only contain letters, numbers, underscores and hyphens'
     )
   }
+}
+
+function normalizeName(name) {
+  if (name.charAt(0) === '-') {
+    name = name.substr(1)
+  }
+
+  if (name.charAt(0) === '-') {
+    name = name.substr(1)
+  }
+
+  return name
 }
 
 function normalizeAndValidateName(name) {

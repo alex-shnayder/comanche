@@ -1,7 +1,6 @@
 const { next } = require('hooter/effects')
 const Command = require('./Command')
 const Option = require('./Option')
-const { normalizeCommandName } = require('../../common')
 
 class ExecutableCommand extends Command {
   on(command, handler) {
@@ -28,8 +27,6 @@ class ExecutableCommand extends Command {
     if (typeof handler !== 'function') {
       throw new TypeError('A handler must be a function')
     }
-
-    command = command.split('.').map((c) => normalizeCommandName(c)).join('.')
 
     return this.lifecycle.hook(`invoke.${command}`, function* (
       options,

@@ -1,5 +1,3 @@
-const { normalizeCommandName: normalizeName } = require('../../common')
-
 function validateName(name) {
   if (typeof name !== 'string' || name.length === 0) {
     throw new Error('A command name or alias must be a non-empty string')
@@ -16,12 +14,6 @@ function validateName(name) {
       'A command name or alias may only contain letters, numbers, underscores and hyphens'
     )
   }
-}
-
-function normalizeAndValidateName(name) {
-  name = normalizeName(name)
-  validateName(name)
-  return name
 }
 
 class Command {
@@ -87,7 +79,8 @@ class Command {
   }
 
   name(name) {
-    this.config.name = normalizeAndValidateName(name)
+    validateName(name)
+    this.config.name = name
     return this
   }
 
@@ -101,9 +94,10 @@ class Command {
     }
 
     if (isArray) {
-      alias = alias.map((a) => normalizeAndValidateName(a))
+      alias.forEach((a) => validateName(a))
     } else {
-      alias = [normalizeAndValidateName(alias)]
+      validateName(alias)
+      alias = [alias]
     }
 
     this.config.alias = alias
