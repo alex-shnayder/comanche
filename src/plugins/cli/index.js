@@ -1,7 +1,13 @@
 const { next } = require('hooter/effects')
 const parseArgs = require('./parseArgs')
+const extendApi = require('./extendApi')
 
 module.exports = function cliPlugin(lifecycle) {
+  lifecycle.hook('init', function* (BaseClass) {
+    let NewClass = extendApi(BaseClass)
+    return yield next(NewClass)
+  })
+
   lifecycle.hook('start', function* (config) {
     yield next(config)
 
