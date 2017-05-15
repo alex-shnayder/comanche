@@ -46,6 +46,11 @@ class ExecutableCommand extends Command {
       throw new Error('run() can only be used on the root command (the app)')
     }
 
+    if (typeof command !== 'string' || command.length === 0) {
+      throw new Error('A command must be a non-empty string')
+    }
+
+    options = options || {}
     return this.lifecycle.tootAsync('run', [{ command, options }], context)
   }
 

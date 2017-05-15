@@ -10,6 +10,12 @@ function validateName(name) {
       'A hyphen is not allowed as the first character of an option name or alias'
     )
   }
+
+  if (!/[a-z0-9_-]/.test(name)) {
+    throw new Error(
+      'An option name or alias may only contain letters, numbers, underscores and hyphens'
+    )
+  }
 }
 
 function normalizeAndValidateName(name) {
