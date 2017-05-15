@@ -100,14 +100,11 @@ class Option {
     return this
   }
 
-  required(value) {
-    if (typeof value !== 'undefined' && typeof value !== 'boolean') {
-      throw new Error(
-        'The argument of required() must be either boolean or undefined'
-      )
+  required(value = true) {
+    if (typeof value !== 'boolean') {
+      throw new Error('The argument of required() must be boolean')
     }
 
-    value = arguments.length === 0 ? false : value
     this.config.required = value
     return this
   }
