@@ -34,7 +34,7 @@
     "prettier": "^1.2.2"
   },
   "dependencies": {
-    "hooter": "^0.11.0",
-    "param-case": "^2.1.1"
+    "camel-case": "^3.0.0",
+    "hooter": "^0.11.0"
   }
 }

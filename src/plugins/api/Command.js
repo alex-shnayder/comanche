@@ -1,17 +1,21 @@
-const paramCase = require('param-case')
+const { normalizeCommandName: normalizeName } = require('../../common')
 
-function normalizeName(value, entity) {
-  if (typeof value !== 'string' || value.length === 0) {
-    throw new Error(`A command ${entity} must be a non-empty string`)
+function validateName(name) {
+  if (typeof name !== 'string' || name.length === 0) {
+    throw new Error('A command name or alias must be a non-empty string')
   }
 
-  if (value.charAt(0) === '-') {
+  if (name.charAt(0) === '-') {
     throw new Error(
-      `A hyphen is not allowed as the first character of a command ${entity}`
+      'A hyphen is not allowed as the first character of a command name or alias'
     )
   }
+}
 
-  return paramCase(value)
+function normalizeAndValidateName(name) {
+  name = normalizeName(name)
+  validateName(name)
+  return name
 }
 
 class Command {
@@ -77,7 +81,7 @@ class Command {
   }
 
   name(name) {
-    this.config.name = normalizeName(name, 'name')
+    this.config.name = normalizeAndValidateName(name)
     return this
   }
 
@@ -91,9 +95,9 @@ class Command {
     }
 
     if (isArray) {
-      alias = alias.map((a) => normalizeName(a, 'alias'))
+      alias = alias.map((a) => normalizeAndValidateName(a))
     } else {
-      alias = [normalizeName(alias, 'alias')]
+      alias = [normalizeAndValidateName(alias)]
     }
 
     this.config.alias = alias

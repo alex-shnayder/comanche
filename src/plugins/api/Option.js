@@ -1,25 +1,21 @@
-const paramCase = require('param-case')
+const { normalizeOptionName: normalizeName } = require('../../common')
 
-function normalizeName(value, entity) {
-  if (typeof value !== 'string' || value.length === 0) {
-    throw new Error(`An option ${entity} must be a non-empty string`)
+function validateName(name) {
+  if (typeof name !== 'string' || name.length === 0) {
+    throw new Error('An option name or alias must be a non-empty string')
   }
 
-  if (value.charAt(0) === '-') {
-    value = value.substr(1)
-  }
-
-  if (value.charAt(0) === '-') {
-    value = value.substr(1)
-  }
-
-  if (value.charAt(0) === '-') {
+  if (name.charAt(0) === '-') {
     throw new Error(
-      `A hyphen is not allowed as the first character of an option ${entity}`
+      'A hyphen is not allowed as the first character of an option name or alias'
     )
   }
+}
 
-  return paramCase(value)
+function normalizeAndValidateName(name) {
+  name = normalizeName(name)
+  validateName(name)
+  return name
 }
 
 class Option {
@@ -64,7 +60,7 @@ class Option {
   }
 
   name(name) {
-    name = normalizeName(name, 'name')
+    name = normalizeAndValidateName(name)
 
     let config = this.config
     config.name = name
@@ -83,9 +79,9 @@ class Option {
     }
 
     if (isArray) {
-      alias = alias.map((a) => normalizeName(a, 'alias'))
+      alias = alias.map((a) => normalizeAndValidateName(a))
     } else {
-      alias = [normalizeName(alias, 'alias')]
+      alias = [normalizeAndValidateName(alias)]
     }
 
     let config = this.config
