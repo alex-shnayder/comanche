@@ -42,6 +42,7 @@ function extractOptions(options) {
       positionalOptions.push(option)
     }
   })
+
   return { positionalOptions, optionsByName }
 }
 

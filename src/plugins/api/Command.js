@@ -11,7 +11,7 @@ function validateName(name) {
 
   if (!/[a-z0-9_-]/.test(name)) {
     throw new Error(
-      'A command name or alias may only contain letters, numbers, underscores and hyphens'
+      'A command name or alias may only contain lowercase letters, numbers, underscores and hyphens'
     )
   }
 }
