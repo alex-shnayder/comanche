@@ -9,10 +9,12 @@ module.exports = function cliPlugin(lifecycle) {
   })
 
   lifecycle.hook('start', function* (config) {
-    yield next(config)
+    config = yield next(config)
 
     let args = process.argv.slice(2)
     let commands = parseArgs(args, config)
     lifecycle.tootAsync('run', commands)
+
+    return config
   })
 }

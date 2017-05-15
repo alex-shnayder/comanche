@@ -56,7 +56,11 @@ class ExecutableCommand extends Command {
       throw new Error('start() can only be used on the root command (the app)')
     }
 
-    return this.lifecycle.tootSync('start', this.getConfig())
+    return this.lifecycle.tootSyncWith(
+      'start',
+      (config) => config,
+      this.getConfig()
+    )
   }
 }
 
