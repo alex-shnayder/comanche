@@ -131,6 +131,7 @@ class Option {
     }
 
     this.config.type = type
+    return this
   }
 
   command(...args) {

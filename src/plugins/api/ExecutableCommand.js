@@ -28,7 +28,7 @@ class ExecutableCommand extends Command {
       throw new TypeError('A handler must be a function')
     }
 
-    return this.lifecycle.hook(`invoke.${command}`, function* (
+    this.lifecycle.hook(`invoke.${command}`, function* (
       options,
       context,
       ...args
@@ -36,6 +36,8 @@ class ExecutableCommand extends Command {
       context = yield handler(options, context, ...args)
       return yield next(options, context, ...args).or(context)
     })
+
+    return this
   }
 
   run(command, options, context) {
