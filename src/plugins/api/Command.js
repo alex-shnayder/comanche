@@ -125,6 +125,10 @@ class Command {
     return option
   }
 
+  end() {
+    return this.parent
+  }
+
   getConfig() {
     let config = this.config
     let names = config.alias ? [config.name, ...config.alias] : [config.name]

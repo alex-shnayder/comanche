@@ -137,6 +137,10 @@ class Option {
     return this.command.option(...args)
   }
 
+  end() {
+    return this.command
+  }
+
   getConfig() {
     return Object.assign({}, this.config)
   }
