@@ -35,7 +35,7 @@ function normalizeAndValidateName(name) {
 }
 
 class Option {
-  constructor(name, command) {
+  constructor(name, parent) {
     if (!name) {
       throw new Error('Either a name or config is required to define an option')
     }
@@ -46,7 +46,7 @@ class Option {
       throw new Error('A name is required to define an option')
     }
 
-    this.command = command
+    this.parent = parent
     this.config = {
       type: 'boolean',
     }
@@ -133,12 +133,16 @@ class Option {
     this.config.type = type
   }
 
+  command(...args) {
+    return this.parent.command(...args)
+  }
+
   option(...args) {
-    return this.command.option(...args)
+    return this.parent.option(...args)
   }
 
   end() {
-    return this.command
+    return this.parent
   }
 
   getConfig() {
