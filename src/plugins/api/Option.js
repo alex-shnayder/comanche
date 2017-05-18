@@ -149,10 +149,7 @@ class Option {
   }
 
   getConfig() {
-    let config = this.config
-    let names = config.alias ? [config.name, ...config.alias] : [config.name]
-
-    return Object.assign({ names }, config)
+    return Object.assign({}, this.config)
   }
 }
 

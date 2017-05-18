@@ -169,14 +169,13 @@ class Command {
     let config = this.config
     let sharedConfig = this.parent ? this.parent.getSharedConfig() : {}
 
-    let names = config.alias ? [config.name, ...config.alias] : [config.name]
     let commands = this.commands.map((command) => {
       return Object.assign(sharedConfig, command.getConfig())
     })
     let options = this.parent ? this.parent.getSharedOptions() : []
     options = options.concat(this.options).map((option) => option.getConfig())
 
-    return Object.assign({ names, commands, options }, config)
+    return Object.assign({ commands, options }, config)
   }
 }
 

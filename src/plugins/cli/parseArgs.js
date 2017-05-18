@@ -36,7 +36,8 @@ function extractOptions(options) {
   let optionsByName = {}
 
   options.forEach((option) => {
-    option.names.forEach((name) => (optionsByName[name] = option))
+    optionsByName[option.name] = option
+    option.alias.forEach((alias) => (optionsByName[alias] = option))
 
     if (option.positional) {
       positionalOptions.push(option)
@@ -89,7 +90,7 @@ function parseArgs(args, config) {
       currentOptions[name] = value
     } else {
       let command = config.commands.find((command) => {
-        return command.names.includes(arg)
+        return command.name === arg || command.alias.includes(arg)
       })
 
       if (command) {
