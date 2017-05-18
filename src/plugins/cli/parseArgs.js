@@ -18,7 +18,7 @@ function tokenizeArgs(args) {
           results.push({
             kind: 'option',
             isLong: false,
-            arg: '-' + body,
+            arg: `-${body}`,
             body,
           })
         })
@@ -93,7 +93,7 @@ function parseArgs(args, config) {
       })
 
       if (command) {
-        currentName += '.' + command.name
+        currentName += `.${command.name}`
         currentOptions = {}
         currentResult = { command: currentName, options: currentOptions }
         results.push(currentResult)
