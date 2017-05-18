@@ -37,6 +37,7 @@ class Command {
     }
     this.commands = []
     this.options = []
+    this.sharedSettings = []
     this.set(config)
   }
 
@@ -125,22 +126,57 @@ class Command {
     return option
   }
 
+  share(...settings) {
+    settings.forEach((setting) => {
+      if (typeof setting !== 'string') {
+        throw new Error('A setting to share must be a string')
+      }
+    })
+
+    this.sharedSettings = this.sharedSettings.concat(settings)
+    return this
+  }
+
   end() {
     return this.parent
   }
 
+  getSharedOptions() {
+    let parentOptions = this.parent ? this.parent.getSharedOptions() : []
+    let ownOptions
+
+    if (this.sharedSettings.includes('options')) {
+      ownOptions = this.options
+    } else {
+      ownOptions = this.options.filter((option) => option.config.shared)
+    }
+
+    return parentOptions.concat(ownOptions)
+  }
+
+  getSharedConfig() {
+    let parentConfig = this.parent ? this.parent.getSharedConfig() : {}
+    let ownConfig = this.sharedSettings.reduce((config, setting) => {
+      if (setting !== 'options') {
+        config[setting] = this.config[setting]
+      }
+      return config
+    }, {})
+    return Object.assign(parentConfig, ownConfig)
+  }
+
   getConfig() {
     let config = this.config
-    let names = config.alias ? [config.name, ...config.alias] : [config.name]
+    let sharedConfig = this.parent ? this.parent.getSharedConfig() : {}
 
-    return Object.assign(
-      {
-        names,
-        commands: this.commands.map((command) => command.getConfig()),
-        options: this.options.map((option) => option.getConfig()),
-      },
-      this.config
-    )
+    let names = config.alias ? [config.name, ...config.alias] : [config.name]
+    let commands = this.commands.map((command) => {
+      return Object.assign(sharedConfig, command.getConfig())
+    })
+    let options = this.parent ? this.parent.getSharedOptions() : []
+    options = options.concat(this.options).map((option) => option.getConfig())
+
+    return Object.assign({ names, commands, options }, config)
   }
 }
 

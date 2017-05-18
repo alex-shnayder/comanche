@@ -127,6 +127,15 @@ class Option {
     return this
   }
 
+  shared(value = true) {
+    if (typeof value !== 'boolean') {
+      throw new Error('The argument of shared() must be boolean')
+    }
+
+    this.config.shared = value
+    return this
+  }
+
   command(...args) {
     return this.parent.command(...args)
   }
