@@ -42,7 +42,7 @@ class Command {
   }
 
   set(config) {
-    let { name, alias, description, commands, options } = config
+    let { name, alias, description, share, commands, options } = config
 
     if (name) {
       this.name(name)
@@ -54,6 +54,10 @@ class Command {
 
     if (description) {
       this.description(description)
+    }
+
+    if (share) {
+      this.share(share)
     }
 
     if (commands) {

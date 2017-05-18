@@ -48,13 +48,14 @@ class Option {
 
     this.parent = parent
     this.config = {
+      alias: [],
       type: 'boolean',
     }
     this.set(config)
   }
 
   set(config) {
-    let { name, alias, description, required } = config
+    let { name, alias, description, required, type, shared } = config
 
     if (name) {
       this.name(name)
@@ -70,6 +71,14 @@ class Option {
 
     if (typeof required !== 'undefined') {
       this.required(required)
+    }
+
+    if (type) {
+      this.type(type)
+    }
+
+    if (typeof shared !== 'undefined') {
+      this.shared(shared)
     }
 
     return this
