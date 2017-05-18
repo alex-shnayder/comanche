@@ -77,11 +77,7 @@ class Option {
 
   name(name) {
     name = normalizeAndValidateName(name)
-
-    let config = this.config
-    config.name = name
-    config.names = config.alias ? [config.name, ...config.alias] : [config.name]
-
+    this.config.name = name
     return this
   }
 
@@ -100,10 +96,7 @@ class Option {
       alias = [normalizeAndValidateName(alias)]
     }
 
-    let config = this.config
-    config.alias = isArray ? alias : [alias]
-    config.names = config.alias ? [config.name, ...config.alias] : [config.name]
-
+    this.config.alias = alias
     return this
   }
 
@@ -147,7 +140,10 @@ class Option {
   }
 
   getConfig() {
-    return Object.assign({}, this.config)
+    let config = this.config
+    let names = config.alias ? [config.name, ...config.alias] : [config.name]
+
+    return Object.assign({ names }, config)
   }
 }
 
