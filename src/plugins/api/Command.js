@@ -1,4 +1,4 @@
-const { findMatch } = require('../../utils')
+const { findMatch } = require('../../common')
 
 
 function validateName(name) {
