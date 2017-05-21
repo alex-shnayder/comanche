@@ -36,6 +36,10 @@ function normalizeAndValidateName(name) {
 
 class Option {
   constructor(name, parent) {
+    if (!parent) {
+      throw new Error('An option must have a parent command')
+    }
+
     if (!name) {
       throw new Error('Either a name or config is required to define an option')
     }
@@ -48,14 +52,14 @@ class Option {
 
     this.parent = parent
     this.config = {
-      alias: [],
       type: 'boolean',
     }
     this.set(config)
+    this.config.id = `${parent.config.id}#${this.config.name}`
   }
 
   set(config) {
-    let { name, alias, description, required, type, shared } = config
+    let { name, alias, description, required, type } = config
 
     if (name) {
       this.name(name)
@@ -75,10 +79,6 @@ class Option {
 
     if (type) {
       this.type(type)
-    }
-
-    if (typeof shared !== 'undefined') {
-      this.shared(shared)
     }
 
     return this
@@ -136,12 +136,8 @@ class Option {
     return this
   }
 
-  shared(value = true) {
-    if (typeof value !== 'boolean') {
-      throw new Error('The argument of shared() must be boolean')
-    }
-
-    this.config.shared = value
+  shared() {
+    this.parent.shareOption(this.config.id)
     return this
   }
 
@@ -158,7 +154,7 @@ class Option {
   }
 
   getConfig() {
-    return Object.assign({}, this.config)
+    return this.config
   }
 }
 

@@ -1,3 +1,6 @@
+const { findMatch } = require('../../utils')
+
+
 function validateName(name) {
   if (typeof name !== 'string' || name.length === 0) {
     throw new Error('A command name or alias must be a non-empty string')
@@ -14,6 +17,16 @@ function validateName(name) {
       'A command name or alias may only contain lowercase letters, numbers, underscores and hyphens'
     )
   }
+}
+
+function mergeConfigs(base, source) {
+  let config = Object.assign({}, base, source)
+
+  if (base.options && source.options) {
+    config.options = base.options.concat(source.options)
+  }
+
+  return config
 }
 
 class Command {
@@ -33,12 +46,21 @@ class Command {
     }
 
     this.config = {
-      alias: [],
+      default: !this.parent,
+      commands: [],
+      options: [],
     }
     this.commands = []
     this.options = []
     this.sharedSettings = []
+    this.sharedOptions = []
     this.set(config)
+
+    if (parent) {
+      this.config.id = `${parent.config.id}.${this.config.name}`
+    } else {
+      this.config.id = this.config.name
+    }
   }
 
   set(config) {
@@ -120,13 +142,35 @@ class Command {
 
   command(config) {
     let command = new this.constructor(config, this)
+    let existingCommands = this.commands.map((c) => c.config)
+    let matchingCommand = findMatch(existingCommands, command.config)
+
+    if (matchingCommand) {
+      throw new Error(
+        `The command "${command.name}" has a name or alias` +
+        `that is already taken by "${matchingCommand.name}"`
+      )
+    }
+
     this.commands.push(command)
+    this.config.commands.push(command.config.id)
     return command
   }
 
   option(config) {
     let option = new this.constructor.Option(config, this)
+    let existingOptions = this.options.map((o) => o.config)
+    let matchingOption = findMatch(existingOptions, option.config)
+
+    if (matchingOption) {
+      throw new Error(
+        `The option "${option.name}" has a name or alias` +
+        `that is already taken by "${matchingOption.name}"`
+      )
+    }
+
     this.options.push(option)
+    this.config.options.push(option.config.id)
     return option
   }
 
@@ -141,45 +185,33 @@ class Command {
     return this
   }
 
+  shareOption(id) {
+    if (typeof id !== 'string' && id.length !== 0) {
+      throw new Error('An option id must be a non-empty string')
+    }
+
+    this.sharedOptions.push(id)
+    return this
+  }
+
   end() {
     return this.parent
   }
 
-  getSharedOptions() {
-    let parentOptions = this.parent ? this.parent.getSharedOptions() : []
-    let ownOptions
-
-    if (this.sharedSettings.includes('options')) {
-      ownOptions = this.options
-    } else {
-      ownOptions = this.options.filter((option) => option.config.shared)
-    }
-
-    return parentOptions.concat(ownOptions)
-  }
-
   getSharedConfig() {
-    let parentConfig = this.parent ? this.parent.getSharedConfig() : {}
-    let ownConfig = this.sharedSettings.reduce((config, setting) => {
-      if (setting !== 'options') {
-        config[setting] = this.config[setting]
-      }
-      return config
+    let inheritedConfig = this.parent ? this.parent.getSharedConfig() : {}
+    let ownConfig = this.sharedSettings.reduce((ownConfig, setting) => {
+      ownConfig[setting] = this.config[setting]
+      return ownConfig
     }, {})
-    return Object.assign(parentConfig, ownConfig)
+    ownConfig.options = ownConfig.options || this.sharedOptions
+
+    return mergeConfigs(inheritedConfig, ownConfig)
   }
 
   getConfig() {
-    let config = this.config
-    let sharedConfig = this.parent ? this.parent.getSharedConfig() : {}
-
-    let commands = this.commands.map((command) => {
-      return Object.assign(sharedConfig, command.getConfig())
-    })
-    let options = this.parent ? this.parent.getSharedOptions() : []
-    options = options.concat(this.options).map((option) => option.getConfig())
-
-    return Object.assign({ commands, options }, config)
+    let inheritedConfig = this.parent ? this.parent.getSharedConfig() : {}
+    return mergeConfigs(inheritedConfig, this.config)
   }
 }
 

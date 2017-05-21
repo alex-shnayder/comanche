@@ -2,6 +2,23 @@ const { next } = require('hooter/effects')
 const Command = require('./Command')
 const Option = require('./Option')
 
+
+function buildConfig(rootCommand) {
+  let commands = [rootCommand.getConfig()]
+  let options = rootCommand.options.map((option) => option.getConfig())
+
+  if (rootCommand.commands) {
+    rootCommand.commands.forEach((command) => {
+      let config = buildConfig(command)
+      commands = commands.concat(config.commands)
+      options = options.concat(config.options)
+    })
+  }
+
+  return { commands, options }
+}
+
+
 class ExecutableCommand extends Command {
   on(command, handler) {
     if (!this.lifecycle || this.parent) {
@@ -61,7 +78,7 @@ class ExecutableCommand extends Command {
     return this.lifecycle.tootSyncWith(
       'start',
       (config) => config,
-      this.getConfig()
+      buildConfig(this)
     )
   }
 }
