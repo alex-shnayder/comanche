@@ -1,3 +1,6 @@
+const { findByIds, findOneByName } = require('../../common')
+
+
 function tokenizeArgs(args) {
   return args.reduce((results, arg) => {
     let isOption = arg.charAt(0) === '-'
@@ -31,29 +34,27 @@ function tokenizeArgs(args) {
   }, [])
 }
 
-function extractOptions(options) {
-  let positionalOptions = []
-  let optionsByName = {}
-
-  options.forEach((option) => {
-    optionsByName[option.name] = option
-    option.alias.forEach((alias) => (optionsByName[alias] = option))
-
-    if (option.positional) {
-      positionalOptions.push(option)
-    }
-  })
-
-  return { positionalOptions, optionsByName }
+function extractFromCommandConfig(commandConfig, config) {
+  let commands = findByIds(config.commands, commandConfig.commands)
+  let options = findByIds(config.options, commandConfig.options)
+  let positionalOptions = options.filter((option) => option.positional)
+  return { commands, options, positionalOptions }
 }
 
 function parseArgs(args, config) {
-  let noOptionsMode = false
-  let currentName = config.name
-  let currentOptions = {}
-  let currentResult = { command: currentName, options: currentOptions }
+  let defaultCommand = config.commands.find((c) => c.default)
+
+  if (!defaultCommand) {
+    throw new Error('No default command defined')
+  }
+
+  let {
+    commands, options, positionalOptions,
+  } = extractFromCommandConfig(defaultCommand, config)
+  let currentResult = { command: defaultCommand.name, options: {} }
   let results = [currentResult]
-  let { positionalOptions, optionsByName } = extractOptions(config.options)
+  let noOptionsMode = false
+
   args = tokenizeArgs(args)
 
   for (let i = 0; i < args.length; i++) {
@@ -71,8 +72,11 @@ function parseArgs(args, config) {
         throw new Error('Option name must not be empty')
       }
 
-      let optionConfig = optionsByName[name]
-      name = optionConfig ? optionConfig.name : name
+      let optionConfig = findOneByName(options, name)
+
+      if (!optionConfig) {
+        throw new Error(`Unknown option "${name}"`)
+      }
 
       if (isLong && eqPos) {
         value = body.substr(eqPos + 1)
@@ -87,21 +91,19 @@ function parseArgs(args, config) {
         }
       }
 
-      currentOptions[name] = value
+      currentResult.options[name] = value
     } else {
-      let command = config.commands.find((command) => {
-        return command.name === arg || command.alias.includes(arg)
-      })
+      let command = findOneByName(commands, body)
 
       if (command) {
-        currentName += `.${command.name}`
-        currentOptions = {}
-        currentResult = { command: currentName, options: currentOptions }
+        ({
+          commands, options, positionalOptions,
+        } = extractFromCommandConfig(command, config))
+        currentResult = {
+          command: `${currentResult.command}.${body}`,
+          options: {},
+        }
         results.push(currentResult)
-
-        let extractedOptions = extractOptions(command.options)
-        positionalOptions = extractedOptions.positionalOptions
-        optionsByName = extractedOptions.optionsByName
       } else {
         let optionConfig = positionalOptions.shift()
 
@@ -109,7 +111,7 @@ function parseArgs(args, config) {
           throw new Error(`Unknown argument "${arg}"`)
         }
 
-        currentOptions[optionConfig.name] = body
+        currentResult.options[optionConfig.name] = body
       }
     }
   }
