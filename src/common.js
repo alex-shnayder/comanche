@@ -10,21 +10,19 @@ function findOneById(items, id) {
   return items.find((item) => item.id === id)
 }
 
-function findOneByName(items, name) {
-  return items.find((item) => {
-    return item.name === name || (item.alias && item.alias.includes(name))
-  })
-}
+function findOneByName(items, names) {
+  if (Array.isArray(names)) {
+    return items.find((item) => {
+      let { name, alias } = item
+      return names.find((n) => n === name || (alias && alias.includes(n)))
+    })
+  }
 
-function findMatch(items, needle) {
-  let names = needle.alias ? needle.alias.concat(needle.name) : [needle.name]
-
   return items.find((item) => {
-    let { name, alias } = item
-    return names.find((n) => n === name || (alias && alias.includes(n)))
+    return item.name === names || (item.alias && item.alias.includes(names))
   })
 }
 
 module.exports = {
-  findByIds, findOneById, findOneByName, findMatch,
+  findByIds, findOneById, findOneByName,
 }

@@ -1,4 +1,4 @@
-const { findMatch } = require('../../common')
+const { findOneByName } = require('../../common')
 
 
 function validateName(name) {
@@ -143,7 +143,9 @@ class Command {
   command(config) {
     let command = new this.constructor(config, this)
     let existingCommands = this.commands.map((c) => c.config)
-    let matchingCommand = findMatch(existingCommands, command.config)
+    let { name, alias } = command.config
+    let names = alias ? alias.concat(name) : [name]
+    let matchingCommand = findOneByName(existingCommands, names)
 
     if (matchingCommand) {
       throw new Error(
@@ -160,7 +162,9 @@ class Command {
   option(config) {
     let option = new this.constructor.Option(config, this)
     let existingOptions = this.options.map((o) => o.config)
-    let matchingOption = findMatch(existingOptions, option.config)
+    let { name, alias } = option.config
+    let names = alias ? alias.concat(name) : [name]
+    let matchingOption = findOneByName(existingOptions, names)
 
     if (matchingOption) {
       throw new Error(
