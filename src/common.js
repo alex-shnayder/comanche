@@ -23,6 +23,26 @@ function findOneByAliases(items, aliases) {
   })
 }
 
+function findOneByName(items, field, name) {
+  if (arguments.length === 2) {
+    return findOneByAliases(items, field)
+  } else if (typeof name === 'string') {
+    return findOneByAliases(items, name)
+  }
+
+  let result
+
+  for (let i = 0; i < name.length && items.length; i++) {
+    result = findOneByName(items, name[i])
+
+    if (result) {
+      items = findByIds(items, result[field])
+    }
+  }
+
+  return result
+}
+
 module.exports = {
-  findByIds, findOneById, findOneByAliases,
+  findByIds, findOneById, findOneByAliases, findOneByName,
 }
