@@ -45,13 +45,17 @@ class ExecutableCommand extends Command {
       throw new TypeError('A handler must be a function')
     }
 
-    this.lifecycle.hook(`handle.${command}`, function* (
-      options,
-      context,
-      ...args
+    command = command.split('.')
+    this.lifecycle.hook('handle', function* (
+      _command, options, context, ...args
     ) {
+      if (_command.length !== command.length ||
+          !_command.every((n, i) => command[i] === n)) {
+        return yield next(_command, options, context, ...args)
+      }
+
       context = yield handler(options, context, ...args)
-      return yield next(options, context, ...args).or(context)
+      return yield next(_command, options, context, ...args).or(context)
     })
 
     return this
@@ -66,6 +70,7 @@ class ExecutableCommand extends Command {
       throw new Error('A command must be a non-empty string')
     }
 
+    command = command.split('.')
     options = options || {}
     return this.lifecycle.tootAsync('run', [{ command, options }], context)
   }

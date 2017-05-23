@@ -51,7 +51,7 @@ function parseArgs(args, config) {
   let {
     commands, options, positionalOptions,
   } = extractFromCommandConfig(defaultCommand, config)
-  let currentResult = { command: defaultCommand.name, options: {} }
+  let currentResult = { name: [defaultCommand.name], options: {} }
   let results = [currentResult]
   let noOptionsMode = false
 
@@ -100,7 +100,7 @@ function parseArgs(args, config) {
           commands, options, positionalOptions,
         } = extractFromCommandConfig(command, config))
         currentResult = {
-          command: `${currentResult.command}.${body}`,
+          name: currentResult.name.concat(body),
           options: {},
         }
         results.push(currentResult)

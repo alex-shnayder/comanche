@@ -14,9 +14,9 @@ module.exports = function runPlugin(lifecycle) {
     let context
 
     for (let i = 0; i < commands.length; i++) {
-      let { command, options } = commands[i]
+      let { name, options } = commands[i]
       options = camelcaseKeys(options)
-      context = yield lifecycle.toot(`handle.${command}`, options, context)
+      context = yield lifecycle.toot('handle', name, options, context)
     }
 
     return context
