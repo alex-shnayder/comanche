@@ -10,19 +10,19 @@ function findOneById(items, id) {
   return items.find((item) => item.id === id)
 }
 
-function findOneByName(items, names) {
-  if (Array.isArray(names)) {
+function findOneByAliases(items, aliases) {
+  if (Array.isArray(aliases)) {
     return items.find((item) => {
       let { name, alias } = item
-      return names.find((n) => n === name || (alias && alias.includes(n)))
+      return aliases.find((n) => n === name || (alias && alias.includes(n)))
     })
   }
 
   return items.find((item) => {
-    return item.name === names || (item.alias && item.alias.includes(names))
+    return item.name === aliases || (item.alias && item.alias.includes(aliases))
   })
 }
 
 module.exports = {
-  findByIds, findOneById, findOneByName,
+  findByIds, findOneById, findOneByAliases,
 }

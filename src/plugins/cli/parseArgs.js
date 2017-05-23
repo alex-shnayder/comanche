@@ -1,4 +1,4 @@
-const { findByIds, findOneByName } = require('../../common')
+const { findByIds, findOneByAliases } = require('../../common')
 
 
 function tokenizeArgs(args) {
@@ -72,7 +72,7 @@ function parseArgs(args, config) {
         throw new Error('Option name must not be empty')
       }
 
-      let optionConfig = findOneByName(options, name)
+      let optionConfig = findOneByAliases(options, name)
 
       if (!optionConfig) {
         throw new Error(`Unknown option "${name}"`)
@@ -93,7 +93,7 @@ function parseArgs(args, config) {
 
       currentResult.options[name] = value
     } else {
-      let command = findOneByName(commands, body)
+      let command = findOneByAliases(commands, body)
 
       if (command) {
         ({
