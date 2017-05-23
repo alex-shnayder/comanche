@@ -26,18 +26,18 @@ class ExecutableCommand extends Command {
     }
 
     if (typeof command !== 'string' || !command) {
-      throw new TypeError('A command pattern must be a string')
+      throw new TypeError('A command name must be a non-empty string')
     }
 
-    if (!/[a-z0-9._-]/.test(command)) {
+    if (!/^[a-z0-9._-]+$/.test(command)) {
       throw new Error(
-        'A command pattern can only contain letters, numbers, underscores, hyphens and dots'
+        'A command name can only contain letters, numbers, underscores, hyphens and dots'
       )
     }
 
     if (command.charAt(0) === '-') {
       throw new Error(
-        'A hyphen is not allowed as the first character of a command pattern'
+        'A hyphen is not allowed as the first character of a command name'
       )
     }
 
@@ -46,7 +46,7 @@ class ExecutableCommand extends Command {
     }
 
     command = command.split('.')
-    this.lifecycle.hook('handle', function* (
+    this.lifecycle.hookAfter('handle', function* (
       _command, options, context, ...args
     ) {
       if (_command.length !== command.length ||
