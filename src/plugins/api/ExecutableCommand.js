@@ -20,9 +20,9 @@ function buildConfig(rootCommand) {
 
 
 class ExecutableCommand extends Command {
-  on(command, handler) {
+  handle(command, handler) {
     if (!this.lifecycle || this.parent) {
-      throw new Error('on() can only be used on the root command (the app)')
+      throw new Error('handle() can only be used on the root command (the app)')
     }
 
     if (typeof command !== 'string' || !command) {
