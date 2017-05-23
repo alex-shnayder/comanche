@@ -45,7 +45,7 @@ class ExecutableCommand extends Command {
       throw new TypeError('A handler must be a function')
     }
 
-    this.lifecycle.hook(`invoke.${command}`, function* (
+    this.lifecycle.hook(`handle.${command}`, function* (
       options,
       context,
       ...args
