@@ -29,9 +29,9 @@ class ExecutableCommand extends Command {
       throw new TypeError('A command name must be a non-empty string')
     }
 
-    if (!/^[a-z0-9._-]+$/.test(command)) {
+    if (!/^[a-z0-9 _-]+$/.test(command)) {
       throw new Error(
-        'A command name can only contain letters, numbers, underscores, hyphens and dots'
+        'A command name can only contain letters, numbers, underscores, hyphens and spaces'
       )
     }
 
@@ -45,7 +45,7 @@ class ExecutableCommand extends Command {
       throw new TypeError('A handler must be a function')
     }
 
-    command = command.split('.')
+    command = command.split(' ')
     this.lifecycle.hookAfter('handle', function* (
       _command, options, context, ...args
     ) {
@@ -70,7 +70,7 @@ class ExecutableCommand extends Command {
       throw new Error('A command must be a non-empty string')
     }
 
-    command = command.split('.')
+    command = command.split(' ')
     options = options || {}
     return this.lifecycle.tootAsync('run', [{ command, options }], context)
   }
