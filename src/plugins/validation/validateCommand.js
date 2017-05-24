@@ -12,8 +12,12 @@ function validateCommand(command, commandConfig, options, optionConfigs) {
     let optionConfig = findOneByName(optionConfigs, option)
     let optionValue = options[option]
 
-    if (!optionConfig && commandConfig.strict) {
-      throw new Error(`Unknown option ${option}`)
+    if (!optionConfig) {
+      if (commandConfig.strict) {
+        throw new Error(`Unknown option ${option}`)
+      }
+
+      return
     }
 
     validateOption(option, optionValue, optionConfig)
