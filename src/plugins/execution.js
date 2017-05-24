@@ -1,7 +1,7 @@
 const camelcaseKeys = require('camelcase-keys')
 const { next } = require('hooter/effects')
 
-module.exports = function runPlugin(lifecycle) {
+module.exports = function executionPlugin(lifecycle) {
   lifecycle.hookBefore('dispatch', function* (commands) {
     if (!Array.isArray(commands) || commands.length === 0) {
       throw new Error('The first argument of dispatch must be an array of commands')
