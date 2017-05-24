@@ -64,17 +64,19 @@ class ExecutableCommand extends Command {
   }
 
   execute(command, options, context) {
-    if (!this.lifecycle || this.parent) {
-      throw new Error('execute() can only be used on the root command (the app)')
+    if (typeof command !== 'string') {
+      context = options
+      options = command
+      command = null
     }
 
-    if (typeof command !== 'string' || command.length === 0) {
-      throw new Error('A command must be a non-empty string')
+    let name = this.getFullName()
+
+    if (command) {
+      name = name.concat(command.split(' '))
     }
 
-    command = command.split(' ')
-    options = options || {}
-    return this.lifecycle.tootAsync('dispatch', [{ command, options }], context)
+    return this.lifecycle.tootAsync('dispatch', [{ name, options }], context)
   }
 
   start() {
