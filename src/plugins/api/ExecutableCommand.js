@@ -81,7 +81,7 @@ class ExecutableCommand extends Command {
 
   start() {
     if (!this.lifecycle || this.parent) {
-      throw new Error('start() can only be used on the root command (the app)')
+      throw new Error('start() can only be used on the default command (the app)')
     }
 
     return this.lifecycle.tootSyncWith(

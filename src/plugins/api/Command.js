@@ -149,7 +149,7 @@ class Command {
 
     if (matchingCommand) {
       throw new Error(
-        `The command "${command.name}" has a name or alias` +
+        `The command "${name}" has a name or alias ` +
         `that is already taken by "${matchingCommand.name}"`
       )
     }
@@ -168,7 +168,7 @@ class Command {
 
     if (matchingOption) {
       throw new Error(
-        `The option "${option.name}" has a name or alias` +
+        `The option "${name}" has a name or alias ` +
         `that is already taken by "${matchingOption.name}"`
       )
     }

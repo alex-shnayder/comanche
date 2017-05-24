@@ -11,9 +11,10 @@ module.exports = function apiPlugin(lifecycle) {
 
   lifecycle.hook('init', function* (Class) {
     if (Class) {
+      // eslint-disable-next-line
       console.warn(
         'The default API plugin is overriding another plugin\'s modifications.' +
-          'Either change the order of the plugins, or disable the default one'
+        'Either change the order of the plugins, or disable the default one'
       )
     }
 
