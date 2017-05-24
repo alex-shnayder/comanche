@@ -74,10 +74,6 @@ function parseArgs(args, config) {
 
       let optionConfig = findOneByAliases(options, name)
 
-      if (!optionConfig) {
-        throw new Error(`Unknown option "${name}"`)
-      }
-
       if (isLong && eqPos) {
         value = body.substr(eqPos + 1)
       } else if (optionConfig && optionConfig.type === 'boolean') {
