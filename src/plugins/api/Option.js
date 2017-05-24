@@ -149,6 +149,10 @@ class Option {
     return this.parent.option(...args)
   }
 
+  handle(...args) {
+    return this.parent.handle(...args)
+  }
+
   end() {
     return this.parent
   }

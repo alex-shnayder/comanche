@@ -21,31 +21,33 @@ function buildConfig(rootCommand) {
 
 class ExecutableCommand extends Command {
   handle(command, handler) {
-    if (!this.lifecycle || this.parent) {
-      throw new Error('handle() can only be used on the root command (the app)')
-    }
+    if (arguments.length === 2) {
+      if (typeof command !== 'string') {
+        throw new TypeError('A command name must be a string')
+      }
 
-    if (typeof command !== 'string' || !command) {
-      throw new TypeError('A command name must be a non-empty string')
-    }
+      if (!/^[a-z0-9 _-]+$/.test(command)) {
+        throw new Error(
+          'A command name can only contain letters, numbers, underscores, hyphens and spaces'
+        )
+      }
 
-    if (!/^[a-z0-9 _-]+$/.test(command)) {
-      throw new Error(
-        'A command name can only contain letters, numbers, underscores, hyphens and spaces'
-      )
-    }
+      if (command.charAt(0) === '-') {
+        throw new Error(
+          'A hyphen is not allowed as the first character of a command name'
+        )
+      }
 
-    if (command.charAt(0) === '-') {
-      throw new Error(
-        'A hyphen is not allowed as the first character of a command name'
-      )
+      command = this.getFullName().concat(command.split(' '))
+    } else {
+      handler = command
+      command = this.getFullName()
     }
 
     if (typeof handler !== 'function') {
       throw new TypeError('A handler must be a function')
     }
 
-    command = command.split(' ')
     this.lifecycle.hook('handle', function* (
       _command, options, context, ...args
     ) {
