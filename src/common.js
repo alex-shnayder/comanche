@@ -10,16 +10,16 @@ function findOneById(items, id) {
   return items.find((item) => item.id === id)
 }
 
-function findOneByAliases(items, aliases) {
-  if (Array.isArray(aliases)) {
+function findOneByAliases(items, names) {
+  if (Array.isArray(names)) {
     return items.find((item) => {
-      let { name, alias } = item
-      return aliases.find((n) => n === name || (alias && alias.includes(n)))
+      let { name, aliases } = item
+      return names.find((n) => n === name || (aliases && aliases.includes(n)))
     })
   }
 
   return items.find((item) => {
-    return item.name === aliases || (item.alias && item.alias.includes(aliases))
+    return item.name === names || (item.aliases && item.aliases.includes(names))
   })
 }
 

@@ -127,7 +127,7 @@ class Command {
       alias = [alias]
     }
 
-    this.config.alias = alias
+    this.config.aliases = alias
     return this
   }
 
@@ -143,8 +143,8 @@ class Command {
   command(config) {
     let command = new this.constructor(config, this)
     let existingCommands = this.commands.map((c) => c.config)
-    let { name, alias } = command.config
-    let names = alias ? alias.concat(name) : [name]
+    let { name, aliases } = command.config
+    let names = aliases ? aliases.concat(name) : [name]
     let matchingCommand = findOneByAliases(existingCommands, names)
 
     if (matchingCommand) {
@@ -162,8 +162,8 @@ class Command {
   option(config) {
     let option = new this.constructor.Option(config, this)
     let existingOptions = this.options.map((o) => o.config)
-    let { name, alias } = option.config
-    let names = alias ? alias.concat(name) : [name]
+    let { name, aliases } = option.config
+    let names = aliases ? aliases.concat(name) : [name]
     let matchingOption = findOneByAliases(existingOptions, names)
 
     if (matchingOption) {

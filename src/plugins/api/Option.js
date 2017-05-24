@@ -105,7 +105,7 @@ class Option {
       alias = [normalizeAndValidateName(alias)]
     }
 
-    this.config.alias = alias
+    this.config.aliases = alias
     return this
   }
 
