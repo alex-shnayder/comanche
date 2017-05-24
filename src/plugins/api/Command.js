@@ -202,6 +202,11 @@ class Command {
     return this.parent
   }
 
+  getFullName() {
+    let parentName = this.parent ? this.parent.getFullName() : []
+    return parentName.concat(this.config.name)
+  }
+
   getSharedConfig() {
     let inheritedConfig = this.parent ? this.parent.getSharedConfig() : {}
     let ownConfig = this.sharedSettings.reduce((ownConfig, setting) => {
