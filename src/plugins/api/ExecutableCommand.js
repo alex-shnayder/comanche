@@ -46,7 +46,7 @@ class ExecutableCommand extends Command {
     }
 
     command = command.split(' ')
-    this.lifecycle.hookAfter('handle', function* (
+    this.lifecycle.hook('handle', function* (
       _command, options, context, ...args
     ) {
       if (_command.length !== command.length ||
@@ -61,9 +61,9 @@ class ExecutableCommand extends Command {
     return this
   }
 
-  run(command, options, context) {
+  execute(command, options, context) {
     if (!this.lifecycle || this.parent) {
-      throw new Error('run() can only be used on the root command (the app)')
+      throw new Error('execute() can only be used on the root command (the app)')
     }
 
     if (typeof command !== 'string' || command.length === 0) {
@@ -72,7 +72,7 @@ class ExecutableCommand extends Command {
 
     command = command.split(' ')
     options = options || {}
-    return this.lifecycle.tootAsync('run', [{ command, options }], context)
+    return this.lifecycle.tootAsync('dispatch', [{ command, options }], context)
   }
 
   start() {
