@@ -2,8 +2,9 @@ const comanche = require('./comanche')
 const api = require('./plugins/api')
 const cli = require('./plugins/cli')
 const execution = require('./plugins/execution')
+const camelCase = require('./plugins/camelCase')
 
-const DEFAULT_PLUGINS = [api, cli, execution]
+const DEFAULT_PLUGINS = [api, cli, execution, camelCase]
 
 module.exports = function defaultComanche(...args) {
   let plugins = DEFAULT_PLUGINS
