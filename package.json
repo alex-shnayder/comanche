@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "camelcase": "^4.1.0",
-    "hooter": "^0.11.0"
+    "hooter": "^0.11.0",
+    "read-pkg-up": "^2.0.0"
   }
 }
