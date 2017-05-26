@@ -35,35 +35,38 @@ function normalizeAndValidateName(name) {
 }
 
 class Option {
-  constructor(name, parent) {
+  constructor(config, parent) {
     if (!parent) {
       throw new Error('An option must have a parent command')
     }
 
-    if (!name) {
-      throw new Error('Either a name or config is required to define an option')
+    let name
+
+    if (config && typeof config === 'string') {
+      name = config
+      config = null
+    } else if (config && typeof config === 'object') {
+      name = config.name
+    } else {
+      throw new Error('The first argument of Command must be either a string or an object')
     }
 
-    let config = typeof name === 'string' ? { name } : name
-
-    if (!config.name) {
-      throw new Error('A name is required to define an option')
-    }
+    name = normalizeAndValidateName(name)
 
     this.parent = parent
     this.config = {
+      name,
+      id: `${parent.config.id}#${name}`,
       type: 'boolean',
     }
-    this.set(config)
-    this.config.id = `${parent.config.id}#${this.config.name}`
+
+    if (config) {
+      this.set(config)
+    }
   }
 
   set(config) {
-    let { name, alias, description, required, type } = config
-
-    if (name) {
-      this.name(name)
-    }
+    let { alias, description, required, type } = config
 
     if (alias) {
       this.alias(alias)
@@ -81,12 +84,6 @@ class Option {
       this.type(type)
     }
 
-    return this
-  }
-
-  name(name) {
-    name = normalizeAndValidateName(name)
-    this.config.name = name
     return this
   }
 

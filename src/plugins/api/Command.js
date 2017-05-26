@@ -30,45 +30,41 @@ function mergeConfigs(base, source) {
 }
 
 class Command {
-  constructor(name, parent) {
-    if (!name) {
-      throw new Error('Either a name or config is required to define a command')
+  constructor(config, parent) {
+    let name
+
+    if (config && typeof config === 'string') {
+      name = config
+      config = null
+    } else if (config && typeof config === 'object') {
+      name = config.name
+    } else {
+      throw new Error('The first argument of Command must be either a non-empty string or an object')
     }
 
-    let config = typeof name === 'string' ? { name } : name
-
-    if (!config.name) {
-      throw new Error('A name is required to define a command')
-    }
-
-    if (parent) {
-      this.parent = parent
-    }
+    validateName(name)
 
     this.config = {
-      default: !this.parent,
+      name,
+      id: parent ? `${parent.config.id}.${name}` : name,
+      default: !parent,
       commands: [],
       options: [],
     }
+
+    this.parent = parent
     this.commands = []
     this.options = []
     this.sharedSettings = []
     this.sharedOptions = []
-    this.set(config)
 
-    if (parent) {
-      this.config.id = `${parent.config.id}.${this.config.name}`
-    } else {
-      this.config.id = this.config.name
+    if (config) {
+      this.set(config)
     }
   }
 
   set(config) {
-    let { name, alias, description, share, commands, options } = config
-
-    if (name) {
-      this.name(name)
-    }
+    let { alias, description, share, commands, options } = config
 
     if (alias) {
       this.alias(alias)
@@ -102,12 +98,6 @@ class Command {
       options.forEach((option) => this.option(option))
     }
 
-    return this
-  }
-
-  name(name) {
-    validateName(name)
-    this.config.name = name
     return this
   }
 
