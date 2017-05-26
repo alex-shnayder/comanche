@@ -7,7 +7,7 @@ module.exports = function camelCasePlugin(lifecycle) {
       if (command.options) {
         command = Object.assign({}, command)
         command.options = command.options.map((option) => {
-          if (option.outputName) {
+          if (option.outputName && option.config) {
             option = Object.assign({}, option, {
               outputName: camelcase(option.outputName),
             })
