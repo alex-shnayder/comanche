@@ -8,7 +8,7 @@ const canonize = require('./plugins/canonize')
 const camelCase = require('./plugins/camelCase')
 
 const DEFAULT_PLUGINS = [
-  execution, api, cli, version, validation, canonize, camelCase,
+  execution, api, cli, version, validation, camelCase, canonize,
 ]
 
 module.exports = function defaultComanche(...args) {
