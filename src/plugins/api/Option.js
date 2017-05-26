@@ -57,7 +57,6 @@ class Option {
     this.config = {
       name,
       id: `${parent.config.id}#${name}`,
-      type: 'boolean',
     }
 
     if (config) {
