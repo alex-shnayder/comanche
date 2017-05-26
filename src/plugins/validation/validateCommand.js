@@ -1,9 +1,12 @@
+const { InputError } = require('../../common')
+
+
 function validateOption() {
 }
 
 function validateCommand({ inputName, options, config }) {
   if (!config) {
-    throw new Error(`Unknown command "${inputName}"`)
+    throw new InputError(`Unknown command "${inputName}"`)
   }
 
   if (config.options && config.options.length) {
@@ -14,7 +17,7 @@ function validateCommand({ inputName, options, config }) {
         })
 
         if (!option) {
-          throw new Error(`Option "${optionConfig.name}" is required`)
+          throw new InputError(`Option "${optionConfig.name}" is required`)
         }
       }
     })
@@ -27,7 +30,7 @@ function validateCommand({ inputName, options, config }) {
   options.forEach((option) => {
     if (!option.config) {
       if (config.strict) {
-        throw new Error(`Unknown option "${option.inputName}"`)
+        throw new InputError(`Unknown option "${option.inputName}"`)
       }
 
       return
@@ -36,5 +39,6 @@ function validateCommand({ inputName, options, config }) {
     validateOption(option)
   })
 }
+
 
 module.exports = validateCommand

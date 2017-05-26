@@ -1,3 +1,5 @@
+class InputError extends Error {}
+
 function findByIds(items, ids) {
   return ids
     .map((id) => {
@@ -44,5 +46,5 @@ function findOneByName(items, field, name) {
 }
 
 module.exports = {
-  findByIds, findOneById, findOneByAliases, findOneByName,
+  InputError, findByIds, findOneById, findOneByAliases, findOneByName,
 }

@@ -1,4 +1,4 @@
-const { findByIds, findOneByAliases } = require('../../common')
+const { InputError, findByIds, findOneByAliases } = require('../../common')
 
 
 function tokenizeArgs(args) {
@@ -73,7 +73,7 @@ function parseArgs(args, config) {
       let value = null
 
       if (!name) {
-        throw new Error('Option name must not be empty')
+        throw new InputError('Option name must not be empty')
       }
 
       let optionConfig = findOneByAliases(options, name)
@@ -109,7 +109,7 @@ function parseArgs(args, config) {
         let optionConfig = positionalOptions.shift()
 
         if (!optionConfig) {
-          throw new Error(`Unknown argument "${arg}"`)
+          throw new InputError(`Unknown argument "${arg}"`)
         }
 
         currentResult.options.push({
