@@ -80,7 +80,7 @@ class Command {
 
     if (commands) {
       if (!Array.isArray(commands)) {
-        throw new TypeError(
+        throw new Error(
           'The value of the "commands" property must be an array'
         )
       }
@@ -90,7 +90,7 @@ class Command {
 
     if (options) {
       if (!Array.isArray(options)) {
-        throw new TypeError(
+        throw new Error(
           'The value of the "options" property must be an array'
         )
       }
@@ -105,7 +105,7 @@ class Command {
     let isArray = Array.isArray(alias)
 
     if (typeof alias !== 'string' && !isArray) {
-      throw new TypeError(
+      throw new Error(
         'The argument of alias() must be either a string or an array'
       )
     }
@@ -123,7 +123,7 @@ class Command {
 
   description(description) {
     if (typeof description !== 'string' || description.length === 0) {
-      throw new TypeError('A description must be a non-empty string')
+      throw new Error('A description must be a non-empty string')
     }
 
     this.config.description = description

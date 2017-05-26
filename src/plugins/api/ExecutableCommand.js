@@ -23,7 +23,7 @@ class ExecutableCommand extends Command {
   handle(command, handler) {
     if (arguments.length === 2) {
       if (typeof command !== 'string') {
-        throw new TypeError('A command name must be a string')
+        throw new Error('A command name must be a string')
       }
 
       if (!/^[a-z0-9 _-]+$/.test(command)) {
@@ -45,7 +45,7 @@ class ExecutableCommand extends Command {
     }
 
     if (typeof handler !== 'function') {
-      throw new TypeError('A handler must be a function')
+      throw new Error('A handler must be a function')
     }
 
     this.lifecycle.hook('handle', function* (

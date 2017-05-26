@@ -90,7 +90,7 @@ class Option {
     let isArray = Array.isArray(alias)
 
     if (typeof alias !== 'string' && !isArray) {
-      throw new TypeError(
+      throw new Error(
         'The argument of alias() must be either a string or an array'
       )
     }
@@ -107,7 +107,7 @@ class Option {
 
   description(description) {
     if (typeof description !== 'string' || description.length === 0) {
-      throw new TypeError('A description must be a non-empty string')
+      throw new Error('A description must be a non-empty string')
     }
 
     this.config.description = description
@@ -125,7 +125,7 @@ class Option {
 
   type(type) {
     if (!type || typeof type !== 'string') {
-      throw new TypeError('A type must be a non-empty string')
+      throw new Error('A type must be a non-empty string')
     }
 
     this.config.type = type
