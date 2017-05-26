@@ -51,7 +51,11 @@ function parseArgs(args, config) {
   let {
     commands, options, positionalOptions,
   } = extractFromCommandConfig(defaultCommand, config)
-  let currentResult = { name: [defaultCommand.name], options: {} }
+  let currentResult = {
+    name: [defaultCommand.name],
+    inputName: defaultCommand.name,
+    options: [],
+  }
   let results = [currentResult]
   let noOptionsMode = false
 
@@ -66,7 +70,7 @@ function parseArgs(args, config) {
       let eqPos = body.indexOf('=')
       eqPos = eqPos === -1 ? undefined : eqPos
       let name = isLong ? body.substring(0, eqPos) : arg.charAt(1)
-      let value
+      let value = null
 
       if (!name) {
         throw new Error('Option name must not be empty')
@@ -76,9 +80,7 @@ function parseArgs(args, config) {
 
       if (isLong && eqPos) {
         value = body.substr(eqPos + 1)
-      } else if (optionConfig && optionConfig.type === 'boolean') {
-        value = true
-      } else if (optionConfig) {
+      } else if (optionConfig && optionConfig.consume) {
         let nextArg = args[i + 1]
 
         if (nextArg && nextArg.kind === 'value') {
@@ -87,7 +89,8 @@ function parseArgs(args, config) {
         }
       }
 
-      currentResult.options[name] = value
+      let inputName = arg
+      currentResult.options.push({ name, inputName, value })
     } else {
       let command = findOneByAliases(commands, body)
 
@@ -95,9 +98,11 @@ function parseArgs(args, config) {
         ({
           commands, options, positionalOptions,
         } = extractFromCommandConfig(command, config))
+        let name = currentResult.name.concat(body)
         currentResult = {
-          name: currentResult.name.concat(body),
-          options: {},
+          name,
+          inputName: name.join(' '),
+          options: [],
         }
         results.push(currentResult)
       } else {
@@ -107,7 +112,11 @@ function parseArgs(args, config) {
           throw new Error(`Unknown argument "${arg}"`)
         }
 
-        currentResult.options[optionConfig.name] = body
+        currentResult.options.push({
+          name: optionConfig.name,
+          inputName: optionConfig.name,
+          value: body,
+        })
       }
     }
   }

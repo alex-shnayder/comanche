@@ -76,7 +76,7 @@ class ExecutableCommand extends Command {
       name = name.concat(command.split(' '))
     }
 
-    return this.lifecycle.tootAsync('dispatch', [{ name, options }], context)
+    return this.lifecycle.tootAsync('execute', [{ name, options }], context)
   }
 
   start() {

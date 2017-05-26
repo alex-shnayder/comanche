@@ -1,28 +1,40 @@
-const { findOneByName } = require('../../common')
-
-
-function validateOption(name, value, config) {
-  if (config.required && typeof value === 'undefined') {
-    throw new Error(`Option "${name}" is required`)
-  }
+function validateOption() {
 }
 
-function validateCommand(command, commandConfig, options, optionConfigs) {
-  Object.keys(options).forEach((option) => {
-    let optionConfig = findOneByName(optionConfigs, option)
-    let optionValue = options[option]
+function validateCommand({ inputName, options, config }) {
+  if (!config) {
+    throw new Error(`Unknown command "${inputName}"`)
+  }
 
-    if (!optionConfig) {
-      if (commandConfig.strict) {
-        throw new Error(`Unknown option ${option}`)
+  if (config.options && config.options.length) {
+    config.options.forEach((optionConfig) => {
+      if (optionConfig.required) {
+        let option = options.find((option) => {
+          return option.config && option.config.id === optionConfig.id
+        })
+
+        if (!option) {
+          throw new Error(`Option "${optionConfig.name}" is required`)
+        }
+      }
+    })
+  }
+
+  if (!options) {
+    return
+  }
+
+  options.forEach((option) => {
+    if (!option.config) {
+      if (config.strict) {
+        throw new Error(`Unknown option "${option.inputName}"`)
       }
 
       return
     }
 
-    validateOption(option, optionValue, optionConfig)
+    validateOption(option)
   })
 }
-
 
 module.exports = validateCommand

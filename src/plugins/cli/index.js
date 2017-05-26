@@ -13,7 +13,7 @@ module.exports = function cliPlugin(lifecycle) {
 
     let args = process.argv.slice(2)
     let commands = parseArgs(args, config)
-    lifecycle.tootAsync('dispatch', commands)
+    lifecycle.tootAsync('execute', commands)
 
     return config
   })
