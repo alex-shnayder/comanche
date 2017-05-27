@@ -6,9 +6,10 @@ const version = require('./plugins/version')
 const validation = require('./plugins/validation')
 const canonize = require('./plugins/canonize')
 const camelCase = require('./plugins/camelCase')
+const error = require('./plugins/error')
 
 const DEFAULT_PLUGINS = [
-  execution, api, cli, version, validation, camelCase, canonize,
+  error, execution, api, cli, version, validation, camelCase, canonize,
 ]
 
 module.exports = function defaultComanche(...args) {
