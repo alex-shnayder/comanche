@@ -6,15 +6,17 @@ const parseArgs = require('./parseArgs')
 const extendApi = require('./extendApi')
 
 
-function handleError(err, message) {
+function handleError(err) {
   if (err instanceof InputError) {
     console.error(err.message)
-
-    if (message) {
-      console.log(message)
-    }
   } else {
     console.error(err)
+  }
+}
+
+function handleResult(result) {
+  if (result) {
+    console.log(result)
   }
 }
 
@@ -33,6 +35,7 @@ module.exports = function cliPlugin(lifecycle) {
         let commands = parseArgs(args, config)
         return lifecycle.tootAsync('execute', commands, handleError)
       })
+      .then(handleResult)
 
     return config
   })
