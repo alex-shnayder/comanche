@@ -1,7 +1,7 @@
 const { next } = require('hooter/effects')
 
 module.exports = function canonizePlugin(lifecycle) {
-  lifecycle.hookAfter('execute', function* (commands) {
+  lifecycle.hookAfter('execute.batch', function* (commands) {
     commands = commands.map((command) => {
       if (command.options) {
         command = Object.assign({}, command)

@@ -9,7 +9,7 @@ module.exports = function validationPlugin(lifecycle) {
     return yield next(NewClass)
   })
 
-  lifecycle.hook('execute', function* (commands) {
+  lifecycle.hook('execute.batch', function* (commands) {
     commands.forEach((command) => validateCommand(command))
     return yield next(commands)
   })

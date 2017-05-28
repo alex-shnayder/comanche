@@ -19,7 +19,7 @@ module.exports = function versionPlugin(lifecycle) {
     return yield next(NewClass)
   })
 
-  lifecycle.hookAfter('execute', function* (commands) {
+  lifecycle.hookAfter('execute.batch', function* (commands) {
     for (let i = 0; i < commands.length; i++) {
       let options = commands[i].options
 

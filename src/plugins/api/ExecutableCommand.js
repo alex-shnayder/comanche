@@ -48,7 +48,7 @@ class ExecutableCommand extends Command {
       throw new Error('A handler must be a function')
     }
 
-    this.lifecycle.hook('handle', function* (
+    this.lifecycle.hook('execute.handle', function* (
       _command, options, context, ...args
     ) {
       if (_command.length !== command.length ||
@@ -63,9 +63,8 @@ class ExecutableCommand extends Command {
     return this
   }
 
-  execute(command, options, context) {
+  execute(command, options) {
     if (typeof command !== 'string') {
-      context = options
       options = command
       command = null
     }
@@ -76,7 +75,7 @@ class ExecutableCommand extends Command {
       name = name.concat(command.split(' '))
     }
 
-    return this.lifecycle.tootAsync('execute', [{ name, options }], context)
+    return this.lifecycle.tootAsync('execute', [{ name, options }])
   }
 
   start() {

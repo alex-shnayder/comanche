@@ -13,7 +13,7 @@ module.exports = function apiPlugin(lifecycle) {
     if (Class) {
       // eslint-disable-next-line
       console.warn(
-        'The default API plugin is overriding another plugin\'s modifications.' +
+        'The default API plugin is overriding another plugin\'s modifications. ' +
         'Either change the order of the plugins, or disable the default one'
       )
     }
@@ -22,7 +22,7 @@ module.exports = function apiPlugin(lifecycle) {
   })
 
   // TODO: consider extracting option sharing to a separate plugin
-  lifecycle.hook('execute', function* (commands) {
+  lifecycle.hook('execute.batch', function* (commands) {
     let providedOptionsById = {}
 
     commands.forEach(({ options }) => {
