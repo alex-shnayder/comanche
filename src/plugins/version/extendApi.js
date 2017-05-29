@@ -16,7 +16,7 @@ module.exports = function extendApi(BaseClass) {
         throw new Error('The argument of version() must be either boolean or a string')
       }
 
-      this.config.value = value
+      this.config.version = value
       return this
     }
   }

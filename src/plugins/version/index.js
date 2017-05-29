@@ -5,6 +5,7 @@ const extendApi = require('./extendApi')
 
 const OPTION = {
   id: 'version',
+  name: 'version',
   aliases: ['v'],
   description: 'Show the current version',
 }
@@ -71,7 +72,7 @@ module.exports = function versionPlugin(lifecycle) {
       })
 
       if (!isVersionAsked) {
-        return yield next(commands)
+        continue
       }
 
       let version = command.config.version
@@ -83,5 +84,7 @@ module.exports = function versionPlugin(lifecycle) {
         return 'Unable to determine the current version'
       }
     }
+
+    return yield next(commands)
   })
 }

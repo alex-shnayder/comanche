@@ -10,12 +10,12 @@ function handleError(err) {
 module.exports = function errorPlugin(lifecycle) {
   ['init', 'start', 'execute'].forEach((event) => {
     lifecycle.hookBefore(event, function* (...args) {
-      let errHandler = (event === 'execute') ? args[1] : handleError
+      let errHandler = (event === 'execute' && args[1]) ? args[1] : handleError
 
       try {
         return yield next(...args)
       } catch (err) {
-        return lifecycle.tootWith('error', errHandler, err)
+        return lifecycle.tootSyncWith('error', errHandler, err)
       }
     })
   })
