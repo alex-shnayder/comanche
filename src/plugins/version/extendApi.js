@@ -1,6 +1,3 @@
-const readPkgUp = require('read-pkg-up')
-
-
 module.exports = function extendApi(BaseClass) {
   class CommandWithVersion extends BaseClass {
     constructor(...args) {
@@ -8,6 +5,7 @@ module.exports = function extendApi(BaseClass) {
 
       if (this.config.default) {
         this.config.version = true
+        this.sharedSettings.push('version')
       }
     }
 
@@ -20,33 +18,6 @@ module.exports = function extendApi(BaseClass) {
 
       this.config.value = value
       return this
-    }
-
-    getConfig() {
-      if (!this.config.version) {
-        return super.getConfig()
-      }
-
-      let option = this
-        .option('version')
-        .alias('v')
-        .description('Show the current version')
-        .shared()
-      option.config._isVersion = true
-
-      let config = super.getConfig()
-
-      if (config.version === true) {
-        let { pkg } = readPkgUp.sync({
-          cwd: process.argv[1],
-        })
-
-        option.config._version = pkg.version
-      } else {
-        option.config._version = config.version
-      }
-
-      return config
     }
   }
 
