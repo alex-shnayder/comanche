@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 const { next } = require('hooter/effects')
 const { InputError } = require('../../common')
 const parseArgs = require('./parseArgs')
@@ -7,6 +5,8 @@ const extendApi = require('./extendApi')
 
 
 function handleError(err) {
+  /* eslint-disable no-console */
+
   if (err instanceof InputError) {
     console.error(err.message)
   } else {
@@ -15,7 +15,9 @@ function handleError(err) {
 }
 
 function handleResult(result) {
-  if (result) {
+  /* eslint-disable no-console */
+
+  if (typeof result === 'string') {
     console.log(result)
   }
 }
@@ -32,8 +34,12 @@ module.exports = function cliPlugin(lifecycle) {
     Promise.resolve()
       .then(() => {
         let args = process.argv.slice(2)
-        let commands = parseArgs(args, config)
-        return lifecycle.tootAsync('execute', commands, handleError)
+        return parseArgs(args, config)
+      })
+      .then((commands) => {
+        return lifecycle.toot('execute', commands)
+      }, (err) => {
+        return lifecycle.tootWith('error', handleError, err)
       })
       .then(handleResult)
 
