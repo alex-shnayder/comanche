@@ -55,8 +55,12 @@ class Command {
     this.parent = parent
     this.commands = []
     this.options = []
-    this.sharedSettings = []
+    this.sharedSettings = ['help']
     this.sharedOptions = []
+
+    if (!parent) {
+      this.config.help = true
+    }
 
     if (config) {
       this.set(config)
@@ -127,6 +131,18 @@ class Command {
     }
 
     this.config.description = description
+    return this
+  }
+
+  help(value = true) {
+    // If help is not a string, every interface should compose text on its own
+    let valueType = typeof value
+
+    if (valueType !== 'boolean' && valueType !== 'string') {
+      throw new Error('The argument of help() must be either boolean or a string')
+    }
+
+    this.config.help = value
     return this
   }
 
