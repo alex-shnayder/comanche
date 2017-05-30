@@ -4,8 +4,12 @@ const normalizeCommands = require('./normalizeCommands')
 
 module.exports = function executionPlugin(lifecycle) {
   function executeOne(command, context) {
-    let { name, options } = command
+    let { outputName, options } = command
     let handlerOptions = {}
+
+    if (!outputName) {
+      throw new Error('Commands must have an output name in the end of "execute.one"')
+    }
 
     if (options) {
       options.forEach((option) => {
@@ -17,7 +21,9 @@ module.exports = function executionPlugin(lifecycle) {
       })
     }
 
-    return lifecycle.tootAsync('execute.handle', name, handlerOptions, context)
+    return lifecycle.tootAsync(
+      'execute.handle', outputName, handlerOptions, context
+    )
   }
 
   function* executeBatch(commands) {
