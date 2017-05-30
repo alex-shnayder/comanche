@@ -21,9 +21,12 @@ module.exports = function normalizeCommands(commands, config) {
 
     let commandConfig = findOneByName(config.commands, 'commands', name)
 
-    if (commandConfig.options) {
+    if (commandConfig.options || commandConfig.commands) {
+      let { options, commands } = commandConfig
+
       commandConfig = Object.assign({}, commandConfig, {
-        options: findByIds(config.options, commandConfig.options),
+        options: options && findByIds(config.options, options),
+        commands: commands && findByIds(config.commands, commands),
       })
     }
 
