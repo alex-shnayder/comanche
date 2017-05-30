@@ -58,7 +58,7 @@ module.exports = function versionPlugin(lifecycle) {
     return yield next(config, ...args)
   })
 
-  lifecycle.hookAfter('execute.batch', function* (commands) {
+  lifecycle.hook('execute.batch', function* (commands) {
     for (let i = 0; i < commands.length; i++) {
       let command = commands[i]
       let options = command.options
