@@ -24,7 +24,7 @@ function validateCommand({ inputName, options, config }) {
           return option.config && option.config.id === optionConfig.id
         })
 
-        if (!option) {
+        if (!option || option.value === null) {
           throw new InputError(`Option "${optionConfig.name}" is required`)
         }
       }
