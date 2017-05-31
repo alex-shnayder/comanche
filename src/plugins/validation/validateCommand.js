@@ -1,7 +1,15 @@
 const { InputError } = require('../../common')
 
 
-function validateOption() {
+const BASIC_TYPES = ['string', 'boolean', 'number', 'function']
+
+function validateOption({ inputName, value, config }) {
+  let { type } = config
+  let isTypeCorrect = (!BASIC_TYPES.includes(type) || typeof value === type)
+
+  if (!isTypeCorrect || Number.isNaN(value)) {
+    throw new InputError(`Option "${inputName}" must be a ${type}`)
+  }
 }
 
 function validateCommand({ inputName, options, config }) {
