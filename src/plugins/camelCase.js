@@ -1,8 +1,9 @@
 const camelcase = require('camelcase')
 const { next } = require('hooter/effects')
 
+
 module.exports = function camelCasePlugin(lifecycle) {
-  lifecycle.hookAfter('execute.batch', function* (commands) {
+  lifecycle.hookEnd('execute.batch', function* (commands) {
     commands = commands.map((command) => {
       if (command.options) {
         command = Object.assign({}, command)

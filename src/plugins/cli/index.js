@@ -43,7 +43,7 @@ module.exports = function cliPlugin(lifecycle) {
       .then((commands) => {
         return lifecycle.toot('execute', commands, handleError)
       }, (err) => {
-        return lifecycle.tootSyncWith('error', handleError, err)
+        return lifecycle.tootWith('error', handleError, err)
       })
       .then(handleResult)
 

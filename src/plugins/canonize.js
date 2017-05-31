@@ -2,7 +2,7 @@ const { next } = require('hooter/effects')
 
 
 module.exports = function canonizePlugin(lifecycle) {
-  lifecycle.hookAfter('execute.batch', function* (commands) {
+  lifecycle.hookEnd('execute.batch', function* (commands) {
     commands = commands.map((command) => {
       let { name, config } = command
       let ownName = config ? config.name : name[name.length - 1]

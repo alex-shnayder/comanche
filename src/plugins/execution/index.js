@@ -21,7 +21,7 @@ module.exports = function executionPlugin(lifecycle) {
       })
     }
 
-    return lifecycle.tootAsync(
+    return lifecycle.toot(
       'execute.handle', outputName, handlerOptions, context
     )
   }
@@ -30,7 +30,7 @@ module.exports = function executionPlugin(lifecycle) {
     let context
 
     for (let i = 0; i < commands.length; i++) {
-      context = yield lifecycle.tootAsyncWith(
+      context = yield lifecycle.tootWith(
         'execute.one', executeOne, commands[i], context
       )
     }
@@ -46,12 +46,12 @@ module.exports = function executionPlugin(lifecycle) {
     return config
   })
 
-  lifecycle.hookAfter('execute', (commands) => {
+  lifecycle.hookEnd('execute', (commands) => {
     if (!Array.isArray(commands) || commands.length === 0) {
       throw new Error('The first argument of execute must be an array of commands')
     }
 
     commands = normalizeCommands(commands, config)
-    return lifecycle.tootAsyncWith('execute.batch', executeBatch, commands)
+    return lifecycle.tootWith('execute.batch', executeBatch, commands)
   })
 }

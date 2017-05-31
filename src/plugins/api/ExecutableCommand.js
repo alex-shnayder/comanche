@@ -75,7 +75,7 @@ class ExecutableCommand extends Command {
       name = name.concat(command.split(' '))
     }
 
-    return this.lifecycle.tootAsync('execute', [{ name, options }])
+    return this.lifecycle.toot('execute', [{ name, options }])
   }
 
   start() {
@@ -83,7 +83,7 @@ class ExecutableCommand extends Command {
       throw new Error('start() can only be used on the default command (the app)')
     }
 
-    return this.lifecycle.tootSyncWith(
+    return this.lifecycle.tootWith(
       'start',
       (config) => config,
       buildConfig(this)
