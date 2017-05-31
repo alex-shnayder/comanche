@@ -1,13 +1,27 @@
 const { next } = require('hooter/effects')
 
 
+const TRUTHY_VALUES = [null, true, 'true', 1, '1']
+const FALSY_VALUES = [false, 'false', 0, '0']
+
+
 function coerceValue(value, type) {
   switch (type) {
-    case 'boolean':
-      return (value === null) ? true : Boolean(value)
+    case 'string':
+      return (typeof value === 'number') ? String(value) : value
 
-    case 'number':
-      return Number(value)
+    case 'boolean':
+      if (TRUTHY_VALUES.includes(value)) {
+        return true
+      } else if (FALSY_VALUES.includes(value)) {
+        return false
+      }
+      break
+
+    case 'number': {
+      let newValue = Number(value)
+      return Number.isNaN(newValue) ? value : newValue
+    }
   }
 
   return value
