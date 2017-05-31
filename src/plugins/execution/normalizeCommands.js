@@ -57,7 +57,10 @@ module.exports = function normalizeCommands(commands, config) {
       newCommand.options = options.map((option) => {
         let optionConfig = findOneByName(commandConfig.options, option.name)
         let inputName = option.inputName || option.name
-        return Object.assign({}, option, { inputName, config: optionConfig })
+        let inputValue = option.value
+        return Object.assign({}, option, {
+          inputName, inputValue, config: optionConfig,
+        })
       })
     }
 

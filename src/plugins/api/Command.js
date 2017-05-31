@@ -146,6 +146,15 @@ class Command {
     return this
   }
 
+  type(value) {
+    if (typeof value !== 'string' || value.length === 0) {
+      throw new Error('A type must be a non-empty string')
+    }
+
+    this.config.type = value
+    return this
+  }
+
   command(config) {
     let command = new this.constructor(config, this)
     let existingCommands = this.commands.map((c) => c.config)
