@@ -2,7 +2,7 @@ const { next } = require('hooter/effects')
 const normalizeCommands = require('./normalizeCommands')
 
 
-module.exports = function executionPlugin(lifecycle) {
+module.exports = function executePlugin(lifecycle) {
   function executeOne(command, context) {
     let { outputName, options } = command
     let handlerOptions = {}

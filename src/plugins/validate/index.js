@@ -3,7 +3,7 @@ const extendApi = require('./extendApi')
 const validateCommand = require('./validateCommand')
 
 
-module.exports = function validationPlugin(lifecycle) {
+module.exports = function validatePlugin(lifecycle) {
   lifecycle.hook('init', function* (BaseClass) {
     let NewClass = extendApi(BaseClass)
     return yield next(NewClass)

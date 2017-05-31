@@ -1,20 +1,20 @@
 const comanche = require('./comanche')
 const api = require('./plugins/api')
 const cli = require('./plugins/cli')
-const execution = require('./plugins/execution')
+const execute = require('./plugins/execute')
 const version = require('./plugins/version')
 const help = require('./plugins/help')
-const validation = require('./plugins/validation')
+const validate = require('./plugins/validate')
 const coerce = require('./plugins/coerce')
 const canonize = require('./plugins/canonize')
 const camelCase = require('./plugins/camelCase')
 const error = require('./plugins/error')
-const sharedOptions = require('./plugins/sharedOptions')
+const shareOptions = require('./plugins/shareOptions')
 
 
 const DEFAULT_PLUGINS = [
-  error, execution, api, cli, sharedOptions,
-  version, help, coerce, validation, camelCase, canonize,
+  error, execute, api, cli, shareOptions,
+  version, help, coerce, validate, camelCase, canonize,
 ]
 
 module.exports = function defaultComanche(...args) {

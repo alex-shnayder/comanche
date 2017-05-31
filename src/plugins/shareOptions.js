@@ -39,7 +39,7 @@ function shareOptions(commands) {
 }
 
 
-module.exports = function sharedOptionsPlugin(lifecycle) {
+module.exports = function shareOptionsPlugin(lifecycle) {
   lifecycle.hook('execute.batch', function* (commands) {
     commands = shareOptions(commands)
     return yield next(commands)
