@@ -114,6 +114,18 @@ class Command {
       )
     }
 
+    if (this.parent) {
+      let matchingSibling = this.parent.findCommandByAliases(alias)
+
+      if (matchingSibling) {
+        alias = isArray ? alias.join(', ') : alias
+        throw new Error(
+          `Cannot set alias "${alias}" of the "${this.config.name}" command ` +
+          `because it is already taken by "${matchingSibling.name}"`
+        )
+      }
+    }
+
     if (isArray) {
       alias.forEach((a) => validateName(a))
     } else {
@@ -157,10 +169,9 @@ class Command {
 
   command(config) {
     let command = new this.constructor(config, this)
-    let existingCommands = this.commands.map((c) => c.config)
     let { name, aliases } = command.config
     let names = aliases ? aliases.concat(name) : [name]
-    let matchingCommand = findOneByAliases(existingCommands, names)
+    let matchingCommand = this.findCommandByAliases(names)
 
     if (matchingCommand) {
       throw new Error(
@@ -176,10 +187,9 @@ class Command {
 
   option(config) {
     let option = new this.constructor.Option(config, this)
-    let existingOptions = this.options.map((o) => o.config)
     let { name, aliases } = option.config
     let names = aliases ? aliases.concat(name) : [name]
-    let matchingOption = findOneByAliases(existingOptions, names)
+    let matchingOption = this.findOptionByAliases(names)
 
     if (matchingOption) {
       throw new Error(
@@ -215,6 +225,16 @@ class Command {
 
   end() {
     return this.parent
+  }
+
+  findCommandByAliases(aliases) {
+    let existingCommands = this.commands.map((c) => c.config)
+    return findOneByAliases(existingCommands, aliases)
+  }
+
+  findOptionByAliases(aliases) {
+    let existingOptions = this.options.map((c) => c.config)
+    return findOneByAliases(existingOptions, aliases)
   }
 
   getFullName() {

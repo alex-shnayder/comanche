@@ -95,6 +95,18 @@ class Option {
       )
     }
 
+    if (this.parent) {
+      let matchingSibling = this.parent.findOptionByAliases(alias)
+
+      if (matchingSibling) {
+        alias = isArray ? alias.join(', ') : alias
+        throw new Error(
+          `Cannot set alias "${alias}" of the "${this.config.name}" option ` +
+          `because it is already taken by "${matchingSibling.name}"`
+        )
+      }
+    }
+
     if (isArray) {
       alias = alias.map((a) => normalizeAndValidateName(a))
     } else {
