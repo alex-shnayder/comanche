@@ -86,31 +86,19 @@ class Option {
     return this
   }
 
-  alias(alias) {
-    let isArray = Array.isArray(alias)
-
-    if (typeof alias !== 'string' && !isArray) {
-      throw new Error(
-        'The argument of alias() must be either a string or an array'
-      )
-    }
+  alias(...alias) {
+    alias = alias.map((a) => normalizeAndValidateName(a))
 
     if (this.parent) {
       let matchingSibling = this.parent.findOptionByAliases(alias)
 
       if (matchingSibling) {
-        alias = isArray ? alias.join(', ') : alias
+        alias = alias.join(', ')
         throw new Error(
           `Cannot set alias "${alias}" of the "${this.config.name}" option ` +
           `because it is already taken by "${matchingSibling.name}"`
         )
       }
-    }
-
-    if (isArray) {
-      alias = alias.map((a) => normalizeAndValidateName(a))
-    } else {
-      alias = [normalizeAndValidateName(alias)]
     }
 
     this.config.aliases = alias

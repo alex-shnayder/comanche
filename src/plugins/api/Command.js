@@ -105,32 +105,19 @@ class Command {
     return this
   }
 
-  alias(alias) {
-    let isArray = Array.isArray(alias)
-
-    if (typeof alias !== 'string' && !isArray) {
-      throw new Error(
-        'The argument of alias() must be either a string or an array'
-      )
-    }
+  alias(...alias) {
+    alias.forEach((a) => validateName(a))
 
     if (this.parent) {
       let matchingSibling = this.parent.findCommandByAliases(alias)
 
       if (matchingSibling) {
-        alias = isArray ? alias.join(', ') : alias
+        alias = alias.join(', ')
         throw new Error(
           `Cannot set alias "${alias}" of the "${this.config.name}" command ` +
           `because it is already taken by "${matchingSibling.name}"`
         )
       }
-    }
-
-    if (isArray) {
-      alias.forEach((a) => validateName(a))
-    } else {
-      validateName(alias)
-      alias = [alias]
     }
 
     this.config.aliases = alias
