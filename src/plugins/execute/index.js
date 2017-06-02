@@ -1,9 +1,9 @@
-const { next } = require('hooter/effects')
+const { next, toot, tootWith } = require('hooter/effects')
 const normalizeCommands = require('./normalizeCommands')
 
 
 module.exports = function executePlugin(lifecycle) {
-  function executeOne(command, context) {
+  function* executeOne(command, context) {
     let { outputName, options } = command
     let handlerOptions = {}
 
@@ -21,18 +21,14 @@ module.exports = function executePlugin(lifecycle) {
       })
     }
 
-    return lifecycle.toot(
-      'execute.handle', outputName, handlerOptions, context
-    )
+    return yield toot('execute.handle', outputName, handlerOptions, context)
   }
 
   function* executeBatch(commands) {
     let context
 
     for (let i = 0; i < commands.length; i++) {
-      context = yield lifecycle.tootWith(
-        'execute.one', executeOne, commands[i], context
-      )
+      context = yield tootWith('execute.one', executeOne, commands[i], context)
     }
 
     return context
@@ -46,12 +42,12 @@ module.exports = function executePlugin(lifecycle) {
     return config
   })
 
-  lifecycle.hookEnd('execute', (commands) => {
+  lifecycle.hookEnd('execute', function* (commands) {
     if (!Array.isArray(commands) || commands.length === 0) {
       throw new Error('The first argument of execute must be an array of commands')
     }
 
     commands = normalizeCommands(commands, config)
-    return lifecycle.tootWith('execute.batch', executeBatch, commands)
+    return yield tootWith('execute.batch', executeBatch, commands)
   })
 }
