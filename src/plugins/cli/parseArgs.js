@@ -1,4 +1,6 @@
-const { InputError, findByIds, findOneByAliases } = require('../../common')
+const {
+  InputError, findByIds, findOneByAliases, findDefaultCommand,
+} = require('../../common')
 
 
 function tokenizeArgs(args) {
@@ -42,7 +44,7 @@ function extractFromCommandConfig(commandConfig, config) {
 }
 
 function parseArgs(args, config) {
-  let defaultCommand = config.commands.find((c) => c.default)
+  let defaultCommand = findDefaultCommand(config)
 
   if (!defaultCommand) {
     throw new Error('No default command defined')

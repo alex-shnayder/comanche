@@ -1,4 +1,4 @@
-const { findOneByName, findByIds } = require('../../common')
+const { findOneByName, populateCommand } = require('../../common')
 
 
 module.exports = function normalizeCommands(commands, config) {
@@ -20,15 +20,7 @@ module.exports = function normalizeCommands(commands, config) {
     }
 
     let commandConfig = findOneByName(config.commands, 'commands', name)
-
-    if (commandConfig.options || commandConfig.commands) {
-      let { options, commands } = commandConfig
-
-      commandConfig = Object.assign({}, commandConfig, {
-        options: options && findByIds(config.options, options),
-        commands: commands && findByIds(config.commands, commands),
-      })
-    }
+    commandConfig = populateCommand(commandConfig, config)
 
     let inputName = command.inputName || name[name.length - 1]
     let newCommand = Object.assign({}, command, {
