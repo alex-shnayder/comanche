@@ -22,7 +22,16 @@ module.exports = function comanche(args, plugins) {
   EVENTS.forEach(([event, mode]) => {
     lifecycle.register(event, mode)
   })
-
   plugins.forEach((plugin) => plugin(lifecycle))
-  return lifecycle.tootWith('init', (Class) => new Class(...args))
+
+  return lifecycle.tootWith('init', (Class) => {
+    if (!Class) {
+      throw new Error(
+        'No interface has been defined. At least one plugin must define ' +
+        'an interface during the "init" event'
+      )
+    }
+
+    return new Class(...args)
+  })
 }
