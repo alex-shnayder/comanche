@@ -22,7 +22,9 @@ module.exports = function comanche(args, plugins) {
   EVENTS.forEach(([event, mode]) => {
     lifecycle.register(event, mode)
   })
-  plugins.forEach((plugin) => plugin(lifecycle))
+  plugins.forEach((plugin) => {
+    plugin(lifecycle.bind(plugin))
+  })
 
   return lifecycle.tootWith('init', (Class) => {
     if (!Class) {
