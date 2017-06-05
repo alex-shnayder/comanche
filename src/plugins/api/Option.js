@@ -9,7 +9,7 @@ function validateName(name) {
     )
   }
 
-  if (!/[a-zA-Z0-9_-]/.test(name)) {
+  if (!/^[a-zA-Z0-9_-]+$/.test(name)) {
     throw new Error(
       'An option name or alias may only contain letters, numbers, underscores and hyphens'
     )
