@@ -76,9 +76,9 @@ module.exports = function cliPlugin(lifecycle) {
           let { type, args } = event || {}
           let command
 
-          if (type === 'execute' || type === 'execute.batch') {
+          if (type === 'execute') {
             command = args[0] && args[0][0]
-          } else if (type === 'execute.one' || type === 'execute.handle') {
+          } else if (type === 'process' || type === 'handle') {
             command = args[0]
           } else {
             command = defaultCommand
@@ -91,30 +91,24 @@ module.exports = function cliPlugin(lifecycle) {
     return config
   })
 
-  lifecycle.hook('execute.batch', function* (commands) {
+  lifecycle.hook('process', function* (command) {
     // This repeats the similar block in the help plugin
     // TODO: DRY it
-    for (let i = 0; i < commands.length; i++) {
-      let command = commands[i]
-      let options = command.options
 
-      if (!options) {
-        continue
-      }
+    let { inputName, options, config } = command
 
-      let isHelpAsked = options.some((option) => {
-        return option.config && option.config.isHelpOption
-      })
+    let isHelpAsked = options && options.some((option) => {
+      return option.config && option.config.isHelpOption
+    })
 
-      if (!isHelpAsked) {
-        continue
-      }
-
-      let help = command.config && command.config.help
-      help = (help === true) ? composeHelp(command, config) : help
-      return help || `Help is unavailable for "${command.inputName}"`
+    if (!isHelpAsked) {
+      return yield next(command)
     }
 
-    return yield next(commands)
+    if (config) {
+      return composeHelp(inputName, config)
+    }
+
+    return `Help is unavailable for "${inputName}"`
   })
 }

@@ -48,16 +48,17 @@ class ExecutableCommand extends Command {
       throw new Error('A handler must be a function')
     }
 
-    this.lifecycle.hook('execute.handle', function* (
-      _command, options, context, ...args
+    this.lifecycle.hook('handle', function* (
+      _command, context, ...args
     ) {
-      if (_command.length !== command.length ||
-          !_command.every((n, i) => command[i] === n)) {
-        return yield next(_command, options, context, ...args)
+      let { outputName, options } = _command
+
+      if (outputName.length === command.length &&
+          outputName.every((n, i) => command[i] === n)) {
+        context = yield handler(options, context, ...args)
       }
 
-      context = yield handler(options, context, ...args)
-      return yield next(_command, options, context, ...args).or(context)
+      return yield next(_command, context, ...args)
     })
 
     return this

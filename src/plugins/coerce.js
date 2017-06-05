@@ -28,22 +28,18 @@ function coerceValue(value, type) {
 }
 
 module.exports = function coercePlugin(lifecycle) {
-  lifecycle.hook('execute.batch', function* (commands) {
-    commands = commands.map((command) => {
-      if (command.options) {
-        command = Object.assign({}, command)
-        command.options = command.options.map((option) => {
-          if (option.config && option.config.type) {
-            option = Object.assign({}, option)
-            option.value = coerceValue(option.value, option.config.type)
-          }
-          return option
-        })
-      }
+  lifecycle.hook('process', function* (command) {
+    if (command.options) {
+      command = Object.assign({}, command)
+      command.options = command.options.map((option) => {
+        if (option.config && option.config.type) {
+          option = Object.assign({}, option)
+          option.value = coerceValue(option.value, option.config.type)
+        }
+        return option
+      })
+    }
 
-      return command
-    })
-
-    return yield next(commands)
+    return yield next(command)
   })
 }

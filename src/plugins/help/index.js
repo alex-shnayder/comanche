@@ -44,29 +44,20 @@ module.exports = function helpPlugin(lifecycle) {
     return yield next(config, ...args)
   })
 
-  lifecycle.hook('execute.batch', function* (commands) {
-    for (let i = 0; i < commands.length; i++) {
-      let command = commands[i]
-      let options = command.options
+  lifecycle.hookEnd('process', function* (command) {
+    let { inputName, options, config } = command
 
-      if (!options) {
-        continue
-      }
+    let isHelpAsked = options && options.some((option) => {
+      return option.config && option.config.isHelpOption
+    })
 
-      let isHelpAsked = options.some((option) => {
-        return option.config && option.config.isHelpOption
-      })
-
-      if (!isHelpAsked) {
-        continue
-      }
-
-      let help = command.config && command.config.help
-      return (typeof help === 'string') ?
-        help :
-        `Help is unavailable for "${command.inputName}"`
+    if (!isHelpAsked) {
+      return yield next(command)
     }
 
-    return yield next(commands)
+    let help = config && config.help
+    return (typeof help === 'string') ?
+      help :
+      `Help is unavailable for "${inputName}"`
   })
 }

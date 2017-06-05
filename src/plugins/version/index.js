@@ -58,33 +58,24 @@ module.exports = function versionPlugin(lifecycle) {
     return yield next(config, ...args)
   })
 
-  lifecycle.hook('execute.batch', function* (commands) {
-    for (let i = 0; i < commands.length; i++) {
-      let command = commands[i]
-      let options = command.options
+  lifecycle.hookEnd('process', function* (command) {
+    let { options, config } = command
 
-      if (!options) {
-        continue
-      }
+    let isVersionAsked = options && options.some((option) => {
+      return option.config && option.config.id === OPTION.id
+    })
 
-      let isVersionAsked = options.some((option) => {
-        return option.config && option.config.id === OPTION.id
-      })
-
-      if (!isVersionAsked) {
-        continue
-      }
-
-      let version = command.config.version
-      version = (version === true) ? detectVersion() : version
-
-      if (version) {
-        return (version.charAt(0) === 'v') ? version : `v${version}`
-      } else {
-        return 'Unable to determine the current version'
-      }
+    if (!isVersionAsked) {
+      return yield next(command)
     }
 
-    return yield next(commands)
+    let version = config && config.version
+    version = (version === true) ? detectVersion() : version
+
+    if (version) {
+      return (version.charAt(0) === 'v') ? version : `v${version}`
+    } else {
+      return 'Unable to determine the current version'
+    }
   })
 }
