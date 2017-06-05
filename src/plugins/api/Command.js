@@ -68,10 +68,10 @@ class Command {
   }
 
   set(config) {
-    let { alias, description, share, commands, options } = config
+    let { aliases, description, share, commands, options } = config
 
-    if (alias) {
-      this.alias(alias)
+    if (aliases) {
+      this.aliases(...aliases)
     }
 
     if (description) {
@@ -105,22 +105,23 @@ class Command {
     return this
   }
 
-  alias(...alias) {
-    alias.forEach((a) => validateName(a))
+  aliases(...aliases) {
+    aliases.forEach((a) => validateName(a))
 
     if (this.parent) {
-      let matchingSibling = this.parent.findCommandByAliases(alias)
+      let matchingSibling = this.parent.findCommandByAliases(aliases)
 
       if (matchingSibling) {
-        alias = alias.join(', ')
+        let name = this.config.name
+        aliases = aliases.join(', ')
         throw new Error(
-          `Cannot set alias "${alias}" of the "${this.config.name}" command ` +
+          `Cannot set aliases "${aliases}" of the "${name}" command ` +
           `because it is already taken by "${matchingSibling.name}"`
         )
       }
     }
 
-    this.config.aliases = alias
+    this.config.aliases = aliases
     return this
   }
 

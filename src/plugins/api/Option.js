@@ -65,10 +65,10 @@ class Option {
   }
 
   set(config) {
-    let { alias, description, required, type } = config
+    let { aliases, description, required, type } = config
 
-    if (alias) {
-      this.alias(alias)
+    if (aliases) {
+      this.aliases(...aliases)
     }
 
     if (description) {
@@ -86,22 +86,23 @@ class Option {
     return this
   }
 
-  alias(...alias) {
-    alias = alias.map((a) => normalizeAndValidateName(a))
+  aliases(...aliases) {
+    aliases = aliases.map((a) => normalizeAndValidateName(a))
 
     if (this.parent) {
-      let matchingSibling = this.parent.findOptionByAliases(alias)
+      let matchingSibling = this.parent.findOptionByAliases(aliases)
 
       if (matchingSibling) {
-        alias = alias.join(', ')
+        let name = this.config.name
+        aliases = aliases.join(', ')
         throw new Error(
-          `Cannot set alias "${alias}" of the "${this.config.name}" option ` +
+          `Cannot set aliases "${aliases}" of the "${name}" option ` +
           `because it is already taken by "${matchingSibling.name}"`
         )
       }
     }
 
-    this.config.aliases = alias
+    this.config.aliases = aliases
     return this
   }
 
