@@ -19,7 +19,7 @@ function coerceValue(value, type) {
       break
 
     case 'number': {
-      let newValue = Number(value)
+      let newValue = (value === null) ? 1 : Number(value)
       return Number.isNaN(newValue) ? value : newValue
     }
   }
