@@ -72,7 +72,30 @@ function populateCommand(command, config) {
   })
 }
 
+function optionsToObject(options) {
+  if (!options || !options.length) {
+    return {}
+  }
+
+  return options.reduce((object, option) => {
+    object[option.outputName] = option.value
+    return object
+  }, {})
+}
+
+function compareNames(nameA, nameB) {
+  nameA = (typeof nameA === 'string') ? [nameA] : nameA
+  nameB = (typeof nameB === 'string') ? [nameB] : nameB
+
+  if (!Array.isArray(nameA) || !Array.isArray(nameB)) {
+    throw new Error('A name must be an array or a string')
+  }
+
+  return (nameA.length === nameB.length &&
+          nameA.every((n, i) => nameB[i] === n))
+}
+
 module.exports = {
-  InputError, findByIds, findOneById, findOneByAliases,
-  findOneByName, findDefaultCommand, populateCommand,
+  InputError, findByIds, findOneById, findOneByAliases, findOneByName,
+  findDefaultCommand, populateCommand, optionsToObject, compareNames,
 }
