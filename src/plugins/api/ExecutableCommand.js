@@ -1,4 +1,5 @@
 const { next } = require('hooter/effects')
+const { optionsToObject, compareNames } = require('../../common')
 const Command = require('./Command')
 const Option = require('./Option')
 
@@ -53,8 +54,8 @@ class ExecutableCommand extends Command {
     ) {
       let { outputName, options } = _command
 
-      if (outputName.length === command.length &&
-          outputName.every((n, i) => command[i] === n)) {
+      if (compareNames(outputName, command)) {
+        options = optionsToObject(options)
         context = yield handler(options, context, ...args)
       }
 
