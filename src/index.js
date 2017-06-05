@@ -10,10 +10,11 @@ const canonize = require('./plugins/canonize')
 const camelCase = require('./plugins/camelCase')
 const error = require('./plugins/error')
 const shareOptions = require('./plugins/shareOptions')
+const defaultValues = require('./plugins/defaultValues')
 
 
 const DEFAULT_PLUGINS = [
-  error, execute, api, cli, shareOptions,
+  error, execute, api, cli, defaultValues, shareOptions,
   version, help, coerce, validate, camelCase, canonize,
 ]
 
