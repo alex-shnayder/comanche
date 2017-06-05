@@ -7,24 +7,39 @@ const parseArgs = require('./parseArgs')
 const extendApi = require('./extendApi')
 
 
-function handleError(err) {
+function print(string, level = 'log') {
+  /* eslint-disable no-console */
+  console[level]()
+  console[level](string)
+  console[level]()
+}
+
+function handleError(err, command) {
   /* eslint-disable no-console */
   // TODO: show help on error
 
+  let text = err
+
   if (err instanceof InputError) {
-    console.error(err.message)
-  } else {
-    console.error(err)
+    text = err.message
+
+    if (command) {
+      let { inputName, config } = command
+      let commandName = inputName || (config && config.name)
+      text += '\n\n'
+      text += composeHelp(commandName, config)
+    }
   }
+
+  print(text, 'error')
 }
 
 function handleResult(result) {
-  /* eslint-disable no-console */
-
   if (typeof result === 'string') {
-    console.log(result)
+    print(result)
   }
 }
+
 
 module.exports = function cliPlugin(lifecycle) {
   let config

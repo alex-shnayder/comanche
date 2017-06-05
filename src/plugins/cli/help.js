@@ -7,15 +7,14 @@ const GAP = 5
 
 let texts = {}
 
-function makeUsageText(command) {
-  let { config, inputName } = command
-  let text = `Usage: ${inputName}`
+function makeUsageText(commandName, commandConfig) {
+  let text = `Usage: ${commandName}`
 
-  if (!config || !config.description) {
+  if (!commandConfig || !commandConfig.description) {
     return text
   }
 
-  return `${text}\n\n${config.description}`
+  return `${text}\n\n${commandConfig.description}`
 }
 
 function makeCommandsText(commands) {
@@ -58,28 +57,26 @@ function makeOptionsText(options) {
 }
 
 
-module.exports = function composeHelp(command) {
-  let { config, inputName } = command
-
-  if (!config) {
-    return `Command "${inputName} is unknown`
+module.exports = function composeHelp(commandName, commandConfig) {
+  if (!commandConfig) {
+    return `Command "${commandName}" is unknown`
   }
 
-  if (texts[config.id]) {
-    return texts[config.id]
+  if (texts[commandConfig.id]) {
+    return texts[commandConfig.id]
   }
 
-  let { options, commands } = config
-  let text = `\n${makeUsageText(command)}\n`
+  let { options, commands } = commandConfig
+  let text = makeUsageText(commandName, commandConfig)
 
   if (commands && commands.length) {
-    text += `\n${makeCommandsText(commands)}\n`
+    text += `\n\n${makeCommandsText(commands)}`
   }
 
   if (options && options.length) {
-    text += `\n${makeOptionsText(options)}\n`
+    text += `\n\n${makeOptionsText(options)}`
   }
 
-  texts[config.id] = text
+  texts[commandConfig.id] = text
   return text
 }
