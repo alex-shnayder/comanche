@@ -1,5 +1,7 @@
 const { next } = require('hooter/effects')
-const { InputError } = require('../../common')
+const {
+  InputError, findDefaultCommand, populateCommand,
+} = require('../../common')
 const composeHelp = require('./help')
 const parseArgs = require('./parseArgs')
 const extendApi = require('./extendApi')
@@ -35,17 +37,41 @@ module.exports = function cliPlugin(lifecycle) {
   lifecycle.hook('start', function* (_config) {
     config = yield next(_config)
 
+    let defaultCommand = findDefaultCommand(config)
+
+    if (defaultCommand) {
+      defaultCommand = populateCommand(defaultCommand, config)
+      defaultCommand = {
+        inputName: defaultCommand.name,
+        config: defaultCommand,
+      }
+    }
+
     Promise.resolve()
       .then(() => {
         let args = process.argv.slice(2)
         return parseArgs(args, config)
       })
       .then((commands) => {
-        return lifecycle.toot('execute', commands, handleError)
-      }, (err) => {
-        return lifecycle.tootWith('error', handleError, err)
+        return lifecycle.toot('execute', commands)
       })
       .then(handleResult)
+      .catch((err) => {
+        lifecycle.tootWith('error', (err, event) => {
+          let { type, args } = event || {}
+          let command
+
+          if (type === 'execute' || type === 'execute.batch') {
+            command = args[0] && args[0][0]
+          } else if (type === 'execute.one' || type === 'execute.handle') {
+            command = args[0]
+          } else {
+            command = defaultCommand
+          }
+
+          handleError(err, command)
+        }, err)
+      })
 
     return config
   })

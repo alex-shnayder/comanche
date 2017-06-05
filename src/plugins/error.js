@@ -1,22 +1,27 @@
 const { next } = require('hooter/effects')
 
 
-function handleError(err) {
-  /* eslint-disable no-console */
-  console.error(err)
-  process.exit(1)
-}
+const NO_HANDLER = {}
+
 
 module.exports = function errorPlugin(lifecycle) {
-  ['init', 'start', 'execute'].forEach((event) => {
-    lifecycle.hookStart(event, function* (...args) {
-      let errHandler = (event === 'execute' && args[1]) ? args[1] : handleError
+  lifecycle.hookEnd('error', function* (err, ...args) {
+    let result = yield next(err, ...args).or(NO_HANDLER)
 
-      try {
-        return yield next(...args)
-      } catch (err) {
-        return lifecycle.tootWith('error', errHandler, err)
-      }
-    })
+    if (result === NO_HANDLER) {
+      throw err
+    }
+
+    return result
+  })
+
+  lifecycle.hookStart('error', function* (err, ...args) {
+    try {
+      yield next(err, err.event, ...args)
+    } catch (err) {
+      /* eslint-disable no-console */
+      console.error(err)
+      process.exit(1)
+    }
   })
 }
