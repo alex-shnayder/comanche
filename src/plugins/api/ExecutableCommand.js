@@ -76,19 +76,25 @@ class ExecutableCommand extends Command {
       name = name.concat(command.split(' '))
     }
 
-    return this.lifecycle.toot('execute', [{ name, options }])
+    let lifecycle = this.lifecycle
+    return lifecycle
+      .toot('execute', [{ name, options }])
+      .catch((err) => lifecycle.toot('error', err))
   }
 
   start() {
-    if (!this.lifecycle || this.parent) {
+    let lifecycle = this.lifecycle
+
+    if (!lifecycle || this.parent) {
       throw new Error('start() can only be used on the default command (the app)')
     }
 
-    return this.lifecycle.tootWith(
-      'start',
-      (config) => config,
-      buildConfig(this)
-    )
+    try {
+      let config = buildConfig(this)
+      return lifecycle.tootWith('start', (_config) => _config, config)
+    } catch (err) {
+      lifecycle.toot('error', err)
+    }
   }
 }
 
