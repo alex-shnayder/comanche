@@ -173,7 +173,20 @@ class Command {
     return command
   }
 
-  option(config) {
+  option(config, description) {
+    if (Array.isArray(config)) {
+      let aliases = config
+      let name = aliases.shift()
+      config = { name, aliases }
+    } else if (typeof config === 'string') {
+      let aliases = config.split(', ')
+
+      if (aliases.length > 1) {
+        let name = aliases.shift()
+        config = { name, aliases }
+      }
+    }
+
     let option = new this.constructor.Option(config, this)
     let { name, aliases } = option.config
     let names = aliases ? aliases.concat(name) : [name]
@@ -184,6 +197,10 @@ class Command {
         `The option "${name}" has a name or alias ` +
         `that is already taken by "${matchingOption.name}"`
       )
+    }
+
+    if (description) {
+      option.description(description)
     }
 
     this.options.push(option)
