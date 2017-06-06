@@ -92,7 +92,7 @@ class ExecutableCommand extends Command {
 
     try {
       let config = buildConfig(this)
-      return lifecycle.tootWith('start', (_config) => _config, config)
+      return lifecycle.toot('start', config)
     } catch (err) {
       lifecycle.toot('error', err)
     }
