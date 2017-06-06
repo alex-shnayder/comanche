@@ -94,6 +94,7 @@ function parseArgs(args, config) {
         value = body.substr(eqPos + 1)
       } else if (!isLong && optionConfig) {
         let { consume, type } = optionConfig
+        let nextArg = args[i + 1]
 
         if (type && (consume === null || typeof consume === 'undefined')) {
           consume = CONSUME_BY_TYPE[type]
@@ -103,9 +104,7 @@ function parseArgs(args, config) {
           consume = CONSUME_BY_TYPE.default
         }
 
-        let nextArg = args[i + 1]
-
-        if (nextArg && nextArg.kind === 'value') {
+        if (consume && nextArg && nextArg.kind === 'value') {
           i++
           value = nextArg.body
         }

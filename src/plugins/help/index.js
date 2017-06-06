@@ -9,6 +9,7 @@ function createOption() {
     name: 'help',
     aliases: 'h',
     description: 'Show help',
+    type: 'boolean',
     isHelpOption: true, // Probably not the best way to identify the options
   }
 }
