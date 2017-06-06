@@ -75,7 +75,9 @@ function parseArgs(args, config) {
       let value = null
 
       if (!name) {
-        throw new InputError('Option name must not be empty')
+        let err = new InputError('Option name must not be empty')
+        err.command = currentResult
+        throw err
       }
 
       let optionConfig = findOneByAliases(options, name)
@@ -111,7 +113,9 @@ function parseArgs(args, config) {
         let optionConfig = positionalOptions.shift()
 
         if (!optionConfig) {
-          throw new InputError(`Unknown argument "${arg}"`)
+          let err = new InputError(`Unknown argument "${arg}"`)
+          err.command = currentResult
+          throw err
         }
 
         currentResult.options.push({

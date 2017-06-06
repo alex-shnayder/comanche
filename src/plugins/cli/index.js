@@ -1,6 +1,6 @@
 const { next } = require('hooter/effects')
 const {
-  InputError, findDefaultCommand, populateCommand,
+  InputError, findDefaultCommand, findOneByName, populateCommand,
 } = require('../../common')
 const composeHelp = require('./help')
 const parseArgs = require('./parseArgs')
@@ -76,15 +76,21 @@ module.exports = function cliPlugin(lifecycle) {
           let { type, args } = event || {}
           let command
 
-          if (type === 'execute') {
+          if (err.command) {
+            let commands = config.commands
+            command = Object.assign({}, err.command)
+            command.config = findOneByName(commands, 'commands', command.name)
+
+            if (command.config) {
+              command.config = populateCommand(command.config, config)
+            }
+          } else if (type === 'execute') {
             command = args[0] && args[0][0]
           } else if (type === 'process' || type === 'handle') {
             command = args[0]
-          } else {
-            command = defaultCommand
           }
 
-          handleError(err, command)
+          handleError(err, command || defaultCommand)
         }, err)
       })
 
