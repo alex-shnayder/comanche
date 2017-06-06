@@ -3,6 +3,14 @@ const {
 } = require('../../common')
 
 
+const CONSUME_BY_TYPE = {
+  boolean: false,
+  number: true,
+  string: true,
+  default: true,
+}
+
+
 function tokenizeArgs(args) {
   return args.reduce((results, arg) => {
     let isOption = arg.charAt(0) === '-'
@@ -84,7 +92,17 @@ function parseArgs(args, config) {
 
       if (isLong && eqPos) {
         value = body.substr(eqPos + 1)
-      } else if (optionConfig && optionConfig.consume) {
+      } else if (!isLong && optionConfig) {
+        let { consume, type } = optionConfig
+
+        if (type && (consume === null || typeof consume === 'undefined')) {
+          consume = CONSUME_BY_TYPE[type]
+        }
+
+        if (typeof consume === 'undefined') {
+          consume = CONSUME_BY_TYPE.default
+        }
+
         let nextArg = args[i + 1]
 
         if (nextArg && nextArg.kind === 'value') {
