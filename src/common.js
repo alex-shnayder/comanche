@@ -95,7 +95,18 @@ function compareNames(nameA, nameB) {
           nameA.every((n, i) => nameB[i] === n))
 }
 
+function getCommandFromEvent(event) {
+  let { args, type } = event
+
+  if (type === 'execute') {
+    return args && args[0] && args[0][0]
+  } else if (type === 'process' || type === 'handle') {
+    return args && args[0]
+  }
+}
+
 module.exports = {
   InputError, findByIds, findOneById, findOneByAliases, findOneByName,
   findDefaultCommand, populateCommand, optionsToObject, compareNames,
+  getCommandFromEvent,
 }

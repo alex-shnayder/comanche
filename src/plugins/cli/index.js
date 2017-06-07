@@ -1,6 +1,7 @@
 const { next } = require('hooter/effects')
 const {
-  InputError, findDefaultCommand, findOneByName, populateCommand,
+  InputError, findDefaultCommand, findOneByName,
+  populateCommand, getCommandFromEvent,
 } = require('../../common')
 const composeHelp = require('./help')
 const parseArgs = require('./parseArgs')
@@ -73,7 +74,6 @@ module.exports = function cliPlugin(lifecycle) {
       .then(handleResult)
       .catch((err) => {
         lifecycle.tootWith('error', (err, event) => {
-          let { type, args } = event || {}
           let command
 
           if (err.command) {
@@ -84,10 +84,8 @@ module.exports = function cliPlugin(lifecycle) {
             if (command.config) {
               command.config = populateCommand(command.config, config)
             }
-          } else if (type === 'execute') {
-            command = args[0] && args[0][0]
-          } else if (type === 'process' || type === 'handle') {
-            command = args[0]
+          } else {
+            command = getCommandFromEvent(event)
           }
 
           handleError(err, command || defaultCommand)
