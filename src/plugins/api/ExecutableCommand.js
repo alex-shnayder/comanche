@@ -97,6 +97,21 @@ class ExecutableCommand extends Command {
       lifecycle.toot('error', err)
     }
   }
+
+  catch(handler) {
+    let lifecycle = this.lifecycle
+
+    if (!lifecycle || this.parent) {
+      throw new Error('hook() can only be used on the default command (the app)')
+    }
+
+    lifecycle.hook('error', function* (...args) {
+      let result = yield handler(...args)
+      return result ? result : yield next(...args)
+    })
+
+    return this
+  }
 }
 
 ExecutableCommand.Option = Option
