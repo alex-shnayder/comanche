@@ -14,7 +14,7 @@ function print(string, level = 'log') {
   console[level]()
 }
 
-function handleError(err, command) {
+function handleError(err, commandConfig, commandName) {
   /* eslint-disable no-console */
   // TODO: show help on error
 
@@ -23,11 +23,9 @@ function handleError(err, command) {
   if (err instanceof InputError) {
     text = err.message
 
-    if (command) {
-      let { inputName, config } = command
-      let commandName = inputName || (config && config.name)
+    if (commandConfig) {
       text += '\n\n'
-      text += composeHelp(commandName, config)
+      text += composeHelp(commandConfig, commandName)
     }
   }
 
@@ -48,15 +46,6 @@ module.exports = function cliPlugin(lifecycle) {
   })
 
   lifecycle.hook('start', function* (config, ...args) {
-    let defaultCommand = findDefaultCommand(config, true)
-
-    if (defaultCommand) {
-      defaultCommand = {
-        inputName: defaultCommand.name,
-        config: defaultCommand,
-      }
-    }
-
     Promise.resolve()
       .then(() => {
         let args = process.argv.slice(2)
@@ -68,16 +57,20 @@ module.exports = function cliPlugin(lifecycle) {
       .then(handleResult)
       .catch((err) => {
         lifecycle.tootWith('error', (_, err, event) => {
-          let command
+          let commandConfig = findDefaultCommand(config, true)
+          let commandName
 
           if (err.command) {
-            command = Object.assign({}, err.command)
-            command.config = findCommandByFullName(config, command.name)
+            let command = err.command
+            commandConfig = findCommandByFullName(config, command.name, true)
+            commandName = command.inputName
           } else if (event) {
-            command = getCommandFromEvent(event)
+            let command = getCommandFromEvent(event)
+            commandConfig = command.config
+            commandName = command.inputName
           }
 
-          handleError(err, command || defaultCommand)
+          handleError(err, commandConfig, commandName)
         }, err)
       })
 
@@ -99,7 +92,7 @@ module.exports = function cliPlugin(lifecycle) {
     }
 
     if (config) {
-      return composeHelp(inputName, config)
+      return composeHelp(config, inputName)
     }
 
     return `Help is unavailable for "${inputName}"`

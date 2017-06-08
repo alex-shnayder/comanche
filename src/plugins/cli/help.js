@@ -34,8 +34,8 @@ function makeCommandsText(commands) {
 
 function makeOptionsText(options) {
   let rows = options
-    .sort((a) => {
-      return a.isHelpOption ? 1 : 0
+    .sort((o) => {
+      return o.isHelpOption ? 1 : 0
     })
     .map((option) => {
       let { name, aliases, description } = option
@@ -57,10 +57,8 @@ function makeOptionsText(options) {
 }
 
 
-module.exports = function composeHelp(commandName, commandConfig) {
-  if (!commandConfig) {
-    return `Command "${commandName}" is unknown`
-  }
+module.exports = function composeHelp(commandConfig, commandName) {
+  commandName = commandName || commandConfig.name
 
   if (texts[commandConfig.id]) {
     return texts[commandConfig.id]
