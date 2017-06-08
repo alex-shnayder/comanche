@@ -1,5 +1,5 @@
 const { next, suspend, getResume, tootWith } = require('hooter/effects')
-const normalizeCommands = require('./normalizeCommands')
+const prepareCommands = require('./prepareCommands')
 
 
 function ProcessingResult(command, resume) {
@@ -32,7 +32,7 @@ module.exports = function executePlugin(lifecycle) {
       throw new Error('The first argument of execute must be an array of commands')
     }
 
-    commands = normalizeCommands(commands, config)
+    commands = prepareCommands(commands, config)
     return yield next(config, commands)
   })
 

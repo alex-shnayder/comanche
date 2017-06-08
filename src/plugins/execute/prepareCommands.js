@@ -1,7 +1,7 @@
 const { findOneByNames, findCommandByFullName } = require('../../common')
 
 
-module.exports = function normalizeCommands(commands, config) {
+module.exports = function prepareCommands(commands, config) {
   return commands.map((command) => {
     if (!command || typeof command !== 'object') {
       throw new Error('A command must be an object')
