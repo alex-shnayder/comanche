@@ -59,6 +59,7 @@ module.exports = function executePlugin(lifecycle) {
         return result
       }
     }
+
     for (let i = 0; i < commands.length; i++) {
       context = yield tootWith('handle', (_, __, c) => c, commands[i], context)
       context = resumes[i](context)

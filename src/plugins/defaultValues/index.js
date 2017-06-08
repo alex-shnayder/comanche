@@ -12,7 +12,7 @@ module.exports = function defaultValuesPlugin(lifecycle) {
     let config = command.config
 
     if (!config || !config.options || !config.options.length) {
-      return yield next(command)
+      return yield next(_, command, ...args)
     }
 
     let options = command.options.slice()
