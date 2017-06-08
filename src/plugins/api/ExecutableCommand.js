@@ -4,9 +4,12 @@ const Command = require('./Command')
 const Option = require('./Option')
 
 
-function buildConfig(rootCommand) {
-  let commands = [rootCommand.getConfig()]
+function buildConfig(rootCommand, isDefault) {
+  let defaultCommandConfig = rootCommand.getConfig()
+  let commands = [defaultCommandConfig]
   let options = rootCommand.options.map((option) => option.getConfig())
+
+  defaultCommandConfig.default = Boolean(isDefault)
 
   if (rootCommand.commands) {
     rootCommand.commands.forEach((command) => {
@@ -91,7 +94,7 @@ class ExecutableCommand extends Command {
     }
 
     try {
-      let config = buildConfig(this)
+      let config = buildConfig(this, true)
       lifecycle.toot('configure', config)
       return lifecycle.toot('start')
     } catch (err) {

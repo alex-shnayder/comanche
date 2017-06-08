@@ -47,7 +47,6 @@ class Command {
     this.config = {
       name,
       id: parent ? `${parent.config.id}.${name}` : name,
-      default: !parent,
       commands: [],
       options: [],
     }
