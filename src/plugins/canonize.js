@@ -3,9 +3,9 @@ const { next } = require('hooter/effects')
 
 module.exports = function canonizePlugin(lifecycle) {
   lifecycle.hookEnd('process', function* (_, command, ...args) {
-    let { name, config } = command
-    let ownName = config ? config.name : name[name.length - 1]
-    let outputName = name.slice(0, -1).concat(ownName)
+    let { fullName, config } = command
+    let ownName = config ? config.name : fullName[fullName.length - 1]
+    let outputName = fullName.slice(0, -1).concat(ownName)
     let options = command.options
 
     if (options && options.length) {

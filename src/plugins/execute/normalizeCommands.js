@@ -7,22 +7,22 @@ module.exports = function normalizeCommands(commands, config) {
       throw new Error('A command must be an object')
     }
 
-    let { name, options } = command
+    let { fullName, options } = command
 
-    if (typeof name === 'string') {
-      if (!name.length) {
-        throw new Error('A command name must not be empty')
-      }
-
-      name = [name]
-    } else if (!Array.isArray(name)) {
-      throw new Error('A command name must be an array or a string')
+    if (!fullName || !fullName.length) {
+      throw new Error('A command must have a full name')
     }
 
-    let commandConfig = findCommandByFullName(config, name, true)
-    let inputName = command.inputName || name[name.length - 1]
+    if (typeof fullName === 'string') {
+      fullName = [fullName]
+    } else if (!Array.isArray(fullName)) {
+      throw new Error('A command\'s fullName must be an array or a string')
+    }
+
+    let commandConfig = findCommandByFullName(config, fullName, true)
+    let inputName = command.inputName || fullName[fullName.length - 1]
     let newCommand = Object.assign({}, command, {
-      name, inputName, config: commandConfig,
+      fullName, inputName, config: commandConfig,
     })
 
     if (!options) {

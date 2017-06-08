@@ -62,7 +62,7 @@ function parseArgs(args, config) {
     commands, options, positionalOptions,
   } = extractFromCommandConfig(defaultCommand, config)
   let currentResult = {
-    name: [defaultCommand.name],
+    fullName: [defaultCommand.name],
     inputName: defaultCommand.name,
     options: [],
   }
@@ -119,10 +119,10 @@ function parseArgs(args, config) {
         ({
           commands, options, positionalOptions,
         } = extractFromCommandConfig(command, config))
-        let name = currentResult.name.concat(body)
+        let fullName = currentResult.fullName.concat(body)
         currentResult = {
-          name,
-          inputName: name.join(' '),
+          fullName: fullName,
+          inputName: fullName.join(' '),
           options: [],
         }
         results.push(currentResult)

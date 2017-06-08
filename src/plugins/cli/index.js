@@ -62,8 +62,9 @@ module.exports = function cliPlugin(lifecycle) {
 
           if (err.command) {
             let command = err.command
-            commandConfig = findCommandByFullName(config, command.name, true)
-            commandName = command.inputName
+            let { fullName, inputName } = command
+            commandConfig = findCommandByFullName(config, fullName, true)
+            commandName = inputName
           } else if (event) {
             let command = getCommandFromEvent(event)
             commandConfig = command.config
