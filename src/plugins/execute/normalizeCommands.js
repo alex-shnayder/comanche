@@ -1,4 +1,4 @@
-const { findOneByAliases, findCommandByFullName } = require('../../common')
+const { findOneByNames, findCommandByFullName } = require('../../common')
 
 
 module.exports = function normalizeCommands(commands, config) {
@@ -45,7 +45,7 @@ module.exports = function normalizeCommands(commands, config) {
 
     if (commandConfig) {
       newCommand.options = options.map((option) => {
-        let optionConfig = findOneByAliases(commandConfig.options, option.name)
+        let optionConfig = findOneByNames(commandConfig.options, option.name)
         let inputName = option.inputName || option.name
         let inputValue = option.value
         return Object.assign({}, option, {

@@ -12,7 +12,7 @@ function findOneById(items, id) {
   return items.find((item) => item.id === id)
 }
 
-function findOneByAliases(items, names) {
+function findOneByNames(items, names) {
   if (Array.isArray(names)) {
     return items.find((item) => {
       let { name, aliases } = item
@@ -30,7 +30,7 @@ function findCommandByFullName(config, fullName, populate) {
   let command
 
   for (let i = 0; i < fullName.length && commands.length; i++) {
-    command = findCommandByFullName(commands, fullName[i])
+    command = findOneByNames(commands, fullName[i])
 
     if (command) {
       commands = findByIds(commands, command.commands)
@@ -105,7 +105,7 @@ function getCommandFromEvent(event) {
 }
 
 module.exports = {
-  InputError, findByIds, findOneById, findOneByAliases, findCommandByFullName,
+  InputError, findByIds, findOneById, findOneByNames, findCommandByFullName,
   findDefaultCommand, populateCommand, optionsToObject, compareNames,
   getCommandFromEvent,
 }

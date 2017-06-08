@@ -1,4 +1,4 @@
-const { findOneByAliases, populateCommand } = require('../../common')
+const { findOneByNames, populateCommand } = require('../../common')
 
 
 function validateCommand(command) {
@@ -8,7 +8,7 @@ function validateCommand(command) {
     commands.forEach((command) => {
       let { name, aliases } = command
       let names = aliases ? aliases.concat(name) : [name]
-      let matchingCommand = findOneByAliases(commands, names)
+      let matchingCommand = findOneByNames(commands, names)
 
       if (matchingCommand && matchingCommand !== command) {
         throw new Error(
@@ -23,7 +23,7 @@ function validateCommand(command) {
     options.forEach((option) => {
       let { name, aliases } = option
       let names = aliases ? aliases.concat(name) : [name]
-      let matchingOption = findOneByAliases(options, names)
+      let matchingOption = findOneByNames(options, names)
 
       if (matchingOption && matchingOption !== option) {
         throw new Error(

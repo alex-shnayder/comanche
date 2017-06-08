@@ -1,5 +1,5 @@
 const {
-  InputError, findByIds, findOneByAliases, findDefaultCommand,
+  InputError, findByIds, findOneByNames, findDefaultCommand,
 } = require('../../common')
 
 
@@ -88,7 +88,7 @@ function parseArgs(args, config) {
         throw err
       }
 
-      let optionConfig = findOneByAliases(options, name)
+      let optionConfig = findOneByNames(options, name)
 
       if (isLong && eqPos) {
         value = body.substr(eqPos + 1)
@@ -113,7 +113,7 @@ function parseArgs(args, config) {
       let inputName = arg
       currentResult.options.push({ name, inputName, value })
     } else {
-      let command = findOneByAliases(commands, body)
+      let command = findOneByNames(commands, body)
 
       if (command) {
         ({
