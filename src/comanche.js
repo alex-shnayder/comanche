@@ -3,6 +3,7 @@ const Hooter = require('hooter')
 
 const EVENTS = [
   ['init', 'sync'],
+  ['configure', 'sync'],
   ['start', 'sync'],
   ['execute', 'async'],
   ['execute.batch', 'async'],

@@ -43,16 +43,12 @@ function handleResult(result) {
 
 
 module.exports = function cliPlugin(lifecycle) {
-  let config
-
   lifecycle.hook('init', function* (BaseClass) {
     let NewClass = extendApi(BaseClass)
     return yield next(NewClass)
   })
 
-  lifecycle.hook('start', function* (_config) {
-    config = yield next(_config)
-
+  lifecycle.hook('start', function* (config, ...args) {
     let defaultCommand = findDefaultCommand(config)
 
     if (defaultCommand) {
@@ -73,7 +69,7 @@ module.exports = function cliPlugin(lifecycle) {
       })
       .then(handleResult)
       .catch((err) => {
-        lifecycle.tootWith('error', (err, event) => {
+        lifecycle.tootWith('error', (_, err, event) => {
           let command
 
           if (err.command) {
@@ -92,10 +88,10 @@ module.exports = function cliPlugin(lifecycle) {
         }, err)
       })
 
-    return config
+    return yield next(config, ...args)
   })
 
-  lifecycle.hook('process', function* (command) {
+  lifecycle.hook('process', function* (_, command) {
     // This repeats the similar block in the help plugin
     // TODO: DRY it
 
@@ -106,7 +102,7 @@ module.exports = function cliPlugin(lifecycle) {
     })
 
     if (!isHelpAsked) {
-      return yield next(command)
+      return yield next(_, command)
     }
 
     if (config) {

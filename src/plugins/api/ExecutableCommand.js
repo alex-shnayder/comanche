@@ -50,7 +50,7 @@ class ExecutableCommand extends Command {
     }
 
     this.lifecycle.hook('handle', function* (
-      _command, context, ...args
+      config, _command, context, ...args
     ) {
       let { outputName, options } = _command
 
@@ -59,7 +59,7 @@ class ExecutableCommand extends Command {
         context = yield handler(options, context, ...args)
       }
 
-      return yield next(_command, context, ...args)
+      return yield next(config, _command, context, ...args)
     })
 
     return this
@@ -92,7 +92,8 @@ class ExecutableCommand extends Command {
 
     try {
       let config = buildConfig(this)
-      return lifecycle.toot('start', config)
+      lifecycle.toot('configure', config)
+      return lifecycle.toot('start')
     } catch (err) {
       lifecycle.toot('error', err)
     }
@@ -105,9 +106,9 @@ class ExecutableCommand extends Command {
       throw new Error('hook() can only be used on the default command (the app)')
     }
 
-    lifecycle.hook('error', function* (...args) {
+    lifecycle.hook('error', function* (_, ...args) {
       let result = yield handler(...args)
-      return result ? result : yield next(...args)
+      return result ? result : yield next(_, ...args)
     })
 
     return this

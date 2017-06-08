@@ -40,12 +40,12 @@ function injectOptions(config) {
 }
 
 module.exports = function helpPlugin(lifecycle) {
-  lifecycle.hook('start', function* (config, ...args) {
+  lifecycle.hook('configure', function* (config, ...args) {
     config = injectOptions(config)
     return yield next(config, ...args)
   })
 
-  lifecycle.hookEnd('process', function* (command) {
+  lifecycle.hookEnd('process', function* (_, command) {
     let { inputName, options, config } = command
 
     let isHelpAsked = options && options.some((option) => {
@@ -53,7 +53,7 @@ module.exports = function helpPlugin(lifecycle) {
     })
 
     if (!isHelpAsked) {
-      return yield next(command)
+      return yield next(_, command)
     }
 
     let help = config && config.help

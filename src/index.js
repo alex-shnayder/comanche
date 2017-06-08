@@ -11,11 +11,11 @@ const camelCase = require('./plugins/camelCase')
 const error = require('./plugins/error')
 const shareOptions = require('./plugins/shareOptions')
 const defaultValues = require('./plugins/defaultValues')
-const start = require('./plugins/start')
+const configure = require('./plugins/configure')
 
 
 const DEFAULT_PLUGINS = [
-  error, start, execute, api, cli, defaultValues, shareOptions,
+  configure, error, execute, api, cli, defaultValues, shareOptions,
   version, help, coerce, validate, camelCase, canonize,
 ]
 

@@ -9,8 +9,8 @@ module.exports = function validatePlugin(lifecycle) {
     return yield next(NewClass)
   })
 
-  lifecycle.hook('process', function* (command) {
+  lifecycle.hook('process', function* (_, command) {
     validateCommand(command)
-    return yield next(command)
+    return yield next(_, command)
   })
 }

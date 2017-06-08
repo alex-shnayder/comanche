@@ -2,7 +2,7 @@ const { next } = require('hooter/effects')
 
 
 module.exports = function canonizePlugin(lifecycle) {
-  lifecycle.hookEnd('process', function* (command) {
+  lifecycle.hookEnd('process', function* (_, command, ...args) {
     let { name, config } = command
     let ownName = config ? config.name : name[name.length - 1]
     let outputName = name.slice(0, -1).concat(ownName)
@@ -16,6 +16,6 @@ module.exports = function canonizePlugin(lifecycle) {
     }
 
     command = Object.assign({}, command, { outputName, options })
-    return yield next(command)
+    return yield next(_, command, ...args)
   })
 }

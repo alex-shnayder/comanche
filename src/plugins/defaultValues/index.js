@@ -8,7 +8,7 @@ module.exports = function defaultValuesPlugin(lifecycle) {
     return yield next(NewClass)
   })
 
-  lifecycle.hookStart('process', function* (command) {
+  lifecycle.hookStart('process', function* (_, command, ...args) {
     let config = command.config
 
     if (!config || !config.options || !config.options.length) {
@@ -42,6 +42,6 @@ module.exports = function defaultValuesPlugin(lifecycle) {
     })
 
     command = Object.assign({}, command, { options })
-    return yield next(command)
+    return yield next(_, command, ...args)
   })
 }

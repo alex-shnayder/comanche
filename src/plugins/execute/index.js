@@ -27,28 +27,21 @@ function validateCommand(command) {
 
 
 module.exports = function executePlugin(lifecycle) {
-  let config
-
-  lifecycle.hook('start', function* (_config) {
-    config = yield next(_config)
-    return config
-  })
-
-  lifecycle.hookStart('execute', function* (commands) {
+  lifecycle.hookStart('execute', function* (config, commands) {
     if (!Array.isArray(commands) || commands.length === 0) {
       throw new Error('The first argument of execute must be an array of commands')
     }
 
     commands = normalizeCommands(commands, config)
-    return yield next(commands)
+    return yield next(config, commands)
   })
 
-  lifecycle.hookEnd('execute', function* (commands) {
+  lifecycle.hookEnd('execute', function* (_, commands) {
     let resumes = []
     let context
 
     for (let i = 0; i < commands.length; i++) {
-      let result = yield tootWith('process', function* (command) {
+      let result = yield tootWith('process', function* (_, command) {
         validateCommand(command)
         let resume = yield getResume()
         let result = new ProcessingResult(command, resume)
@@ -66,9 +59,8 @@ module.exports = function executePlugin(lifecycle) {
         return result
       }
     }
-
     for (let i = 0; i < commands.length; i++) {
-      context = yield tootWith('handle', (_, c) => c, commands[i], context)
+      context = yield tootWith('handle', (_, __, c) => c, commands[i], context)
       context = resumes[i](context)
     }
 

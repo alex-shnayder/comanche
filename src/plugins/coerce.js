@@ -28,7 +28,7 @@ function coerceValue(value, type) {
 }
 
 module.exports = function coercePlugin(lifecycle) {
-  lifecycle.hook('process', function* (command) {
+  lifecycle.hook('process', function* (_, command, ...args) {
     if (command.options) {
       command = Object.assign({}, command)
       command.options = command.options.map((option) => {
@@ -40,6 +40,6 @@ module.exports = function coercePlugin(lifecycle) {
       })
     }
 
-    return yield next(command)
+    return yield next(_, command, ...args)
   })
 }

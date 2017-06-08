@@ -3,7 +3,7 @@ const { next } = require('hooter/effects')
 
 
 module.exports = function camelCasePlugin(lifecycle) {
-  lifecycle.hookEnd('process', function* (command) {
+  lifecycle.hookEnd('process', function* (_, command, ...args) {
     if (command.options) {
       command = Object.assign({}, command)
       command.options = command.options.map((option) => {
@@ -16,6 +16,6 @@ module.exports = function camelCasePlugin(lifecycle) {
       })
     }
 
-    return yield next(command)
+    return yield next(_, command, ...args)
   })
 }

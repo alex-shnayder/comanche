@@ -40,8 +40,8 @@ function shareOptions(commands) {
 
 
 module.exports = function shareOptionsPlugin(lifecycle) {
-  lifecycle.hook('execute', function* (commands) {
+  lifecycle.hook('execute', function* (_, commands) {
     commands = shareOptions(commands)
-    return yield next(commands)
+    return yield next(_, commands)
   })
 }

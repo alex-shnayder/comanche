@@ -5,8 +5,8 @@ const NO_HANDLER = {}
 
 
 module.exports = function errorPlugin(lifecycle) {
-  lifecycle.hookEnd('error', function* (err, ...args) {
-    let result = yield next(err, ...args).or(NO_HANDLER)
+  lifecycle.hookEnd('error', function* (_, err, ...args) {
+    let result = yield next(_, err, ...args).or(NO_HANDLER)
 
     if (result === NO_HANDLER) {
       throw err
@@ -15,9 +15,9 @@ module.exports = function errorPlugin(lifecycle) {
     return result
   })
 
-  lifecycle.hookStart('error', function* (err, ...args) {
+  lifecycle.hookStart('error', function* (_, err, ...args) {
     try {
-      yield next(err, err.event, ...args)
+      yield next(_, err, err.event, ...args)
     } catch (err) {
       /* eslint-disable no-console */
       console.error(err)

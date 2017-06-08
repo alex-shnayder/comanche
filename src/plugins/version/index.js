@@ -54,12 +54,12 @@ module.exports = function versionPlugin(lifecycle) {
     return yield next(NewClass)
   })
 
-  lifecycle.hook('start', function* (config, ...args) {
+  lifecycle.hook('configure', function* (config, ...args) {
     config = injectOptions(config)
     return yield next(config, ...args)
   })
 
-  lifecycle.hookEnd('process', function* (command) {
+  lifecycle.hookEnd('process', function* (_, command, ...args) {
     let { options, config } = command
 
     let isVersionAsked = options && options.some((option) => {
@@ -67,7 +67,7 @@ module.exports = function versionPlugin(lifecycle) {
     })
 
     if (!isVersionAsked) {
-      return yield next(command)
+      return yield next(_, command, ...args)
     }
 
     let version = config && config.version

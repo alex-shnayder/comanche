@@ -1,5 +1,4 @@
-const { next } = require('hooter/effects')
-const { findOneByAliases, populateCommand } = require('../common')
+const { findOneByAliases, populateCommand } = require('../../common')
 
 
 function validateCommand(command) {
@@ -58,10 +57,4 @@ function validateConfig(config) {
 }
 
 
-module.exports = function startPlugin(lifecycle) {
-  lifecycle.hookEnd('start', function* (config) {
-    config = yield next(config).or(config)
-    validateConfig(config)
-    return config
-  })
-}
+module.exports = validateConfig
