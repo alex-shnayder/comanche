@@ -25,28 +25,17 @@ function findOneByAliases(items, names) {
   })
 }
 
-function findOneByName(items, field, name) {
-  if (arguments.length === 2) {
-    return findOneByAliases(items, field)
-  } else if (typeof name === 'string') {
-    return findOneByAliases(items, name)
-  }
+function findCommandByFullName(config, fullName, populate) {
+  let commands = config.commands || []
+  let command
 
-  let result
+  for (let i = 0; i < fullName.length && commands.length; i++) {
+    command = findCommandByFullName(commands, fullName[i])
 
-  for (let i = 0; i < name.length && items.length; i++) {
-    result = findOneByName(items, name[i])
-
-    if (result) {
-      items = findByIds(items, result[field])
+    if (command) {
+      commands = findByIds(commands, command.commands)
     }
   }
-
-  return result
-}
-
-function findCommandByFullName(config, name, populate) {
-  let command = findOneByName(config.commands, 'commands', name)
 
   if (command && populate) {
     command = populateCommand(config, command)
@@ -116,7 +105,7 @@ function getCommandFromEvent(event) {
 }
 
 module.exports = {
-  InputError, findByIds, findOneById, findOneByAliases, findOneByName,
-  findDefaultCommand, findCommandByFullName, populateCommand, optionsToObject,
-  compareNames, getCommandFromEvent,
+  InputError, findByIds, findOneById, findOneByAliases, findCommandByFullName,
+  findDefaultCommand, populateCommand, optionsToObject, compareNames,
+  getCommandFromEvent,
 }
