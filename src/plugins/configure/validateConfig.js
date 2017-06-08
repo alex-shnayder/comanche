@@ -51,7 +51,7 @@ function validateConfig(config) {
   }
 
   commands.forEach((command) => {
-    command = populateCommand(command, config)
+    command = populateCommand(config, command)
     validateCommand(command)
   })
 }

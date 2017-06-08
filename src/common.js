@@ -49,7 +49,7 @@ function findCommandByFullName(config, name, populate) {
   let command = findOneByName(config.commands, 'commands', name)
 
   if (command && populate) {
-    command = populateCommand(command, config)
+    command = populateCommand(config, command)
   }
 
   return command
@@ -63,13 +63,13 @@ function findDefaultCommand(config, populate) {
   let command = config.commands.find((c) => c.default)
 
   if (command && populate) {
-    return populateCommand(command, config)
+    return populateCommand(config, command)
   }
 
   return command
 }
 
-function populateCommand(command, config) {
+function populateCommand(config, command) {
   let { options, commands } = command
 
   if (!options && !commands) {
