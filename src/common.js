@@ -45,6 +45,16 @@ function findOneByName(items, field, name) {
   return result
 }
 
+function findCommandByFullName(config, name, populate) {
+  let command = findOneByName(config.commands, 'commands', name)
+
+  if (command && populate) {
+    command = populateCommand(command, config)
+  }
+
+  return command
+}
+
 function findDefaultCommand(config, populate) {
   if (!config || !config.commands) {
     return
@@ -107,6 +117,6 @@ function getCommandFromEvent(event) {
 
 module.exports = {
   InputError, findByIds, findOneById, findOneByAliases, findOneByName,
-  findDefaultCommand, populateCommand, optionsToObject, compareNames,
-  getCommandFromEvent,
+  findDefaultCommand, findCommandByFullName, populateCommand, optionsToObject,
+  compareNames, getCommandFromEvent,
 }

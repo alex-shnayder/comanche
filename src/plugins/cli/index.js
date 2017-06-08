@@ -1,6 +1,6 @@
 const { next } = require('hooter/effects')
 const {
-  InputError, findDefaultCommand, findOneByName,
+  InputError, findDefaultCommand, findCommandByFullName,
   populateCommand, getCommandFromEvent,
 } = require('../../common')
 const composeHelp = require('./help')
@@ -73,14 +73,9 @@ module.exports = function cliPlugin(lifecycle) {
           let command
 
           if (err.command) {
-            let commands = config.commands
             command = Object.assign({}, err.command)
-            command.config = findOneByName(commands, 'commands', command.name)
-
-            if (command.config) {
-              command.config = populateCommand(command.config, config)
-            }
-          } else {
+            command.config = findCommandByFullName(config, command.name)
+          } else if (event) {
             command = getCommandFromEvent(event)
           }
 

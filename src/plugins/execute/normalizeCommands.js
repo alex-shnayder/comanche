@@ -1,4 +1,4 @@
-const { findOneByName, populateCommand } = require('../../common')
+const { findOneByName, findCommandByFullName } = require('../../common')
 
 
 module.exports = function normalizeCommands(commands, config) {
@@ -19,9 +19,7 @@ module.exports = function normalizeCommands(commands, config) {
       throw new Error('A command name must be an array or a string')
     }
 
-    let commandConfig = findOneByName(config.commands, 'commands', name)
-    commandConfig = populateCommand(commandConfig, config)
-
+    let commandConfig = findCommandByFullName(config, name, true)
     let inputName = command.inputName || name[name.length - 1]
     let newCommand = Object.assign({}, command, {
       name, inputName, config: commandConfig,
