@@ -1,51 +1,31 @@
 const { InputError } = require('../../common')
 
 
-const BASIC_TYPES = ['string', 'boolean', 'number', 'function']
+function validateOption(option) {
+  let { config, value, inputName } = option
 
-function validateOption({ inputName, value, config }) {
-  let { type } = config
-  let isTypeCorrect = (!BASIC_TYPES.includes(type) || typeof value === type)
+  if (config && config.validate) {
+    let validate = config.validate
 
-  if (!isTypeCorrect || Number.isNaN(value)) {
-    throw new InputError(`Option "${inputName}" must be a ${type}`)
+    if (typeof validate === 'function') {
+      validate(option)
+    } else if (validate instanceof RegExp) {
+      if (!validate.test(value)) {
+        throw new InputError(
+            `Value "${value}" of option "${inputName}" ` +
+            `does not match the regular expression ${validate}`
+          )
+      }
+    } else {
+      throw new Error('Validate must be either a function or a regular expression')
+    }
   }
 }
 
-function validateCommand({ inputName, options, config }) {
-  if (!config) {
-    throw new InputError(`Unknown command "${inputName}"`)
+function validateCommand({ options }) {
+  if (options) {
+    options.forEach((option) => validateOption(option))
   }
-
-  if (config.options && config.options.length) {
-    config.options.forEach((optionConfig) => {
-      if (optionConfig.required) {
-        let option = options.find((option) => {
-          return option.config && option.config.id === optionConfig.id
-        })
-
-        if (!option || option.value === null) {
-          throw new InputError(`Option "${optionConfig.name}" is required`)
-        }
-      }
-    })
-  }
-
-  if (!options) {
-    return
-  }
-
-  options.forEach((option) => {
-    if (!option.config) {
-      if (config.strict) {
-        throw new InputError(`Unknown option "${option.inputName}"`)
-      }
-
-      return
-    }
-
-    validateOption(option)
-  })
 }
 
 

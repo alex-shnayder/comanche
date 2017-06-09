@@ -1,19 +1,17 @@
 module.exports = function extendApi(BaseClass) {
-  class StrictCommand extends BaseClass {
-    constructor(...args) {
-      super(...args)
-      this.sharedSettings.push('strict')
-    }
-
-    strict(value = true) {
-      if (typeof value !== 'boolean') {
-        throw new Error('The argument of strict() must be boolean')
+  class ValidatableOption extends BaseClass.Option {
+    validate(value) {
+      if (typeof value !== 'function' && !(value instanceof RegExp)) {
+        throw new Error('The argument of validate() must be either a function or a regular expression')
       }
 
-      this.config.strict = value
+      this.config.validate = value
       return this
     }
   }
 
-  return StrictCommand
+  class ValidatableCommand extends BaseClass {}
+
+  ValidatableCommand.Option = ValidatableOption
+  return ValidatableCommand
 }
