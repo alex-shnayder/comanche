@@ -7,6 +7,7 @@ const help = require('./plugins/help')
 const _require = require('./plugins/require')
 const validate = require('./plugins/validate')
 const coerce = require('./plugins/coerce')
+const types = require('./plugins/types')
 const canonize = require('./plugins/canonize')
 const camelCase = require('./plugins/camelCase')
 const error = require('./plugins/error')
@@ -17,7 +18,7 @@ const configure = require('./plugins/configure')
 
 const DEFAULT_PLUGINS = [
   configure, error, execute, api, cli, defaultValues, shareOptions,
-  version, help, coerce, _require, validate, camelCase, canonize,
+  version, help, coerce, _require, validate, camelCase, canonize, types,
 ]
 
 module.exports = function defaultComanche(...args) {
