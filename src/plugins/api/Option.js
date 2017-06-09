@@ -65,7 +65,7 @@ class Option {
   }
 
   set(config) {
-    let { aliases, description, required, type } = config
+    let { aliases, description, type } = config
 
     if (aliases) {
       this.aliases(...aliases)
@@ -73,10 +73,6 @@ class Option {
 
     if (description) {
       this.description(description)
-    }
-
-    if (typeof required !== 'undefined') {
-      this.required(required)
     }
 
     if (type) {
@@ -112,15 +108,6 @@ class Option {
     }
 
     this.config.description = description
-    return this
-  }
-
-  required(value = true) {
-    if (typeof value !== 'boolean') {
-      throw new Error('The argument of required() must be boolean')
-    }
-
-    this.config.required = value
     return this
   }
 
