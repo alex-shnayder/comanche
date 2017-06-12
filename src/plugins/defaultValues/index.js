@@ -1,11 +1,11 @@
 const { next } = require('hooter/effects')
-const extendApi = require('./extendApi')
+const modifySchema = require('./modifySchema')
 
 
 module.exports = function defaultValuesPlugin(lifecycle) {
-  lifecycle.hook('init', function* (BaseClass) {
-    let NewClass = extendApi(BaseClass)
-    return yield next(NewClass)
+  lifecycle.hook('schema', function* (schema) {
+    schema = modifySchema(schema)
+    return yield next(schema)
   })
 
   lifecycle.hookStart('process', function* (_, command, ...args) {

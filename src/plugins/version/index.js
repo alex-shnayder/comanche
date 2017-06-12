@@ -1,6 +1,6 @@
 const { next } = require('hooter/effects')
 const readPkgUp = require('read-pkg-up')
-const extendApi = require('./extendApi')
+const modifySchema = require('./modifySchema')
 
 
 const OPTION = {
@@ -49,9 +49,9 @@ function injectOptions(config) {
 }
 
 module.exports = function versionPlugin(lifecycle) {
-  lifecycle.hook('init', function* (BaseClass) {
-    let NewClass = extendApi(BaseClass)
-    return yield next(NewClass)
+  lifecycle.hook('schema', function* (schema) {
+    schema = modifySchema(schema)
+    return yield next(schema)
   })
 
   lifecycle.hook('configure', function* (config, ...args) {

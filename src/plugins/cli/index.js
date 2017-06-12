@@ -4,7 +4,7 @@ const {
 } = require('../../common')
 const composeHelp = require('./help')
 const parseArgs = require('./parseArgs')
-const extendApi = require('./extendApi')
+const modifySchema = require('./modifySchema')
 
 
 function print(string, level = 'log') {
@@ -40,9 +40,9 @@ function handleResult(result) {
 
 
 module.exports = function cliPlugin(lifecycle) {
-  lifecycle.hook('init', function* (BaseClass) {
-    let NewClass = extendApi(BaseClass)
-    return yield next(NewClass)
+  lifecycle.hook('schema', function* (schema) {
+    schema = modifySchema(schema)
+    return yield next(schema)
   })
 
   lifecycle.hook('start', function* (config, ...args) {

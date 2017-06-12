@@ -1,3 +1,6 @@
+const objectPathImmutable = require('object-path-immutable')
+
+
 class InputError extends Error {}
 
 function findByIds(items, ids) {
@@ -104,8 +107,11 @@ function getCommandFromEvent(event) {
   }
 }
 
+
 module.exports = {
   InputError, findByIds, findOneById, findOneByNames, findCommandByFullName,
   findDefaultCommand, populateCommand, optionsToObject, compareNames,
   getCommandFromEvent,
 }
+
+Object.assign(module.exports, objectPathImmutable)

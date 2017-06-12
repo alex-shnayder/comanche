@@ -6,11 +6,16 @@ const EVENTS = ['start', 'execute', 'process', 'handle', 'error']
 
 
 module.exports = function configurePlugin(lifecycle) {
-  let config
+  let schema, config
+
+  lifecycle.hookEnd('schema', function* (_schema) {
+    schema = yield next(_schema)
+    return schema
+  })
 
   lifecycle.hookEnd('configure', function* (_config) {
     config = yield next(_config).or(_config)
-    validateConfig(config)
+    validateConfig(schema, config)
     return config
   })
 

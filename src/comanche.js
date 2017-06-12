@@ -1,7 +1,9 @@
 const Hooter = require('hooter')
+const defaultSchema = require('./schema')
 
 
 const EVENTS = [
+  ['schema', 'sync'],
   ['init', 'sync'],
   ['configure', 'sync'],
   ['start', 'sync'],
@@ -26,6 +28,8 @@ module.exports = function comanche(args, plugins) {
   plugins.forEach((plugin) => {
     plugin(lifecycle.bind(plugin))
   })
+
+  lifecycle.tootWith('schema', (schema) => schema, defaultSchema)
 
   return lifecycle.tootWith('init', (Class) => {
     if (!Class) {

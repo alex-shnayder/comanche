@@ -1,5 +1,5 @@
 const { next } = require('hooter/effects')
-const extendApi = require('./extendApi')
+const modifySchema = require('./modifySchema')
 
 
 function coerceOption(option) {
@@ -14,9 +14,9 @@ function coerceOption(option) {
 }
 
 module.exports = function coercePlugin(lifecycle) {
-  lifecycle.hook('init', function* (BaseClass) {
-    let NewClass = extendApi(BaseClass)
-    return yield next(NewClass)
+  lifecycle.hook('schema', function* (schema) {
+    schema = modifySchema(schema)
+    return yield next(schema)
   })
 
   lifecycle.hook('process', function* (_, command, ...args) {

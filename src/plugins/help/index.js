@@ -7,7 +7,7 @@ function createOption() {
   return {
     id: `help${++optionCounter}`,
     name: 'help',
-    aliases: 'h',
+    aliases: ['h'],
     description: 'Show help',
     type: 'boolean',
     isHelpOption: true, // Probably not the best way to identify the options

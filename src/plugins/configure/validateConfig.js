@@ -1,4 +1,10 @@
+const Ajv = require('ajv')
+const ajvKeywords = require('ajv-keywords')
 const { findOneByNames, populateCommand } = require('../../common')
+
+
+let ajv = new Ajv()
+ajvKeywords(ajv, ['typeof', 'instanceof'])
 
 
 function validateCommand(command) {
@@ -35,22 +41,14 @@ function validateCommand(command) {
   }
 }
 
-function validateConfig(config) {
-  if (!config || typeof config !== 'object') {
-    throw new Error('Config must be an object')
+function validateConfig(schema, config) {
+  let isValid = ajv.validate(schema, config)
+
+  if (!isValid) {
+    throw new Error(`The config doesn't match the schema:\n${ajv.errorsText()}`)
   }
 
-  let { commands, options } = config
-
-  if (!commands || !Array.isArray(commands)) {
-    throw new Error('Config must contain an array of commands')
-  }
-
-  if (options && !Array.isArray(options)) {
-    throw new Error('The options in config must be an array')
-  }
-
-  commands.forEach((command) => {
+  config.commands.forEach((command) => {
     command = populateCommand(config, command)
     validateCommand(command)
   })
