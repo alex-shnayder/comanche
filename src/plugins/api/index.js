@@ -1,15 +1,9 @@
 const { next } = require('hooter/effects')
-const ExecutableCommand = require('./ExecutableCommand')
+const extendClasses = require('./extendClasses')
 
 
 module.exports = function apiPlugin(lifecycle) {
-  function createCommand(...args) {
-    let command = new ExecutableCommand(...args)
-    command.lifecycle = lifecycle
-    return command
-  }
-
-  lifecycle.hook('init', function* (api) {
+  lifecycle.hook('init', function* (schema, api) {
     if (api) {
       // eslint-disable-next-line
       console.warn(
@@ -18,6 +12,13 @@ module.exports = function apiPlugin(lifecycle) {
       )
     }
 
-    return yield next(createCommand)
+    let Command = extendClasses(schema)
+    let createCommand = (...args) => {
+      let command = new Command(...args)
+      command.lifecycle = lifecycle
+      return command
+    }
+
+    return yield next(schema, createCommand)
   })
 }

@@ -5,9 +5,9 @@ const Option = require('./Option')
 
 
 function buildConfig(rootCommand, isDefault) {
-  let defaultCommandConfig = rootCommand.getConfig()
+  let defaultCommandConfig = rootCommand.config
   let commands = [defaultCommandConfig]
-  let options = rootCommand.options.map((option) => option.getConfig())
+  let options = rootCommand.options.map((option) => option.config)
 
   defaultCommandConfig.default = Boolean(isDefault)
 
@@ -24,6 +24,11 @@ function buildConfig(rootCommand, isDefault) {
 
 
 class ExecutableCommand extends Command {
+  getFullName() {
+    let parentName = this.parent ? this.parent.getFullName() : []
+    return parentName.concat(this.config.name)
+  }
+
   handle(command, handler) {
     if (arguments.length === 2) {
       if (typeof command !== 'string') {
