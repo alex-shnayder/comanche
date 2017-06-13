@@ -29,9 +29,9 @@ module.exports = function comanche(args, plugins) {
     plugin(lifecycle.bind(plugin))
   })
 
-  lifecycle.tootWith('schema', (schema) => schema, defaultSchema)
+  let schema = lifecycle.tootWith('schema', (schema) => schema, defaultSchema)
 
-  return lifecycle.tootWith('init', (createApi) => {
+  return lifecycle.tootWith('init', (_, createApi) => {
     if (!createApi) {
       throw new Error(
         'No interface has been defined. At least one plugin must define ' +
@@ -44,5 +44,5 @@ module.exports = function comanche(args, plugins) {
     }
 
     return createApi(...args)
-  })
+  }, schema)
 }
