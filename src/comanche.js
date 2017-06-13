@@ -31,14 +31,18 @@ module.exports = function comanche(args, plugins) {
 
   lifecycle.tootWith('schema', (schema) => schema, defaultSchema)
 
-  return lifecycle.tootWith('init', (Class) => {
-    if (!Class) {
+  return lifecycle.tootWith('init', (createApi) => {
+    if (!createApi) {
       throw new Error(
         'No interface has been defined. At least one plugin must define ' +
         'an interface during the "init" event'
       )
     }
 
-    return new Class(...args)
+    if (typeof createApi !== 'function') {
+      throw new Error('The result of "init" must be a function')
+    }
+
+    return createApi(...args)
   })
 }

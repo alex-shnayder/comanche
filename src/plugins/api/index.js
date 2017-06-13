@@ -3,15 +3,14 @@ const ExecutableCommand = require('./ExecutableCommand')
 
 
 module.exports = function apiPlugin(lifecycle) {
-  class ExecutableCommandWithLifecycle extends ExecutableCommand {
-    constructor(...args) {
-      super(...args)
-      this.lifecycle = lifecycle
-    }
+  function createCommand(...args) {
+    let command = new ExecutableCommand(...args)
+    command.lifecycle = lifecycle
+    return command
   }
 
-  lifecycle.hook('init', function* (Class) {
-    if (Class) {
+  lifecycle.hook('init', function* (api) {
+    if (api) {
       // eslint-disable-next-line
       console.warn(
         'The default API plugin is overriding another plugin\'s modifications. ' +
@@ -19,6 +18,6 @@ module.exports = function apiPlugin(lifecycle) {
       )
     }
 
-    return yield next(ExecutableCommandWithLifecycle)
+    return yield next(createCommand)
   })
 }
