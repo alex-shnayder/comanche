@@ -1,4 +1,5 @@
 const { next } = require('hooter/effects')
+const assignDefaults = require('./assignDefaults')
 const validateConfig = require('./validateConfig')
 
 
@@ -14,6 +15,7 @@ module.exports = function configurePlugin(lifecycle) {
   })
 
   lifecycle.hookEnd('configure', function* (_config) {
+    _config = assignDefaults(schema, _config)
     validateConfig(schema, _config)
     config = yield next(_config).or(_config)
     return config
