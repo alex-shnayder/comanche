@@ -14,11 +14,12 @@ const error = require('./plugins/error')
 const inherit = require('./plugins/inherit')
 const defaultValues = require('./plugins/defaultValues')
 const configure = require('./plugins/configure')
+const processTitle = require('./plugins/processTitle')
 
 
 const DEFAULT_PLUGINS = [
-  configure, inherit, error, execute, api, cli, defaultValues,
-  version, help, coerce, _require, validate, camelCase, canonize, types,
+  configure, inherit, error, execute, api, cli, defaultValues, version, help,
+  coerce, _require, validate, camelCase, canonize, types, processTitle,
 ]
 
 module.exports = function defaultComanche(...args) {
