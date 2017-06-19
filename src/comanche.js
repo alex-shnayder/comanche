@@ -8,9 +8,8 @@ const EVENTS = [
   ['configure', 'sync'],
   ['start', 'sync'],
   ['execute', 'async'],
-  ['execute.batch', 'async'],
-  ['execute.one', 'async'],
-  ['execute.handle', 'async'],
+  ['process', 'async'],
+  ['handle', 'async'],
   ['error', 'sync'],
 ]
 

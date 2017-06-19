@@ -1,4 +1,6 @@
-const { next, suspend, getResume, tootWith } = require('hooter/effects')
+const {
+  next, resolve, suspend, getResume, tootWith,
+} = require('hooter/effects')
 const prepareCommands = require('./prepareCommands')
 
 
@@ -47,6 +49,7 @@ module.exports = function executePlugin(lifecycle) {
         let result = new ProcessingResult(command, resume)
         return yield suspend(result)
       }, commands[i])
+      result = yield resolve(result)
 
       // If the result is not an instance of ProcessingResult,
       // it means that a handler has returned early effectively
@@ -62,7 +65,8 @@ module.exports = function executePlugin(lifecycle) {
 
     for (let i = 0; i < commands.length; i++) {
       context = yield tootWith('handle', (_, __, c) => c, commands[i], context)
-      context = resumes[i](context)
+      context = yield resolve(context)
+      context = yield resolve(resumes[i](context))
     }
 
     return context
