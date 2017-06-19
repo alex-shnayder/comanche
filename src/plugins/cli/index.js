@@ -51,8 +51,8 @@ module.exports = function cliPlugin(lifecycle) {
         let args = process.argv.slice(2)
         return parseArgs(args, config)
       })
-      .then((commands) => {
-        return lifecycle.toot('execute', commands)
+      .then((request) => {
+        return lifecycle.toot('execute', request)
       })
       .then(handleResult)
       .catch((err) => {

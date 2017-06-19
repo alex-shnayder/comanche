@@ -29,26 +29,26 @@ function validateCommand(command) {
 
 
 module.exports = function executePlugin(lifecycle) {
-  lifecycle.hookStart('execute', function* (config, commands) {
-    if (!Array.isArray(commands) || commands.length === 0) {
+  lifecycle.hookStart('execute', function* (config, request) {
+    if (!Array.isArray(request) || request.length === 0) {
       throw new Error('The first argument of execute must be an array of commands')
     }
 
-    commands = prepareCommands(commands, config)
-    return yield next(config, commands)
+    request = prepareCommands(request, config)
+    return yield next(config, request)
   })
 
-  lifecycle.hookEnd('execute', function* (_, commands) {
+  lifecycle.hookEnd('execute', function* (_, request) {
     let resumes = []
     let context
 
-    for (let i = 0; i < commands.length; i++) {
+    for (let i = 0; i < request.length; i++) {
       let result = yield tootWith('process', function* (_, command) {
         validateCommand(command)
         let resume = yield getResume()
         let result = new ProcessingResult(command, resume)
         return yield suspend(result)
-      }, commands[i])
+      }, request[i])
       result = yield resolve(result)
 
       // If the result is not an instance of ProcessingResult,
@@ -56,15 +56,15 @@ module.exports = function executePlugin(lifecycle) {
       // completing the execution
 
       if (result instanceof ProcessingResult) {
-        commands[i] = result.command
+        request[i] = result.command
         resumes[i] = result.resume
       } else {
         return result
       }
     }
 
-    for (let i = 0; i < commands.length; i++) {
-      context = yield tootWith('handle', (_, __, c) => c, commands[i], context)
+    for (let i = 0; i < request.length; i++) {
+      context = yield tootWith('handle', (_, __, c) => c, request[i], context)
       context = yield resolve(context)
       context = yield resolve(resumes[i](context))
     }

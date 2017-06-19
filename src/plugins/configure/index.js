@@ -3,7 +3,7 @@ const assignDefaults = require('./assignDefaults')
 const validateConfig = require('./validateConfig')
 
 
-const EVENTS = ['start', 'execute', 'process', 'handle', 'error']
+const EVENTS_WITH_CONFIG = ['start', 'execute', 'process', 'handle', 'error']
 
 
 module.exports = function configurePlugin(lifecycle) {
@@ -29,7 +29,7 @@ module.exports = function configurePlugin(lifecycle) {
     return config
   })
 
-  EVENTS.forEach((event) => {
+  EVENTS_WITH_CONFIG.forEach((event) => {
     lifecycle.hookStart(event, function* (...args) {
       if (!config && event !== 'error') {
         throw new Error(

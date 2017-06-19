@@ -15,8 +15,8 @@ module.exports = function inheritPlugin(lifecycle) {
     return yield next(schema, config)
   })
 
-  lifecycle.hook('execute', function* (_, commands) {
-    commands = shareOptionValues(commands)
-    return yield next(_, commands)
+  lifecycle.hook('execute', function* (_, request) {
+    request = shareOptionValues(request)
+    return yield next(_, request)
   })
 }
