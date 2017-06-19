@@ -14,29 +14,46 @@ function print(string, level = 'log') {
   console[level]()
 }
 
-function handleError(err, commandConfig, commandName) {
-  /* eslint-disable no-console */
-
-  let text = err
-
-  if (err instanceof InputError) {
-    text = err.message
-
-    if (commandConfig) {
-      text += '\n\n'
-      text += composeHelp(commandConfig, commandName)
-    }
-  }
-
-  print(text, 'error')
-}
-
 function handleResult(result) {
   if (typeof result === 'string') {
     print(result)
   }
 }
 
+function handleError(config, err, event) {
+  if (!(err instanceof InputError)) {
+    return print(err, 'error')
+  }
+
+  let errText = err.message
+  let commandConfig = findDefaultCommand(config, true)
+  let commandName
+
+  if (err.command) {
+    let command = err.command
+    let { fullName, inputName } = command
+    commandConfig = findCommandByFullName(config, fullName, true)
+    commandName = inputName
+  } else if (event) {
+    let command = getCommandFromEvent(event)
+
+    if (command.config) {
+      commandName = command.inputName
+      commandConfig = command.config
+    } else {
+      let parentName = command.fullName.slice(0, -1)
+      commandConfig = findCommandByFullName(config, parentName, true)
+      commandName = parentName.join(' ')
+    }
+  }
+
+  if (commandConfig) {
+    errText += '\n\n'
+    errText += composeHelp(commandConfig, commandName)
+  }
+
+  return print(errText, 'error')
+}
 
 module.exports = function cliPlugin(lifecycle) {
   lifecycle.hook('schema', function* (schema) {
@@ -55,30 +72,7 @@ module.exports = function cliPlugin(lifecycle) {
       })
       .then(handleResult)
       .catch((err) => {
-        lifecycle.tootWith('error', (_, err, event) => {
-          let commandConfig = findDefaultCommand(config, true)
-          let commandName
-
-          if (err.command) {
-            let command = err.command
-            let { fullName, inputName } = command
-            commandConfig = findCommandByFullName(config, fullName, true)
-            commandName = inputName
-          } else if (event) {
-            let command = getCommandFromEvent(event)
-
-            if (command.config) {
-              commandName = command.inputName
-              commandConfig = command.config
-            } else {
-              let parentName = command.fullName.slice(0, -1)
-              commandConfig = findCommandByFullName(config, parentName, true)
-              commandName = parentName.join(' ')
-            }
-          }
-
-          handleError(err, commandConfig, commandName)
-        }, err)
+        lifecycle.tootWith('error', handleError, err)
       })
 
     return yield next(config, ...args)
