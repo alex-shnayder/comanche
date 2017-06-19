@@ -93,7 +93,11 @@ module.exports = function cliPlugin(lifecycle) {
     }
 
     if (config) {
-      return composeHelp(config, inputName)
+      if (typeof config.help === 'string') {
+        return config.help
+      } else {
+        return composeHelp(config, inputName)
+      }
     }
 
     return `Help is unavailable for "${inputName}"`
