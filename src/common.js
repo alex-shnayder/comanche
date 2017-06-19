@@ -28,6 +28,28 @@ function findOneByNames(items, names) {
   })
 }
 
+function findCommandById(config, id, populate) {
+  let { commands } = config
+
+  if (!commands || !commands.length) {
+    return
+  }
+
+  let command = findOneById(commands, id)
+
+  if (command && populate) {
+    return populateCommand(config, command)
+  }
+}
+
+function findOptionById(config, id) {
+  let { options } = config
+
+  if (options && options.length) {
+    return findOneById(options, id)
+  }
+}
+
 function findCommandByFullName(config, fullName, populate) {
   let commands = config.commands || []
   let command
@@ -74,6 +96,66 @@ function populateCommand(config, command) {
   })
 }
 
+function updateCommandById(config, id, command, overwrite) {
+  let { commands } = config
+
+  if (!commands || !commands.length) {
+    throw new Error('Config doesn\'t have any commands')
+  }
+
+  let updatedCommands = []
+  let commandFound = false
+
+  for (let i = 0; i < commands.length; i++) {
+    if (commands[i].id === id) {
+      commandFound = true
+      updatedCommands[i] = overwrite ?
+        command :
+        Object.assign({}, commands[i], command)
+    } else {
+      updatedCommands[i] = commands[i]
+    }
+  }
+
+  if (!commandFound) {
+    throw new Error(`Command "${id}" is not found`)
+  }
+
+  return Object.assign({}, config, {
+    commands: updatedCommands,
+  })
+}
+
+function updateOptionById(config, id, option, overwrite) {
+  let { options } = config
+
+  if (!options || !options.length) {
+    throw new Error('Config doesn\'t have any options')
+  }
+
+  let updatedOptions = []
+  let optionFound = false
+
+  for (let i = 0; i < options.length; i++) {
+    if (options[i].id === id) {
+      optionFound = true
+      updatedOptions[i] = overwrite ?
+        option :
+        Object.assign({}, options[i], option)
+    } else {
+      updatedOptions[i] = options[i]
+    }
+  }
+
+  if (!optionFound) {
+    throw new Error(`option "${id}" is not found`)
+  }
+
+  return Object.assign({}, config, {
+    options: updatedOptions,
+  })
+}
+
 function optionsToObject(options) {
   if (!options || !options.length) {
     return {}
@@ -109,8 +191,9 @@ function getCommandFromEvent(event) {
 
 
 module.exports = {
-  InputError, findByIds, findOneById, findOneByNames, findCommandByFullName,
-  findDefaultCommand, populateCommand, optionsToObject, compareNames,
+  InputError, findByIds, findOneById, findOneByNames, findCommandById,
+  findOptionById, findCommandByFullName, findDefaultCommand, populateCommand,
+  updateCommandById, updateOptionById, optionsToObject, compareNames,
   getCommandFromEvent,
 }
 
