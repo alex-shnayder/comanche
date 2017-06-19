@@ -1,11 +1,7 @@
 const { InputError } = require('../../common')
 
 
-function validateCommand({ inputName, options, config }) {
-  if (!config) {
-    throw new InputError(`Unknown command "${inputName}"`)
-  }
-
+function validateCommand({ options, config }) {
   if (config.options && config.options.length) {
     config.options.forEach((optionConfig) => {
       if (optionConfig.required) {
