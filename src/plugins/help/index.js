@@ -46,9 +46,9 @@ module.exports = function helpPlugin(lifecycle) {
     return yield next(schema)
   })
 
-  lifecycle.hook('configure', function* (config, ...args) {
+  lifecycle.hook('configure', function* (_, config) {
     config = injectOptions(config)
-    return yield next(config, ...args)
+    return yield next(_, config)
   })
 
   lifecycle.hookEnd('process', function* (_, command) {

@@ -5,17 +5,14 @@ const inherit = require('./inherit')
 
 
 module.exports = function inheritPlugin(lifecycle) {
-  let schema
-
-  lifecycle.hook('schema', function* (_schema) {
-    _schema = modifySchema(_schema)
-    schema = yield next(_schema)
-    return schema
+  lifecycle.hook('schema', function* (schema) {
+    schema = modifySchema(schema)
+    return yield next(schema)
   })
 
-  lifecycle.hookStart('configure', function* (config) {
+  lifecycle.hookStart('configure', function* (schema, config) {
     config = inherit(schema, config)
-    return yield next(config)
+    return yield next(schema, config)
   })
 
   lifecycle.hook('execute', function* (_, commands) {

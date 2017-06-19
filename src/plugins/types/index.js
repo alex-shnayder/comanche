@@ -19,15 +19,15 @@ function modifyOptions(options) {
 }
 
 module.exports = function typesPlugin(lifecycle) {
-  lifecycle.hook('configure', function* (config, ...args) {
+  lifecycle.hook('configure', function* (_, config, ...args) {
     let options = config.options
 
     if (!options) {
-      return yield next(config, ...args)
+      return yield next(_, config, ...args)
     }
 
     options = modifyOptions(options)
     config = Object.assign({}, config, { options })
-    return yield next(config, ...args)
+    return yield next(_, config, ...args)
   })
 }

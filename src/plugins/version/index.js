@@ -54,9 +54,9 @@ module.exports = function versionPlugin(lifecycle) {
     return yield next(schema)
   })
 
-  lifecycle.hook('configure', function* (config, ...args) {
+  lifecycle.hook('configure', function* (_, config, ...args) {
     config = injectOptions(config)
-    return yield next(config, ...args)
+    return yield next(_, config, ...args)
   })
 
   lifecycle.hookEnd('process', function* (_, command, ...args) {

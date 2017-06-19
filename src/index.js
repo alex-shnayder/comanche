@@ -17,7 +17,7 @@ const configure = require('./plugins/configure')
 
 
 const DEFAULT_PLUGINS = [
-  inherit, configure, error, execute, api, cli, defaultValues,
+  configure, inherit, error, execute, api, cli, defaultValues,
   version, help, coerce, _require, validate, camelCase, canonize, types,
 ]
 
