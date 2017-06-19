@@ -31,7 +31,7 @@ function validateCommand(command) {
 module.exports = function executePlugin(lifecycle) {
   lifecycle.hookStart('execute', function* (config, request) {
     if (!Array.isArray(request) || request.length === 0) {
-      throw new Error('The first argument of execute must be an array of commands')
+      throw new Error('The first argument of "execute" must be an array of commands')
     }
 
     request = prepareCommands(request, config)
@@ -54,7 +54,6 @@ module.exports = function executePlugin(lifecycle) {
       // If the result is not an instance of ProcessingResult,
       // it means that a handler has returned early effectively
       // completing the execution
-
       if (result instanceof ProcessingResult) {
         request[i] = result.command
         resumes[i] = result.resume

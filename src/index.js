@@ -22,6 +22,7 @@ const DEFAULT_PLUGINS = [
   coerce, _require, validate, camelCase, canonize, types, processTitle,
 ]
 
+
 module.exports = function defaultComanche(...args) {
   let plugins = DEFAULT_PLUGINS
 
