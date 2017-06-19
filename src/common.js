@@ -54,12 +54,14 @@ function findCommandByFullName(config, fullName, populate) {
   let commands = config.commands || []
   let command
 
-  for (let i = 0; i < fullName.length && commands.length; i++) {
+  for (let i = 0; i < fullName.length; i++) {
     command = findOneByNames(commands, fullName[i])
 
-    if (command) {
-      commands = findByIds(commands, command.commands)
+    if (!command) {
+      return
     }
+
+    commands = findByIds(config.commands, command.commands)
   }
 
   if (command && populate) {
