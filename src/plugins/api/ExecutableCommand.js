@@ -1,26 +1,8 @@
 const { next } = require('hooter/effects')
 const { optionsToObject, compareNames } = require('../../common')
+const buildConfig = require('./buildConfig')
 const Command = require('./Command')
 const Option = require('./Option')
-
-
-function buildConfig(rootCommand, isDefault) {
-  let defaultCommandConfig = rootCommand.config
-  let commands = [defaultCommandConfig]
-  let options = rootCommand.options.map((option) => option.config)
-
-  defaultCommandConfig.default = Boolean(isDefault)
-
-  if (rootCommand.commands) {
-    rootCommand.commands.forEach((command) => {
-      let config = buildConfig(command)
-      commands = commands.concat(config.commands)
-      options = options.concat(config.options)
-    })
-  }
-
-  return { commands, options }
-}
 
 
 class ExecutableCommand extends Command {

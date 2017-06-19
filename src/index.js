@@ -11,13 +11,13 @@ const types = require('./plugins/types')
 const canonize = require('./plugins/canonize')
 const camelCase = require('./plugins/camelCase')
 const error = require('./plugins/error')
-const shareOptions = require('./plugins/shareOptions')
+const inherit = require('./plugins/inherit')
 const defaultValues = require('./plugins/defaultValues')
 const configure = require('./plugins/configure')
 
 
 const DEFAULT_PLUGINS = [
-  configure, error, execute, api, cli, defaultValues, shareOptions,
+  inherit, configure, error, execute, api, cli, defaultValues,
   version, help, coerce, _require, validate, camelCase, canonize, types,
 ]
 

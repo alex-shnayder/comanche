@@ -14,10 +14,30 @@ class Command {
     this.parent = parent
     this.commands = []
     this.options = []
+    this.sharedSettings = []
+    this.sharedOptions = []
+
+    if (!parent) {
+      let inheritableSettings = this.constructor.inheritableSettings
+      let inheritableOptions = this.constructor.inheritableOptions
+
+      if (inheritableSettings && inheritableSettings.length) {
+        this.sharedSettings = inheritableSettings.slice()
+      }
+
+      if (inheritableOptions && inheritableOptions.length) {
+        this.sharedOptions = inheritableOptions.slice()
+      }
+    }
   }
 
   aliases(...aliases) {
     this.config.aliases = aliases
+    return this
+  }
+
+  share(...settings) {
+    this.sharedSettings.push(...settings)
     return this
   }
 

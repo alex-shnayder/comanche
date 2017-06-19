@@ -33,6 +33,11 @@ class Option {
     return this
   }
 
+  shared() {
+    this.parent.sharedOptions.push(this.config.id)
+    return this
+  }
+
   command(...args) {
     return this.parent.command(...args)
   }

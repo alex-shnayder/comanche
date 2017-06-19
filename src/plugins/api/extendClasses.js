@@ -44,5 +44,9 @@ module.exports = function extendClasses(schema) {
   let Command = extendClass(ExecutableCommand, commandSchema)
   Command.Option = extendClass(Option, optionSchema)
 
+  let commandProps = commandSchema.properties
+  Command.inheritableSettings = commandProps.inheritableSettings.default
+  Command.inheritableOptions = commandProps.inheritableOptions.default
+
   return Command
 }

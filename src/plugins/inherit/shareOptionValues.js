@@ -1,7 +1,4 @@
-const { next } = require('hooter/effects')
-
-
-function shareOptions(commands) {
+module.exports = function shareOptionValues(commands) {
   let providedOptionsById = {}
 
   commands.forEach(({ options }) => {
@@ -35,13 +32,5 @@ function shareOptions(commands) {
     })
 
     return command
-  })
-}
-
-
-module.exports = function shareOptionsPlugin(lifecycle) {
-  lifecycle.hook('execute', function* (_, commands) {
-    commands = shareOptions(commands)
-    return yield next(_, commands)
   })
 }

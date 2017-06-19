@@ -14,8 +14,12 @@ module.exports = function configurePlugin(lifecycle) {
     return schema
   })
 
-  lifecycle.hookEnd('configure', function* (_config) {
+  lifecycle.hookStart('configure', function* (_config) {
     _config = assignDefaults(schema, _config)
+    return yield next(_config)
+  })
+
+  lifecycle.hookEnd('configure', function* (_config) {
     validateConfig(schema, _config)
     config = yield next(_config).or(_config)
     return config
