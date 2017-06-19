@@ -9,6 +9,7 @@ const CONSUME_BY_TYPE = {
   string: true,
   default: true,
 }
+const SHORT_OPTION_FORMAT = /^[a-zA-Z0-9]$/
 
 
 function tokenizeArgs(args) {
@@ -31,8 +32,7 @@ function tokenizeArgs(args) {
           results.push({
             kind: 'option',
             isLong: false,
-            arg: `-${body}`,
-            body,
+            body, arg,
           })
         })
       }
@@ -79,8 +79,17 @@ function parseArgs(args, config) {
     } else if (!noOptionsMode && kind === 'option') {
       let eqPos = body.indexOf('=')
       eqPos = eqPos === -1 ? undefined : eqPos
-      let name = isLong ? body.substring(0, eqPos) : arg.charAt(1)
+      let name = isLong ? body.substring(0, eqPos) : body
       let value = null
+
+      if (!isLong && !SHORT_OPTION_FORMAT.test(name)) {
+        let err = new InputError(
+          'Short options may only contain letters and numbers. ' +
+          `Found "${name}" in "${arg}"`
+        )
+        err.command = currentResult
+        throw err
+      }
 
       if (!name) {
         let err = new InputError('Option name must not be empty')
