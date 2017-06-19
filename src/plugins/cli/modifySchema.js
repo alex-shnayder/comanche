@@ -12,7 +12,7 @@ const OPTION_PROPERTIES = {
   },
   positional: {
     type: 'boolean',
-    default: true,
+    default: false,
   },
 }
 
