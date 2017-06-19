@@ -2,7 +2,7 @@ const { assign, push } = require('../../common')
 
 
 const COMMAND_PROPERTIES = {
-  version: {
+  help: {
     type: ['boolean', 'string'],
     default: true,
   },
@@ -10,6 +10,6 @@ const COMMAND_PROPERTIES = {
 
 
 module.exports = function modifySchema(schema) {
-  schema = push(schema, 'definitions.command.properties.inheritableSettings.default', 'version')
+  schema = push(schema, 'definitions.command.properties.inheritableSettings.default', 'help')
   return assign(schema, 'definitions.command.properties', COMMAND_PROPERTIES)
 }

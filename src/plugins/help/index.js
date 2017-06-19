@@ -1,4 +1,5 @@
 const { next } = require('hooter/effects')
+const modifySchema = require('./modifySchema')
 
 
 let optionCounter = 0
@@ -40,6 +41,11 @@ function injectOptions(config) {
 }
 
 module.exports = function helpPlugin(lifecycle) {
+  lifecycle.hook('schema', function* (schema) {
+    schema = modifySchema(schema)
+    return yield next(schema)
+  })
+
   lifecycle.hook('configure', function* (config, ...args) {
     config = injectOptions(config)
     return yield next(config, ...args)
