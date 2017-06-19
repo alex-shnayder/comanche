@@ -123,11 +123,20 @@ function parseArgs(args, config) {
       currentResult.options.push({ name, inputName, value })
     } else {
       let command = findOneByNames(commands, body)
+      let hasPositionalOptions = Boolean(positionalOptions.length)
 
-      if (command) {
-        ({
-          commands, options, positionalOptions,
-        } = extractFromCommandConfig(command, config))
+      if (command || !hasPositionalOptions) {
+        if (command) {
+          let params = extractFromCommandConfig(command, config)
+          commands = params.commands
+          options = params.options
+          positionalOptions = params.positionalOptions
+        } else {
+          commands = []
+          options = []
+          positionalOptions = []
+        }
+
         let fullName = currentResult.fullName.concat(body)
         currentResult = {
           fullName: fullName,
@@ -137,12 +146,6 @@ function parseArgs(args, config) {
         results.push(currentResult)
       } else {
         let optionConfig = positionalOptions.shift()
-
-        if (!optionConfig) {
-          let err = new InputError(`Unknown argument "${arg}"`)
-          err.command = currentResult
-          throw err
-        }
 
         currentResult.options.push({
           name: optionConfig.name,

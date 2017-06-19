@@ -66,8 +66,15 @@ module.exports = function cliPlugin(lifecycle) {
             commandName = inputName
           } else if (event) {
             let command = getCommandFromEvent(event)
-            commandConfig = command.config
-            commandName = command.inputName
+
+            if (command.config) {
+              commandName = command.inputName
+              commandConfig = command.config
+            } else {
+              let parentName = command.fullName.slice(0, -1)
+              commandConfig = findCommandByFullName(config, parentName, true)
+              commandName = parentName.join(' ')
+            }
           }
 
           handleError(err, commandConfig, commandName)
