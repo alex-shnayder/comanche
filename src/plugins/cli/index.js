@@ -16,7 +16,6 @@ function print(string, level = 'log') {
 
 function handleError(err, commandConfig, commandName) {
   /* eslint-disable no-console */
-  // TODO: show help on error
 
   let text = err
 
@@ -79,9 +78,6 @@ module.exports = function cliPlugin(lifecycle) {
   })
 
   lifecycle.hook('process', function* (_, command) {
-    // This repeats the similar block in the help plugin
-    // TODO: DRY it
-
     let { inputName, options, config } = command
 
     let isHelpAsked = options && options.some((option) => {
