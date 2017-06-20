@@ -1,4 +1,4 @@
-const { next } = require('hooter/effects')
+const { next, hook } = require('hooter/effects')
 const validators = require('./validators')
 const coercers = require('./coercers')
 
@@ -18,8 +18,8 @@ function modifyOptions(options) {
   })
 }
 
-module.exports = function typesPlugin(lifecycle) {
-  lifecycle.hook('configure', function* (_, config, ...args) {
+module.exports = function* typesPlugin() {
+  yield hook('configure', function* (_, config, ...args) {
     let options = config.options
 
     if (!options) {

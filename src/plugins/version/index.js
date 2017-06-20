@@ -1,4 +1,4 @@
-const { next } = require('hooter/effects')
+const { next, hook, hookEnd } = require('hooter/effects')
 const readPkgUp = require('read-pkg-up')
 const modifySchema = require('./modifySchema')
 
@@ -48,18 +48,18 @@ function injectOptions(config) {
   return Object.assign({}, config, { commands, options })
 }
 
-module.exports = function versionPlugin(lifecycle) {
-  lifecycle.hook('schema', function* (schema) {
+module.exports = function* versionPlugin() {
+  yield hook('schema', function* (schema) {
     schema = modifySchema(schema)
     return yield next(schema)
   })
 
-  lifecycle.hook('configure', function* (_, config, ...args) {
+  yield hook('configure', function* (_, config, ...args) {
     config = injectOptions(config)
     return yield next(_, config, ...args)
   })
 
-  lifecycle.hookEnd('process', function* (_, command, ...args) {
+  yield hookEnd('process', function* (_, command, ...args) {
     let { options, config } = command
 
     let isVersionAsked = options && options.some((option) => {

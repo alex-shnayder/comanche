@@ -1,9 +1,9 @@
-const { next } = require('hooter/effects')
+const { next, hook } = require('hooter/effects')
 const extendClasses = require('./extendClasses')
 
 
-module.exports = function apiPlugin(lifecycle) {
-  lifecycle.hook('init', function* (schema, api) {
+module.exports = function* apiPlugin(lifecycle) {
+  yield hook('init', function* (schema, api) {
     if (api) {
       // eslint-disable-next-line
       console.warn(

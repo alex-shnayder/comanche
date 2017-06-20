@@ -24,8 +24,11 @@ module.exports = function comanche(args, plugins) {
   EVENTS.forEach(([event, mode]) => {
     lifecycle.register(event, mode)
   })
+
   plugins.forEach((plugin) => {
-    plugin(lifecycle.bind(plugin))
+    let boundLifecycle = lifecycle.bind(plugin)
+    plugin = boundLifecycle.wrap(plugin)
+    plugin(boundLifecycle)
   })
 
   let schema = lifecycle.tootWith('schema', (schema) => schema, defaultSchema)

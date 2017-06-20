@@ -1,5 +1,5 @@
 const {
-  next, resolve, suspend, getResume, tootWith,
+  next, resolve, suspend, getResume, tootWith, hookStart, hookEnd,
 } = require('hooter/effects')
 const prepareCommands = require('./prepareCommands')
 
@@ -28,8 +28,8 @@ function validateCommand(command) {
 }
 
 
-module.exports = function executePlugin(lifecycle) {
-  lifecycle.hookStart('execute', function* (config, request) {
+module.exports = function* executePlugin() {
+  yield hookStart('execute', function* (config, request) {
     if (!Array.isArray(request) || request.length === 0) {
       throw new Error('The first argument of "execute" must be an array of commands')
     }
@@ -38,7 +38,7 @@ module.exports = function executePlugin(lifecycle) {
     return yield next(config, request)
   })
 
-  lifecycle.hookEnd('execute', function* (_, request) {
+  yield hookEnd('execute', function* (_, request) {
     let resumes = []
     let context
 
@@ -49,7 +49,6 @@ module.exports = function executePlugin(lifecycle) {
         let result = new ProcessingResult(command, resume)
         return yield suspend(result)
       }, request[i])
-      result = yield resolve(result)
 
       // If the result is not an instance of ProcessingResult,
       // it means that a handler has returned early effectively
@@ -64,7 +63,6 @@ module.exports = function executePlugin(lifecycle) {
 
     for (let i = 0; i < request.length; i++) {
       context = yield tootWith('handle', (_, __, c) => c, request[i], context)
-      context = yield resolve(context)
       context = yield resolve(resumes[i](context))
     }
 

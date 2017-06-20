@@ -1,15 +1,15 @@
-const { next } = require('hooter/effects')
+const { next, hook } = require('hooter/effects')
 const modifySchema = require('./modifySchema')
 const validateCommand = require('./validateCommand')
 
 
-module.exports = function validatePlugin(lifecycle) {
-  lifecycle.hook('schema', function* (schema) {
+module.exports = function* validatePlugin() {
+  yield hook('schema', function* (schema) {
     schema = modifySchema(schema)
     return yield next(schema)
   })
 
-  lifecycle.hook('process', function* (_, command) {
+  yield hook('process', function* (_, command) {
     validateCommand(command)
     return yield next(_, command)
   })

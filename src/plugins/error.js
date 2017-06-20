@@ -1,11 +1,11 @@
-const { next } = require('hooter/effects')
+const { next, hookStart, hookEnd } = require('hooter/effects')
 
 
 const NO_HANDLER = {}
 
 
-module.exports = function errorPlugin(lifecycle) {
-  lifecycle.hookEnd('error', function* (_, err, ...args) {
+module.exports = function* errorPlugin() {
+  yield hookEnd('error', function* (_, err, ...args) {
     let result = yield next(_, err, ...args).or(NO_HANDLER)
 
     if (result === NO_HANDLER) {
@@ -15,7 +15,7 @@ module.exports = function errorPlugin(lifecycle) {
     return result
   })
 
-  lifecycle.hookStart('error', function* (_, err, ...args) {
+  yield hookStart('error', function* (_, err, ...args) {
     try {
       yield next(_, err, err.event, ...args)
     } catch (err) {

@@ -1,14 +1,14 @@
-const { next } = require('hooter/effects')
+const { next, hook, hookStart } = require('hooter/effects')
 const modifySchema = require('./modifySchema')
 
 
-module.exports = function defaultValuesPlugin(lifecycle) {
-  lifecycle.hook('schema', function* (schema) {
+module.exports = function* defaultValuesPlugin() {
+  yield hook('schema', function* (schema) {
     schema = modifySchema(schema)
     return yield next(schema)
   })
 
-  lifecycle.hookStart('process', function* (_, command, ...args) {
+  yield hookStart('process', function* (_, command, ...args) {
     let config = command.config
 
     if (!config || !config.options || !config.options.length) {

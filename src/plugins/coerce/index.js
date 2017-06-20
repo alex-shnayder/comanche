@@ -1,4 +1,4 @@
-const { next } = require('hooter/effects')
+const { next, hook } = require('hooter/effects')
 const modifySchema = require('./modifySchema')
 
 
@@ -13,13 +13,13 @@ function coerceOption(option) {
   return Object.assign({}, option, { value })
 }
 
-module.exports = function coercePlugin(lifecycle) {
-  lifecycle.hook('schema', function* (schema) {
+module.exports = function* coercePlugin() {
+  yield hook('schema', function* (schema) {
     schema = modifySchema(schema)
     return yield next(schema)
   })
 
-  lifecycle.hook('process', function* (_, command, ...args) {
+  yield hook('process', function* (_, command, ...args) {
     let options = command.options
 
     if (options) {

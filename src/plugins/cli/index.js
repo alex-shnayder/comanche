@@ -1,4 +1,4 @@
-const { next } = require('hooter/effects')
+const { next, hook, fork, toot, tootWith } = require('hooter/effects')
 const {
   InputError, findDefaultCommand, findCommandByFullName, getCommandFromEvent,
 } = require('../../common')
@@ -55,30 +55,29 @@ function handleError(config, err, event) {
   return print(errText, 'error')
 }
 
-module.exports = function cliPlugin(lifecycle) {
-  lifecycle.hook('schema', function* (schema) {
+module.exports = function* cliPlugin() {
+  yield hook('schema', function* (schema) {
     schema = modifySchema(schema)
     return yield next(schema)
   })
 
-  lifecycle.hook('start', function* (config, ...args) {
-    Promise.resolve()
-      .then(() => {
-        let args = process.argv.slice(2)
-        return parseArgs(args, config)
-      })
-      .then((request) => {
-        return lifecycle.toot('execute', request)
-      })
-      .then(handleResult)
-      .catch((err) => {
-        lifecycle.tootWith('error', handleError, err)
-      })
+  yield hook('start', function* (config, ...args) {
+    yield fork(function* () {
+      let args = process.argv.slice(2)
+
+      try {
+        let request = parseArgs(args, config)
+        let result = yield toot('execute', request)
+        handleResult(result)
+      } catch (err) {
+        yield tootWith('error', handleError, err)
+      }
+    })
 
     return yield next(config, ...args)
   })
 
-  lifecycle.hook('process', function* (_, command) {
+  yield hook('process', function* (_, command) {
     let { inputName, options, config } = command
 
     let isHelpAsked = options && options.some((option) => {

@@ -1,4 +1,4 @@
-const { next } = require('hooter/effects')
+const { next, hook, hookEnd } = require('hooter/effects')
 const modifySchema = require('./modifySchema')
 
 
@@ -40,18 +40,18 @@ function injectOptions(config) {
   return Object.assign({}, config, { commands, options })
 }
 
-module.exports = function helpPlugin(lifecycle) {
-  lifecycle.hook('schema', function* (schema) {
+module.exports = function* helpPlugin() {
+  yield hook('schema', function* (schema) {
     schema = modifySchema(schema)
     return yield next(schema)
   })
 
-  lifecycle.hook('configure', function* (_, config) {
+  yield hook('configure', function* (_, config) {
     config = injectOptions(config)
     return yield next(_, config)
   })
 
-  lifecycle.hookEnd('process', function* (_, command) {
+  yield hookEnd('process', function* (_, command) {
     let { inputName, options, config } = command
 
     let isHelpAsked = options && options.some((option) => {

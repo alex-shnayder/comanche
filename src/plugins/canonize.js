@@ -1,8 +1,8 @@
-const { next } = require('hooter/effects')
+const { next, hookEnd } = require('hooter/effects')
 
 
-module.exports = function canonizePlugin(lifecycle) {
-  lifecycle.hookEnd('process', function* (_, command, ...args) {
+module.exports = function* canonizePlugin() {
+  yield hookEnd('process', function* (_, command, ...args) {
     let { fullName, config } = command
     let ownName = config ? config.name : fullName[fullName.length - 1]
     let outputName = fullName.slice(0, -1).concat(ownName)

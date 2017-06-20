@@ -1,9 +1,9 @@
 const camelcase = require('camelcase')
-const { next } = require('hooter/effects')
+const { next, hookEnd } = require('hooter/effects')
 
 
-module.exports = function camelCasePlugin(lifecycle) {
-  lifecycle.hookEnd('process', function* (_, command, ...args) {
+module.exports = function* camelCasePlugin() {
+  yield hookEnd('process', function* (_, command, ...args) {
     if (command.options) {
       command = Object.assign({}, command)
       command.options = command.options.map((option) => {
