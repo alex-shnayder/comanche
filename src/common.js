@@ -182,11 +182,11 @@ function compareNames(nameA, nameB) {
 }
 
 function getCommandFromEvent(event) {
-  let { args, type } = event
+  let { args, name } = event
 
-  if (type === 'execute') {
+  if (name === 'execute') {
     return args && args[0] && args[0][0]
-  } else if (type === 'process' || type === 'handle') {
+  } else if (name === 'process' || name === 'handle') {
     return args && args[0]
   }
 }
