@@ -16,7 +16,8 @@
     "console"
   ],
   "scripts": {
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "test": "mocha --require denude/register src/**/tests/*.js src/**/test.js"
   },
   "lint-staged": {
     "*.js": [
@@ -26,10 +27,12 @@
   },
   "main": "src/index.js",
   "devDependencies": {
+    "denude": "^0.2.0",
     "eslint": "^3.19.0",
     "eslint-plugin-import": "^2.2.0",
     "husky": "^0.13.3",
-    "lint-staged": "^3.4.0"
+    "lint-staged": "^3.4.0",
+    "mocha": "^3.4.2"
   },
   "dependencies": {
     "ajv": "^5.1.5",
