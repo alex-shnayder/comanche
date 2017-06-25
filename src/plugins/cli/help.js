@@ -65,18 +65,33 @@ function makeCommandsText(commands) {
 
 function makeOptionsText(options) {
   let rows = options
-    .sort((o) => {
-      return o.isHelpOption ? 1 : 0
+    .sort((option) => {
+      return option.isHelpOption ? 1 : 0
+    })
+    .filter(({ long, short, positional, description }) => {
+      return long || short || (positional && description)
     })
     .map((option) => {
-      let { name, aliases, description } = option
-      let names = aliases ? [name].concat(aliases) : [name]
-      let namesText = names
-        .sort((a, b) => a.length - b.length)
-        .map((name) => {
-          return (name.length === 1) ? `-${name}` : `--${name}`
-        })
-        .join(', ')
+      let { name, aliases, description, long, short, positional } = option
+      let namesText = ''
+
+      if (long || short) {
+        let names = aliases ? [name].concat(aliases) : [name]
+        namesText = names
+          .filter(({ length }) => {
+            return ((length === 1 && short) || (length > 1 && long))
+          })
+          .sort((a, b) => a.length - b.length)
+          .map((name) => {
+            return (name.length === 1) ? `-${name}` : `--${name}`
+          })
+          .join(', ')
+      }
+
+      if (positional && !long) {
+        namesText += namesText ? `, ${name}` : name
+      }
+
       namesText = ' '.repeat(PADDING) + namesText
       return [namesText, description || '']
     })
