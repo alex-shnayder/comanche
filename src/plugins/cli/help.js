@@ -10,11 +10,42 @@ let texts = {}
 function makeUsageText(commandName, commandConfig) {
   let text = `Usage: ${commandName}`
 
-  if (!commandConfig || !commandConfig.description) {
+  if (!commandConfig) {
     return text
   }
 
-  return `${text}\n\n${commandConfig.description}`
+  let { options, commands, description } = commandConfig
+
+  if (options && options.length) {
+    let positionalText = ''
+    let hasNonPositionalOptions = false
+
+    options.forEach(({ name, positional, long, short, required }) => {
+      if (positional) {
+        positionalText += required ? ` <${name}>` : ` [${name}]`
+      }
+
+      if (long || short) {
+        hasNonPositionalOptions = true
+      }
+    })
+
+    if (hasNonPositionalOptions) {
+      text += ' [options]'
+    }
+
+    text += positionalText
+  }
+
+  if (commands && commands.length) {
+    text += ' [command]'
+  }
+
+  if (description) {
+    text += `\n\n${description}`
+  }
+
+  return text
 }
 
 function makeCommandsText(commands) {
