@@ -9,7 +9,7 @@ const validate = require('./plugins/validate')
 const coerce = require('./plugins/coerce')
 const types = require('./plugins/types')
 const canonize = require('./plugins/canonize')
-const camelCase = require('./plugins/camelCase')
+const camelize = require('./plugins/camelize')
 const error = require('./plugins/error')
 const inherit = require('./plugins/inherit')
 const defaultValues = require('./plugins/defaultValues')
@@ -19,7 +19,7 @@ const processTitle = require('./plugins/processTitle')
 
 const DEFAULT_PLUGINS = [
   configure, inherit, error, execute, api, cli, defaultValues, version, help,
-  coerce, _require, validate, camelCase, canonize, types, processTitle,
+  coerce, _require, validate, camelize, canonize, types, processTitle,
 ]
 
 
