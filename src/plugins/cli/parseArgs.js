@@ -32,7 +32,8 @@ function tokenizeArgs(args) {
           results.push({
             kind: 'option',
             isLong: false,
-            body, arg,
+            arg: `-${body}`,
+            body,
           })
         })
       }
