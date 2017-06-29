@@ -17,24 +17,13 @@ function makeUsageText(commandName, commandConfig) {
   let { options, commands, description } = commandConfig
 
   if (options && options.length) {
-    let positionalText = ''
-    let hasNonPositionalOptions = false
+    text += ' [options]'
 
-    options.forEach(({ name, positional, long, short, required }) => {
+    options.forEach(({ name, positional, required }) => {
       if (positional) {
-        positionalText += required ? ` <${name}>` : ` [${name}]`
-      }
-
-      if (long || short) {
-        hasNonPositionalOptions = true
+        text += required ? ` <${name}>` : ` [${name}]`
       }
     })
-
-    if (hasNonPositionalOptions) {
-      text += ' [options]'
-    }
-
-    text += positionalText
   }
 
   if (commands && commands.length) {
@@ -68,29 +57,16 @@ function makeOptionsText(options) {
     .sort((option) => {
       return option.isHelpOption ? 1 : 0
     })
-    .filter(({ long, short, positional, description }) => {
-      return long || short || (positional && description)
-    })
     .map((option) => {
-      let { name, aliases, description, long, short, positional } = option
-      let namesText = ''
+      let { name, aliases, description } = option
+      let names = aliases ? [name].concat(aliases) : [name]
 
-      if (long || short) {
-        let names = aliases ? [name].concat(aliases) : [name]
-        namesText = names
-          .filter(({ length }) => {
-            return ((length === 1 && short) || (length > 1 && long))
-          })
-          .sort((a, b) => a.length - b.length)
-          .map((name) => {
-            return (name.length === 1) ? `-${name}` : `--${name}`
-          })
-          .join(', ')
-      }
-
-      if (positional && !long) {
-        namesText += namesText ? `, ${name}` : name
-      }
+      let namesText = names
+        .sort((a, b) => a.length - b.length)
+        .map((name) => {
+          return (name.length === 1) ? `-${name}` : `--${name}`
+        })
+        .join(', ')
 
       namesText = ' '.repeat(PADDING) + namesText
       return [namesText, description || '']
