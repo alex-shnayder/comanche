@@ -191,12 +191,35 @@ function getCommandFromEvent(event) {
   }
 }
 
+function assignDefaults(itemSchema, item) {
+  item = Object.assign({}, item)
+
+  Object.entries(itemSchema.properties).forEach(([key, prop]) => {
+    if (typeof prop.default !== 'undefined' &&
+        typeof item[key] === 'undefined') {
+      item[key] = prop.default
+    }
+  })
+
+  return item
+}
+
+function createCommand(schema, command) {
+  let commandSchema = schema.definitions.command
+  return assignDefaults(commandSchema, command)
+}
+
+function createOption(schema, option) {
+  let optionSchema = schema.definitions.option
+  return assignDefaults(optionSchema, option)
+}
+
 
 module.exports = {
   InputError, findByIds, findOneById, findOneByNames, findCommandById,
   findOptionById, findCommandByFullName, findDefaultCommand, populateCommand,
   updateCommandById, updateOptionById, optionsToObject, compareNames,
-  getCommandFromEvent,
+  getCommandFromEvent, assignDefaults, createCommand, createOption,
 }
 
 Object.assign(module.exports, objectPathImmutable)

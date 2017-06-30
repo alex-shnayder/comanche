@@ -1,30 +1,28 @@
-function assignItemDefaults(props, item) {
-  item = Object.assign({}, item)
-  props.forEach(([key, prop]) => {
-    if (typeof prop.default !== 'undefined' &&
-        typeof item[key] === 'undefined') {
-      item[key] = prop.default
-    }
-  })
-  return item
-}
+const { assignDefaults: assignItemDefaults } = require('../../common')
+
 
 module.exports = function assignDefaults(schema, config) {
-  let commandProps = Object.entries(schema.definitions.command.properties)
-  let optionProps = Object.entries(schema.definitions.option.properties)
   let { commands, options } = config
+  let hasCommands = commands && commands.length
+  let hasOptions = options && options.length
 
-  if (commands && commands.length) {
+  if (hasCommands) {
+    let commandSchema = schema.definitions.command
     commands = commands.map((command) => {
-      return assignItemDefaults(commandProps, command)
+      return assignItemDefaults(commandSchema, command)
     })
   }
 
-  if (options && options.length) {
+  if (hasOptions) {
+    let optionSchema = schema.definitions.option
     options = options.map((option) => {
-      return assignItemDefaults(optionProps, option)
+      return assignItemDefaults(optionSchema, option)
     })
   }
 
-  return Object.assign({}, config, { commands, options })
+  if (hasCommands || hasOptions) {
+    return Object.assign({}, config, { commands, options })
+  } else {
+    return config
+  }
 }
