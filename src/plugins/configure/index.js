@@ -10,7 +10,7 @@ module.exports = function* configurePlugin() {
   let schema, config
 
   function* provideConfig(...args) {
-    let event = this.type
+    let event = this.name
 
     if (!config && event !== 'error') {
       throw new Error(
