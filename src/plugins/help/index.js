@@ -1,21 +1,22 @@
 const { next, hook, hookEnd } = require('hooter/effects')
+const { createOption } = require('../../common')
 const modifySchema = require('./modifySchema')
 
 
 let optionCounter = 0
 
-function createOption() {
-  return {
+function createHelpOption(schema) {
+  return createOption(schema, {
     id: `help${++optionCounter}`,
     name: 'help',
     aliases: ['h'],
     description: 'Show help',
     type: 'boolean',
     isHelpOption: true, // Probably not the best way to identify the options
-  }
+  })
 }
 
-function injectOptions(config) {
+function injectOptions(schema, config) {
   let helpOptions = []
   let commands = config.commands.map((command) => {
     let { help, options } = command
@@ -24,7 +25,7 @@ function injectOptions(config) {
       return command
     }
 
-    let option = createOption()
+    let option = createHelpOption(schema)
     helpOptions.push(option)
     options = options ? options.concat(option.id) : [option.id]
     return Object.assign({}, command, { options })
@@ -46,9 +47,9 @@ module.exports = function* helpPlugin() {
     return yield next(schema)
   })
 
-  yield hook('configure', function* (_, config) {
-    config = injectOptions(config)
-    return yield next(_, config)
+  yield hook('configure', function* (schema, config) {
+    config = injectOptions(schema, config)
+    return yield next(schema, config)
   })
 
   yield hookEnd('process', function* (_, command) {

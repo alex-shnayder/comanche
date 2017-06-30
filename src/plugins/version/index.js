@@ -1,5 +1,6 @@
 const { next, hook, hookEnd } = require('hooter/effects')
 const readPkgUp = require('read-pkg-up')
+const { createOption } = require('../../common')
 const modifySchema = require('./modifySchema')
 
 
@@ -26,7 +27,7 @@ function detectVersion() {
   return pkg.version
 }
 
-function injectOptions(config) {
+function injectOptions(schema, config) {
   let needsVersionOption = false
   let commands = config.commands.map((command) => {
     let { version, options } = command
@@ -44,7 +45,8 @@ function injectOptions(config) {
     return config
   }
 
-  let options = config.options ? config.options.concat(OPTION) : [OPTION]
+  let option = createOption(schema, OPTION)
+  let options = config.options ? config.options.concat(option) : [option]
   return Object.assign({}, config, { commands, options })
 }
 
@@ -54,9 +56,9 @@ module.exports = function* versionPlugin() {
     return yield next(schema)
   })
 
-  yield hook('configure', function* (_, config, ...args) {
-    config = injectOptions(config)
-    return yield next(_, config, ...args)
+  yield hook('configure', function* (schema, config, ...args) {
+    config = injectOptions(schema, config)
+    return yield next(schema, config, ...args)
   })
 
   yield hookEnd('process', function* (_, command, ...args) {
