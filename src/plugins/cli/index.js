@@ -1,3 +1,4 @@
+const chalk = require('chalk')
 const { next, hook, fork, toot, tootWith } = require('hooter/effects')
 const {
   InputError, findDefaultCommand, findCommandByFullName, getCommandFromEvent,
@@ -25,7 +26,7 @@ function handleError(config, err, event) {
     return print(err, 'error')
   }
 
-  let errText = err.message
+  let errText = chalk.red(err.message)
   let commandConfig = findDefaultCommand(config, true)
   let commandName
 

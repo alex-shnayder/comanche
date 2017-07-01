@@ -38,6 +38,7 @@
     "ajv": "^5.1.5",
     "ajv-keywords": "^2.1.0",
     "camelcase": "^4.1.0",
+    "chalk": "^2.0.1",
     "cliff": "^0.1.10",
     "hooter": "^0.16.1",
     "object-path-immutable": "^0.5.1",
