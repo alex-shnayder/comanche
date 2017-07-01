@@ -1,7 +1,7 @@
 class Command {
   constructor(name, parent) {
     if (!name || typeof name !== 'string') {
-      throw new Error('The first argument of Command must be a non-empty string')
+      throw new Error('The first argument of the Command constructor must be its name (a non-empty string)')
     }
 
     this.config = {

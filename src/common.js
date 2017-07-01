@@ -102,7 +102,7 @@ function updateCommandById(config, id, command, overwrite) {
   let { commands } = config
 
   if (!commands || !commands.length) {
-    throw new Error('Config doesn\'t have any commands')
+    throw new Error('The config doesn\'t have any commands')
   }
 
   let updatedCommands = []
@@ -132,7 +132,7 @@ function updateOptionById(config, id, option, overwrite) {
   let { options } = config
 
   if (!options || !options.length) {
-    throw new Error('Config doesn\'t have any options')
+    throw new Error('The config doesn\'t have any options')
   }
 
   let updatedOptions = []
@@ -150,7 +150,7 @@ function updateOptionById(config, id, option, overwrite) {
   }
 
   if (!optionFound) {
-    throw new Error(`option "${id}" is not found`)
+    throw new Error(`Option "${id}" is not found`)
   }
 
   return Object.assign({}, config, {

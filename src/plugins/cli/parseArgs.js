@@ -93,7 +93,7 @@ function parseArgs(args, config) {
       }
 
       if (!name) {
-        let err = new InputError('Option name must not be empty')
+        let err = new InputError('An option\'s name must not be empty')
         err.command = currentResult
         throw err
       }

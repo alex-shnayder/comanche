@@ -17,7 +17,7 @@ function validateOption(option) {
           )
       }
     } else {
-      throw new Error('Validate must be either a function or a regular expression')
+      throw new Error('"validate" must be either a function or a regular expression')
     }
   }
 }

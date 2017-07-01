@@ -18,7 +18,7 @@ function validateCommand(command) {
 
       if (matchingCommand && matchingCommand !== command) {
         throw new Error(
-          `The command "${name}" has a name or alias ` +
+          `Command "${name}" has a name or alias ` +
           `that is already taken by "${matchingCommand.name}"`
         )
       }
@@ -33,7 +33,7 @@ function validateCommand(command) {
 
       if (matchingOption && matchingOption !== option) {
         throw new Error(
-          `The option "${name}" has a name or alias ` +
+          `Option "${name}" has a name or alias ` +
           `that is already taken by "${matchingOption.name}"`
         )
       }
