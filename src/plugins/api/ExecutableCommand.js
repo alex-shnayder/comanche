@@ -42,9 +42,9 @@ class ExecutableCommand extends Command {
     this.lifecycle.hook('handle', function* (
       config, _command, context, ...args
     ) {
-      let { outputName, options } = _command
+      let { fullName, options } = _command
 
-      if (compareNames(outputName, command)) {
+      if (compareNames(fullName, command)) {
         options = optionsToObject(options)
         context = yield handler(options, context, ...args)
       }

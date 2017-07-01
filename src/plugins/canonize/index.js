@@ -6,7 +6,7 @@ function canonize(command) {
 
   if (config) {
     command = Object.assign({}, command)
-    command.outputName = fullName.slice(0, -1).concat(config.name)
+    command.fullName = fullName.slice(0, -1).concat(config.name)
   }
 
   if (options && options.length) {
@@ -16,9 +16,9 @@ function canonize(command) {
         return option
       }
 
-      return Object.assign({}, option, {
-        outputName: option.config.name,
-      })
+      option = Object.assign({}, option)
+      option.name = option.config.name
+      return option
     })
   }
 

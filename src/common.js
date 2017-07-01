@@ -163,8 +163,10 @@ function optionsToObject(options) {
     return {}
   }
 
-  return options.reduce((object, option) => {
-    object[option.outputName] = option.value
+  return options.reduce((object, { name, value }) => {
+    if (name) {
+      object[name] = value
+    }
     return object
   }, {})
 }

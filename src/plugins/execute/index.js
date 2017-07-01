@@ -13,18 +13,6 @@ function validateCommand(command) {
   if (!command || typeof command !== 'object') {
     throw new Error('The result of processing a command must be a command object')
   }
-
-  if (!command.outputName) {
-    throw new Error('Commands must have an output name in the end of "process"')
-  }
-
-  if (command.options) {
-    command.options.forEach((option) => {
-      if (!option.outputName) {
-        throw new Error('All options must have an output name in the end of "process"')
-      }
-    })
-  }
 }
 
 

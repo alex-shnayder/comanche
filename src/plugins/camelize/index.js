@@ -9,11 +9,8 @@ function camelizeOptions(command) {
 
   command = Object.assign({}, command)
   command.options = command.options.map((option) => {
-    if (option.outputName) {
-      option = Object.assign({}, option, {
-        outputName: camelcase(option.outputName),
-      })
-    }
+    option = Object.assign({}, option)
+    option.name = camelcase(option.name)
     return option
   })
 

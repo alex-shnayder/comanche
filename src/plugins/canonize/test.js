@@ -58,7 +58,7 @@ describe('canonize plugin', () => {
       assert(command === result)
     })
 
-    it('sets the command\'s output name to its canonical form', () => {
+    it('sets the command\'s name to its canonical form', () => {
       let command = {
         fullName: ['foo', 'bar'],
         config: {
@@ -68,35 +68,34 @@ describe('canonize plugin', () => {
       let result = canonize(command)
 
       assert.deepStrictEqual(result, {
-        fullName: ['foo', 'bar'],
-        outputName: ['foo', 'baz'],
+        fullName: ['foo', 'baz'],
         config: {
           name: 'baz',
         },
       })
     })
 
-    it('sets the output names of command\'s options to the names defined in their configs', () => {
+    it('sets the names of the command\'s options to the names defined in their configs', () => {
       let command = {
         options: [{
-          outputName: 'foo',
+          name: 'foo',
           config: {
             name: 'oof',
           },
         }, {
-          outputName: 'bar',
+          name: 'bar',
         }],
       }
       let result = canonize(command)
 
       assert.deepStrictEqual(result, {
         options: [{
-          outputName: 'oof',
+          name: 'oof',
           config: {
             name: 'oof',
           },
         }, {
-          outputName: 'bar',
+          name: 'bar',
         }],
       })
     })

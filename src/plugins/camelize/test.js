@@ -60,14 +60,14 @@ describe('camelize plugin', () => {
     it('converts the command\'s options to camelCase', () => {
       let command = {
         options: [{
-          outputName: 'foo-bar',
+          name: 'foo-bar',
         }],
       }
       let result = camelizeOptions(command)
 
       assert.deepStrictEqual(result, {
         options: [{
-          outputName: 'fooBar',
+          name: 'fooBar',
         }],
       })
     })
