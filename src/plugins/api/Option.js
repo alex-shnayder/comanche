@@ -17,7 +17,7 @@ class Option {
     }
 
     if (!name || typeof name !== 'string') {
-      throw new Error('The first argument of the Option constructor must be a its name (a non-empty string)')
+      throw new Error('The first argument of the Option constructor must be its name (a non-empty string)')
     }
 
     name = normalizeName(name)
