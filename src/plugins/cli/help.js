@@ -8,7 +8,7 @@ const GAP = 5
 let texts = {}
 
 function makeUsageText(commandName, commandConfig) {
-  let text = `Usage: ${commandName}`
+  let text = `Usage:\n${' '.repeat(PADDING)}${commandName}`
 
   if (!commandConfig) {
     return text
@@ -31,7 +31,7 @@ function makeUsageText(commandName, commandConfig) {
   }
 
   if (description) {
-    text += `\n\n${description}`
+    text = `${description}\n\n${text}`
   }
 
   return text
