@@ -1,5 +1,5 @@
 const Hooter = require('hooter')
-const defaultSchema = require('./schema')
+const baseSchema = require('./schema')
 
 
 const EVENTS = [
@@ -31,7 +31,7 @@ module.exports = function comanche(args, plugins) {
     plugin(boundLifecycle)
   })
 
-  let schema = lifecycle.tootWith('schema', (schema) => schema, defaultSchema)
+  let schema = lifecycle.tootWith('schema', (schema) => schema, baseSchema)
 
   return lifecycle.tootWith('init', (_, createApi) => {
     if (!createApi) {
