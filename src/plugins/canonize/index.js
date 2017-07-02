@@ -1,16 +1,39 @@
 const { next, hookEnd, call } = require('hooter/effects')
+const { findOneByNames, findByIds } = require('../../common')
 
 
-function canonize(command) {
-  let { fullName, config, options } = command
+function canonizeCommandName(config, fullName) {
+  let allCommands = config.commands
+  let commands = allCommands
+  let newName = fullName.slice()
 
-  if (config) {
-    command = Object.assign({}, command)
-    command.fullName = fullName.slice(0, -1).concat(config.name)
+  for (let i = 0; i < fullName.length; i++) {
+    let name = fullName[i]
+    let command = findOneByNames(commands, name)
+
+    if (!command) {
+      return newName
+    }
+
+    newName[i] = command.name
+
+    if (!command.commands) {
+      return newName
+    }
+
+    commands = findByIds(allCommands, command.commands)
   }
 
+  return newName
+}
+
+function canonize(config, command) {
+  let { fullName, options } = command
+
+  command = Object.assign({}, command)
+  command.fullName = canonizeCommandName(config, fullName)
+
   if (options && options.length) {
-    command = config ? command : Object.assign({}, command)
     command.options = options.map((option) => {
       if (!option.config) {
         return option
@@ -25,9 +48,9 @@ function canonize(command) {
   return command
 }
 
-function* processHandler(_, command, ...args) {
-  command = yield call(canonize, command)
-  return yield next(_, command, ...args)
+function* processHandler(config, command, ...args) {
+  command = yield call(canonize, config, command)
+  return yield next(config, command, ...args)
 }
 
 module.exports = function* canonizePlugin() {

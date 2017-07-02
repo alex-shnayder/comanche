@@ -27,7 +27,7 @@ describe('canonize plugin', () => {
       assert.deepStrictEqual(value, {
         effect: 'call',
         fn: canonize,
-        args: [command],
+        args: [config, command],
       })
     })
 
@@ -51,32 +51,37 @@ describe('canonize plugin', () => {
   })
 
   describe('canonize', () => {
-    it('returns the given command if it has no config or options', () => {
-      let command = {}
-      let result = canonize(command)
-
-      assert(command === result)
-    })
-
     it('sets the command\'s name to its canonical form', () => {
+      let config = {
+        commands: [{
+          id: 1,
+          name: 'for',
+          aliases: ['foo'],
+          commands: [2],
+        }, {
+          id: 2,
+          name: 'baz',
+          aliases: ['bar'],
+        }],
+      }
       let command = {
         fullName: ['foo', 'bar'],
-        config: {
-          name: 'baz',
-        },
+        config: config.commands[1],
       }
-      let result = canonize(command)
+      let result = canonize(config, command)
 
       assert.deepStrictEqual(result, {
-        fullName: ['foo', 'baz'],
-        config: {
-          name: 'baz',
-        },
+        fullName: ['for', 'baz'],
+        config: config.commands[1],
       })
     })
 
     it('sets the names of the command\'s options to the names defined in their configs', () => {
+      let config = {
+        commands: [],
+      }
       let command = {
+        fullName: [],
         options: [{
           name: 'foo',
           config: {
@@ -86,9 +91,10 @@ describe('canonize plugin', () => {
           name: 'bar',
         }],
       }
-      let result = canonize(command)
+      let result = canonize(config, command)
 
       assert.deepStrictEqual(result, {
+        fullName: [],
         options: [{
           name: 'oof',
           config: {
