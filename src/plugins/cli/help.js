@@ -2,7 +2,7 @@ const cliff = require('cliff')
 
 
 const PADDING = 2
-const GAP = 5
+const GAP = 4
 
 
 let texts = {}
