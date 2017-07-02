@@ -6,6 +6,10 @@ const OPTION_PROPERTIES = {
     type: 'boolean',
     default: false,
   },
+  consume: {
+    type: 'boolean',
+    default: true,
+  },
 }
 
 
