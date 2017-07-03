@@ -56,21 +56,28 @@ class ExecutableCommand extends Command {
   }
 
   execute(command, options) {
-    if (typeof command !== 'string') {
-      options = command
-      command = null
+    let request
+
+    if (Array.isArray(command)) {
+      request = command
+    } else {
+      if (arguments.length === 1 && typeof command !== 'string') {
+        options = command
+        command = null
+      }
+
+      let fullName = this.getFullName()
+
+      if (command) {
+        fullName = fullName.concat(command.split(' '))
+      }
+
+      request = [{ fullName, options }]
     }
 
-    let name = this.getFullName()
-
-    if (command) {
-      name = name.concat(command.split(' '))
-    }
-
-    let lifecycle = this.lifecycle
-    return lifecycle
-      .toot('execute', [{ name, options }])
-      .catch((err) => lifecycle.toot('error', err))
+    return this.lifecycle
+      .toot('execute', request)
+      .catch((err) => this.lifecycle.toot('error', err))
   }
 
   start() {
