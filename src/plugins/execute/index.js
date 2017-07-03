@@ -1,7 +1,7 @@
 const {
   next, resolve, suspend, getResume, tootWith, hookStart, hookEnd,
 } = require('hooter/effects')
-const prepareCommands = require('./prepareCommands')
+const preprocessRequest = require('./preprocessRequest')
 
 
 function ProcessingResult(command, resume) {
@@ -18,11 +18,7 @@ function validateCommand(command) {
 
 module.exports = function* executePlugin() {
   yield hookStart('execute', function* (config, request) {
-    if (!Array.isArray(request) || request.length === 0) {
-      throw new Error('The first argument of "execute" must be an array of commands')
-    }
-
-    request = prepareCommands(request, config)
+    request = preprocessRequest(request, config)
     return yield next(config, request)
   })
 
