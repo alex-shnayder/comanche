@@ -13,3 +13,5 @@ BASIC_TYPES.forEach((type) => {
     }
   }
 })
+
+module.exports.path = module.exports.string
