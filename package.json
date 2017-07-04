@@ -40,7 +40,7 @@
     "camelcase": "^4.1.0",
     "chalk": "^2.0.1",
     "cliff": "^0.1.10",
-    "hooter": "^0.16.1",
+    "hooter": "^0.16.2",
     "object-path-immutable": "^0.5.1",
     "read-pkg-up": "^2.0.0"
   }
