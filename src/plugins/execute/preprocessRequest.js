@@ -146,6 +146,15 @@ module.exports = function preprocessRequest(request, config) {
     command.config = commandConfig
     command.options = transformOptions(options, optionConfigs)
 
+    if (commandConfig && commandConfig.abstract && !request[i + 1]) {
+      let err = new InputError(
+        `Command "${command.inputName}" cannot be used directly. ` +
+        'Please specify a subcommand'
+      )
+      err.command = command
+      throw err
+    }
+
     branch = fullName
     result.push(command)
   }

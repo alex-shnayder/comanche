@@ -26,6 +26,9 @@
         "default": {
           "type": "boolean"
         },
+        "abstract": {
+          "type": "boolean"
+        },
         "commands": {
           "type": "array",
           "uniqueItems": true,
