@@ -2,7 +2,7 @@ module.exports = function shareOptionValues(commands) {
   let providedOptionsById = {}
 
   commands.forEach(({ options }) => {
-    if (options) {
+    if (options && options.length) {
       options.forEach((option) => {
         if (option.config) {
           providedOptionsById[option.config.id] = option
@@ -12,24 +12,20 @@ module.exports = function shareOptionValues(commands) {
   })
 
   return commands.map((command) => {
-    if (!command.config || !command.config.options) {
+    let { config, options } = command
+
+    if (!config || !config.options || !config.options.length) {
       return command
     }
 
+    let providedCommandOptions = config.options
+      .filter(({ id }) => providedOptionsById[id])
+      .map(({ id }) => providedOptionsById[id])
+
     command = Object.assign({}, command)
-    command.config.options.forEach(({ id }) => {
-      let providedOption = providedOptionsById[id]
-
-      if (providedOption) {
-        let option = command.options && command.options.find((o) => {
-          return o.config && o.config.id === id
-        })
-
-        if (!option) {
-          command.options.push(providedOption)
-        }
-      }
-    })
+    command.options = (options || [])
+      .filter(({ id }) => !providedOptionsById[id])
+      .concat(providedCommandOptions)
 
     return command
   })
