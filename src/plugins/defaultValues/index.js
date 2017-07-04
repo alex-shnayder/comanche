@@ -18,7 +18,7 @@ module.exports = function* defaultValuesPlugin() {
     let options = command.options.slice()
 
     config.options.forEach((optionConfig) => {
-      if (typeof optionConfig.default === 'undefined') {
+      if (typeof optionConfig.defaultValue === 'undefined') {
         return
       }
 
@@ -29,13 +29,13 @@ module.exports = function* defaultValuesPlugin() {
 
       if (option && typeof option.value === 'undefined') {
         options[optionIndex] = Object.assign({}, option, {
-          value: optionConfig.default,
+          value: optionConfig.defaultValue,
         })
       } else if (!option) {
         options.push({
           name: optionConfig.name,
           inputName: optionConfig.name,
-          value: optionConfig.default,
+          value: optionConfig.defaultValue,
           config: optionConfig,
         })
       }

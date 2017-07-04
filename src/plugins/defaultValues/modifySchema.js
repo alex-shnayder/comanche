@@ -2,7 +2,7 @@ const { assign } = require('../../common')
 
 
 const OPTION_PROPERTIES = {
-  default: {},
+  defaultValue: {},
 }
 
 
