@@ -1,7 +1,7 @@
 {
   "name": "comanche",
   "version": "0.0.0",
-  "description": "",
+  "description": "🐺 The CLI chief",
   "repository": "alex-shnayder/comanche",
   "homepage": "https://github.com/alex-shnayder/comanche#readme",
   "bugs": "https://github.com/alex-shnayder/comanche/issues",
@@ -9,11 +9,15 @@
   "keywords": [
     "cli",
     "bin",
+    "argument",
     "args",
     "argv",
     "command",
     "cmd",
-    "console"
+    "option",
+    "flag",
+    "console",
+    "getopt"
   ],
   "scripts": {
     "precommit": "lint-staged",
