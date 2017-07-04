@@ -6,7 +6,11 @@ const PROPS_TO_SKIP = ['id', 'name', 'aliases', 'commands', 'options']
 
 
 function createMethod(name, prop) {
-  let isBoolean = (prop.type === 'boolean')
+  let isBoolean = (
+    prop.type === 'boolean' || typeof prop.typeof === 'boolean' ||
+    (Array.isArray(prop.type) && prop.type.includes('boolean')) ||
+    (Array.isArray(prop.typeof) && prop.typeof.includes('boolean'))
+  )
 
   return function(arg) {
     if (isBoolean && typeof arg === 'undefined') {

@@ -84,7 +84,7 @@ class ExecutableCommand extends Command {
     let lifecycle = this.lifecycle
 
     if (!lifecycle || this.parent) {
-      throw new Error('start() can only be used on the default command (the app)')
+      throw new Error('start() can only be used on the root command (the app)')
     }
 
     try {
@@ -100,7 +100,7 @@ class ExecutableCommand extends Command {
     let lifecycle = this.lifecycle
 
     if (!lifecycle || this.parent) {
-      throw new Error('hook() can only be used on the default command (the app)')
+      throw new Error('catch() can only be used on the root command (the app)')
     }
 
     lifecycle.hook('error', function* (_, ...args) {
