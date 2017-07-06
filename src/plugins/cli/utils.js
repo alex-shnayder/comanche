@@ -11,7 +11,7 @@ const DEFAULT_CONFIG = {
 
 
 function wrap(string, width, padding) {
-  width = width || DEFAULT_CONFIG.lineWidth
+  width = Math.min(width, process.stdout.columns) || DEFAULT_CONFIG.lineWidth
   padding = (typeof padding === 'undefined') ? DEFAULT_CONFIG.padding : padding
   return splitIntoLines(string, width)
     .map((line) => ' '.repeat(padding) + line)
@@ -21,18 +21,16 @@ function wrap(string, width, padding) {
 function formatColumns(rows, config) {
   config = config ? Object.assign({}, DEFAULT_CONFIG, config) : DEFAULT_CONFIG
 
-  let { gap, padding } = config
+  let { gap, padding, lineWidth } = config
   let columnifyConfig = {
     showHeaders: false,
     config: {},
     columnSplitter: ' '.repeat(gap),
   }
-  let lineWidth = Math.min(config.lineWidth, process.stdout.columns)
   let columnWidths = config.columnWidths || []
   let actualColumnWidths = []
   let colNum = 0
   let flexCols = 0
-
 
   for (let r = 0; r < rows.length; r++) {
     let cols = rows[r]
@@ -59,6 +57,9 @@ function formatColumns(rows, config) {
     flexCols = Math.max(flexCols, flexColsInRow)
     colNum = Math.max(colNum, c)
   }
+
+  lineWidth = Math.min(config.lineWidth, process.stdout.columns)
+  lineWidth = lineWidth || DEFAULT_CONFIG.lineWidth
 
   // Flexible columns share the free space equally
   let takenWidth = actualColumnWidths.reduce((a, b) => a + b, 0)

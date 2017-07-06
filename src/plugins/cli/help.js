@@ -1,8 +1,8 @@
-const { wrap, formatColumns } = require('./utils')
+const { wrap: wrapText, formatColumns } = require('./utils')
 
 
 const PADDING = 2
-const COLUMNS_CONFIG = {
+const DEFAULT_COLUMNS_CONFIG = {
   padding: PADDING,
   columnWidths: [30],
 }
@@ -10,9 +10,9 @@ const COLUMNS_CONFIG = {
 
 let texts = {}
 
-function makeUsageText(commandName, commandConfig) {
+function makeUsageText(commandConfig, commandName) {
+  let { options, commands, description, wrap } = commandConfig
   let text = commandName
-  let { options, commands, description } = commandConfig
 
   if (options && options.length) {
     text += ' [options]'
@@ -28,27 +28,29 @@ function makeUsageText(commandName, commandConfig) {
     text += ' [command]'
   }
 
-  text = `Usage:\n${wrap(text, null, PADDING)}`
+  text = `Usage:\n${wrapText(text, wrap, PADDING)}`
 
   if (description) {
-    text = `${wrap(description)}\n\n${text}`
+    text = `${wrapText(description, wrap)}\n\n${text}`
   }
 
   return text
 }
 
-function makeCommandsText(commands) {
+function makeCommandsText(commandConfig, commands) {
   let rows = commands.map((command) => {
     let { name, aliases, description } = command
     let names = aliases ? [name].concat(aliases) : [name]
     return [names.join(', '), description || '']
   })
-  let rowsText = formatColumns(rows, COLUMNS_CONFIG)
+  let lineWidth = commandConfig.wrap
+  let columnsConfig = Object.assign({}, DEFAULT_COLUMNS_CONFIG, { lineWidth })
+  let rowsText = formatColumns(rows, columnsConfig)
 
   return `Commands:\n${rowsText}`
 }
 
-function makeOptionsText(options) {
+function makeOptionsText(commandConfig, options) {
   let rows = options
     .sort((option) => {
       return option.isHelpOption ? 1 : 0
@@ -67,7 +69,9 @@ function makeOptionsText(options) {
       return [namesText, description]
     })
 
-  let rowsText = formatColumns(rows, COLUMNS_CONFIG)
+  let lineWidth = commandConfig.wrap
+  let columnsConfig = Object.assign({}, DEFAULT_COLUMNS_CONFIG, { lineWidth })
+  let rowsText = formatColumns(rows, columnsConfig)
   return `Options:\n${rowsText}`
 }
 
@@ -80,14 +84,14 @@ module.exports = function composeHelp(commandConfig, commandName) {
   }
 
   let { options, commands } = commandConfig
-  let text = makeUsageText(commandName, commandConfig)
+  let text = makeUsageText(commandConfig, commandName)
 
   if (commands && commands.length) {
-    text += `\n\n${makeCommandsText(commands)}`
+    text += `\n\n${makeCommandsText(commandConfig, commands)}`
   }
 
   if (options && options.length) {
-    text += `\n\n${makeOptionsText(options)}`
+    text += `\n\n${makeOptionsText(commandConfig, options)}`
   }
 
   texts[commandConfig.id] = text

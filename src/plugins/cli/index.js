@@ -9,16 +9,26 @@ const parseArgs = require('./parseArgs')
 const modifySchema = require('./modifySchema')
 
 
-function print(string, level = 'log') {
+function print(value, maxWidth, level = 'log') {
+  if (typeof maxWidth === 'string') {
+    level = maxWidth
+    maxWidth = undefined
+  }
+
+  if (typeof value === 'string' && maxWidth) {
+    value = wrap(value, maxWidth)
+  }
+
   /* eslint-disable no-console */
   console[level]()
-  console[level](string)
+  console[level](value)
   console[level]()
 }
 
-function handleResult(result) {
-  if (typeof result === 'string') {
-    print(result)
+function handleResult(command, result) {
+  if (typeof result !== 'undefined') {
+    let maxWidth = command.config && command.config.wrap
+    print(result, maxWidth)
   }
 }
 
@@ -27,7 +37,6 @@ function handleError(config, err, event) {
     return print(err, 'error')
   }
 
-  let errText = chalk.red(wrap(err.message))
   let commandConfig = findDefaultCommand(config, true)
   let commandName
 
@@ -49,12 +58,14 @@ function handleError(config, err, event) {
     }
   }
 
+  let errText = wrap(chalk.red(err.message), commandConfig.wrap)
+
   if (commandConfig) {
     errText += '\n\n'
     errText += composeHelp(commandConfig, commandName)
   }
 
-  return print(errText, 'error')
+  print(errText, 'error')
 }
 
 module.exports = function* cliPlugin() {
@@ -70,7 +81,8 @@ module.exports = function* cliPlugin() {
       try {
         let request = parseArgs(args, config)
         let result = yield toot('execute', request)
-        handleResult(result)
+        let command = request[request.length - 1]
+        handleResult(command, result)
       } catch (err) {
         yield tootWith('error', handleError, err)
       }
