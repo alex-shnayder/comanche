@@ -1,19 +1,17 @@
-const cliff = require('cliff')
+const { wrap, formatColumns } = require('./utils')
 
 
 const PADDING = 2
-const GAP = 4
+const COLUMNS_CONFIG = {
+  padding: PADDING,
+  columnWidths: [30],
+}
 
 
 let texts = {}
 
 function makeUsageText(commandName, commandConfig) {
-  let text = `Usage:\n${' '.repeat(PADDING)}${commandName}`
-
-  if (!commandConfig) {
-    return text
-  }
-
+  let text = commandName
   let { options, commands, description } = commandConfig
 
   if (options && options.length) {
@@ -30,8 +28,10 @@ function makeUsageText(commandName, commandConfig) {
     text += ' [command]'
   }
 
+  text = `Usage:\n${wrap(text, null, PADDING)}`
+
   if (description) {
-    text = `${description}\n\n${text}`
+    text = `${wrap(description)}\n\n${text}`
   }
 
   return text
@@ -41,14 +41,10 @@ function makeCommandsText(commands) {
   let rows = commands.map((command) => {
     let { name, aliases, description } = command
     let names = aliases ? [name].concat(aliases) : [name]
-    let namesText = names.join(', ')
-    namesText = ' '.repeat(PADDING) + namesText
-    return [namesText, description || '']
+    return [names.join(', '), description || '']
   })
+  let rowsText = formatColumns(rows, COLUMNS_CONFIG)
 
-  let rowsText = cliff.stringifyRows(rows, null, {
-    columnSpacing: GAP,
-  })
   return `Commands:\n${rowsText}`
 }
 
@@ -68,13 +64,10 @@ function makeOptionsText(options) {
         })
         .join(', ')
 
-      namesText = ' '.repeat(PADDING) + namesText
-      return [namesText, description || '']
+      return [namesText, description]
     })
 
-  let rowsText = cliff.stringifyRows(rows, null, {
-    columnSpacing: GAP,
-  })
+  let rowsText = formatColumns(rows, COLUMNS_CONFIG)
   return `Options:\n${rowsText}`
 }
 

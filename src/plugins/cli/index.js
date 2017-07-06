@@ -3,6 +3,7 @@ const { next, hook, fork, toot, tootWith } = require('hooter/effects')
 const {
   InputError, findDefaultCommand, findCommandByFullName, getCommandFromEvent,
 } = require('../../common')
+const { wrap } = require('./utils')
 const composeHelp = require('./help')
 const parseArgs = require('./parseArgs')
 const modifySchema = require('./modifySchema')
@@ -26,7 +27,7 @@ function handleError(config, err, event) {
     return print(err, 'error')
   }
 
-  let errText = chalk.red(err.message)
+  let errText = chalk.red(wrap(err.message))
   let commandConfig = findDefaultCommand(config, true)
   let commandName
 
