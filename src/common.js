@@ -188,7 +188,7 @@ function getCommandFromEvent(event) {
 
   if (name === 'execute') {
     return args && args[0] && args[0][0]
-  } else if (name === 'process' || name === 'handle') {
+  } else if (name === 'process' || name === 'handle' || name === 'tap') {
     return args && args[0]
   }
 }

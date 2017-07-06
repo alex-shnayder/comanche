@@ -46,7 +46,8 @@ module.exports = function* executePlugin() {
     }
 
     for (let i = 0; i < request.length; i++) {
-      context = yield tootWith('handle', (_, __, c) => c, request[i], context)
+      let event = (request[i + 1]) ? 'tap' : 'handle'
+      context = yield tootWith(event, (_, __, c) => c, request[i], context)
       context = yield resolve(resumes[i](context))
     }
 

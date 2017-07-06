@@ -50,6 +50,10 @@ class Option {
     return this.parent.handle(...args)
   }
 
+  tap(...args) {
+    return this.parent.tap(...args)
+  }
+
   end() {
     return this.parent
   }

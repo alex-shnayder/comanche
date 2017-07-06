@@ -3,7 +3,9 @@ const assignDefaults = require('./assignDefaults')
 const validateConfig = require('./validateConfig')
 
 
-const EVENTS_WITH_CONFIG = ['start', 'execute', 'process', 'handle', 'error']
+const EVENTS_WITH_CONFIG = [
+  'start', 'execute', 'process', 'handle', 'tap', 'error',
+]
 
 
 module.exports = function* configurePlugin() {

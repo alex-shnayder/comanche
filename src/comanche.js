@@ -10,6 +10,7 @@ const EVENTS = [
   ['execute', 'async'],
   ['process', 'async'],
   ['handle', 'async'],
+  ['tap', 'async'],
   ['error', 'sync'],
 ]
 

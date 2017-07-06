@@ -11,8 +11,8 @@ class ExecutableCommand extends Command {
     return parentName.concat(this.config.name)
   }
 
-  handle(command, handler) {
-    if (arguments.length === 2) {
+  _hookHandler(event, command, handler) {
+    if (handler) {
       if (typeof command !== 'string') {
         throw new Error('A command name must be a string')
       }
@@ -39,7 +39,7 @@ class ExecutableCommand extends Command {
       throw new Error('A handler must be a function')
     }
 
-    this.lifecycle.hook('handle', function* (
+    this.lifecycle.hook(event, function* (
       config, _command, context, ...args
     ) {
       let { fullName, options } = _command
@@ -53,6 +53,14 @@ class ExecutableCommand extends Command {
     })
 
     return this
+  }
+
+  handle(command, handler) {
+    return this._hookHandler('handle', command, handler)
+  }
+
+  tap(command, handler) {
+    return this._hookHandler('tap', command, handler)
   }
 
   execute(command, options) {
