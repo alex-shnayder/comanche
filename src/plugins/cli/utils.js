@@ -11,7 +11,7 @@ const DEFAULT_CONFIG = {
 
 
 function wrap(string, width, padding) {
-  width = Math.min(width, process.stdout.columns) || DEFAULT_CONFIG.lineWidth
+  width = Math.min(width || DEFAULT_CONFIG.lineWidth, process.stdout.columns)
   padding = (typeof padding === 'undefined') ? DEFAULT_CONFIG.padding : padding
   return splitIntoLines(string, width)
     .map((line) => ' '.repeat(padding) + line)
@@ -58,8 +58,8 @@ function formatColumns(rows, config) {
     colNum = Math.max(colNum, c)
   }
 
-  lineWidth = Math.min(config.lineWidth, process.stdout.columns)
-  lineWidth = lineWidth || DEFAULT_CONFIG.lineWidth
+  lineWidth = config.lineWidth || DEFAULT_CONFIG.lineWidth
+  lineWidth = Math.min(lineWidth, process.stdout.columns)
 
   // Flexible columns share the free space equally
   let takenWidth = actualColumnWidths.reduce((a, b) => a + b, 0)
