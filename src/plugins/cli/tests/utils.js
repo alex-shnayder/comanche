@@ -21,10 +21,16 @@ describe('formatColumns', () => {
       '  --howthehelldoesitwork, --wtf,                                                ',
       '  --info                                                                        ',
     ].join('\n')
-    let result = formatColumns(rows, {
+    let config = {
+      lineWidth: 80,
       padding: 2,
       columnWidths: [30],
-    })
+    }
+
+    let columns = process.stdout.columns
+    process.stdout.columns = Infinity
+    let result = formatColumns(rows, config)
+    process.stdout.columns = columns
 
     assert(result === expectedResult)
   })
