@@ -11,13 +11,25 @@ function normalizeName(name) {
 }
 
 class Option {
-  constructor(name, parent) {
+  constructor(name, description, parent) {
     if (!parent) {
       throw new Error('An option must have a parent command')
     }
 
+    let aliases
+
+    if (Array.isArray(name)) {
+      aliases = name
+      name = aliases.shift()
+    } else if (typeof name === 'string') {
+      aliases = name.split(', ')
+      name = aliases.shift()
+    }
+
     if (!name || typeof name !== 'string') {
-      throw new Error('The first argument of the Option constructor must be its name (a non-empty string)')
+      throw new Error(
+        'The first argument of the Option constructor must be either a non-empty string or an array'
+      )
     }
 
     name = normalizeName(name)
@@ -25,6 +37,14 @@ class Option {
     this.config = {
       name,
       id: `${parent.config.id}#${name}`,
+    }
+
+    if (aliases.length) {
+      this.aliases(...aliases)
+    }
+
+    if (description) {
+      this.description(description)
     }
   }
 

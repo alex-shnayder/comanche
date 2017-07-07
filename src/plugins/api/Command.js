@@ -1,7 +1,19 @@
 class Command {
-  constructor(name, parent) {
+  constructor(name, description, parent) {
+    let aliases
+
+    if (Array.isArray(name)) {
+      aliases = name
+      name = aliases.shift()
+    } else if (typeof name === 'string') {
+      aliases = name.split(', ')
+      name = aliases.shift()
+    }
+
     if (!name || typeof name !== 'string') {
-      throw new Error('The first argument of the Command constructor must be its name (a non-empty string)')
+      throw new Error(
+        'The first argument of the Command constructor must be either a non-empty string or an array'
+      )
     }
 
     this.config = {
@@ -29,6 +41,14 @@ class Command {
         this.sharedOptions = inheritableOptions.slice()
       }
     }
+
+    if (aliases.length) {
+      this.aliases(...aliases)
+    }
+
+    if (description) {
+      this.description(description)
+    }
   }
 
   aliases(...aliases) {
@@ -41,34 +61,15 @@ class Command {
     return this
   }
 
-  command(config) {
-    let command = new this.constructor(config, this)
+  command(name, description) {
+    let command = new this.constructor(name, description, this)
     this.commands.push(command)
     this.config.commands.push(command.config.id)
     return command
   }
 
-  option(config, description) {
-    let name, aliases
-
-    if (Array.isArray(config)) {
-      aliases = config
-      name = aliases.shift()
-    } else if (typeof config === 'string') {
-      aliases = config.split(', ')
-      name = aliases.shift()
-    }
-
-    let option = new this.constructor.Option(name, this)
-
-    if (aliases && aliases.length) {
-      option.aliases(...aliases)
-    }
-
-    if (description) {
-      option.description(description)
-    }
-
+  option(name, description) {
+    let option = new this.constructor.Option(name, description, this)
     this.options.push(option)
     this.config.options.push(option.config.id)
     return option

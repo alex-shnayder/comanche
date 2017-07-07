@@ -13,8 +13,8 @@ module.exports = function* apiPlugin(lifecycle) {
     }
 
     let Command = extendClasses(schema)
-    let createCommand = (...args) => {
-      let command = new Command(...args)
+    let createCommand = (name, description) => {
+      let command = new Command(name, description)
       command.lifecycle = lifecycle
       return command
     }
