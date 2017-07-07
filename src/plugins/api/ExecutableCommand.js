@@ -11,6 +11,10 @@ class ExecutableCommand extends Command {
     return parentName.concat(this.config.name)
   }
 
+  _getLifecycle() {
+    return this.lifecycle || (this.parent && this.parent._getLifecycle())
+  }
+
   _hookHandler(event, command, handler) {
     if (handler) {
       if (typeof command !== 'string') {
@@ -39,7 +43,7 @@ class ExecutableCommand extends Command {
       throw new Error('A handler must be a function')
     }
 
-    this.lifecycle.hook(event, function* (
+    this._getLifecycle().hook(event, function* (
       config, _command, context, ...args
     ) {
       let { fullName, options } = _command
@@ -83,9 +87,10 @@ class ExecutableCommand extends Command {
       request = [{ fullName, options }]
     }
 
-    return this.lifecycle
+    let lifecycle = this._getLifecycle()
+    return lifecycle
       .toot('execute', request)
-      .catch((err) => this.lifecycle.toot('error', err))
+      .catch((err) => lifecycle.toot('error', err))
   }
 
   start() {

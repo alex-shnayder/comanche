@@ -74,6 +74,10 @@ class Option {
     return this.parent.tap(...args)
   }
 
+  start(...args) {
+    return this.parent.start(...args)
+  }
+
   end() {
     return this.parent
   }
