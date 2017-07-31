@@ -12,7 +12,7 @@ function* pluginB() {}
 
 
 function compareArrays(arrayA, arrayB) {
-  assert(arrayA.length = arrayB.length)
+  assert(arrayA.length === arrayB.length)
   arrayA.forEach((item, i) => {
     assert(item === arrayB[i])
   })
@@ -33,8 +33,8 @@ function stringifyArgs(args) {
 }
 
 
-describe('plugins', () => {
-  let passingTests = [
+describe('pluginize', () => {
+  let testsToPass = [
     {
       args: [],
       expected: CORE_AND_DEFAULT_PLUGINS,
@@ -42,8 +42,8 @@ describe('plugins', () => {
       args: [pluginA, pluginB],
       expected: CORE_AND_DEFAULT_PLUGINS.concat(pluginA, pluginB),
     }, {
-      args: [pluginA, pluginB, pluginA, pluginB, pluginB],
-      expected: CORE_AND_DEFAULT_PLUGINS.concat(pluginA, pluginB),
+      args: [pluginA, pluginB, pluginA],
+      expected: CORE_AND_DEFAULT_PLUGINS.concat(pluginA, pluginB, pluginA),
     }, {
       args: [false],
       expected: CORE_PLUGINS,
@@ -70,20 +70,20 @@ describe('plugins', () => {
         .concat(pluginB),
     },
   ]
-  let failingTests = [
+  let testsToFail = [
     ['foo'],
     [false, '-bar'],
     [{}],
     [false, pluginA, [], true],
   ]
 
-  passingTests.forEach(({ args, expected }) => {
+  testsToPass.forEach(({ args, expected }) => {
     it(`works for [${stringifyArgs(args)}]`, () => {
       compareArrays(pluginize(args), expected)
     })
   })
 
-  failingTests.forEach((args) => {
+  testsToFail.forEach((args) => {
     it(`throws for [${stringifyArgs(args)}]`, () => {
       assert.throws(() => {
         pluginize(args)
