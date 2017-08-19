@@ -1,5 +1,5 @@
 const {
-  next, resolve, suspend, getResume, tootWith, hookStart, hookEnd,
+  next, suspend, getResume, toot, hookStart, hookEnd,
 } = require('hooter/effects')
 const preprocessRequest = require('./preprocessRequest')
 
@@ -15,24 +15,36 @@ function validateCommand(command) {
   }
 }
 
+function* processCb(_, command) {
+  validateCommand(command)
+  let resume = yield getResume()
+  let result = new ProcessingResult(command, resume)
+  return yield suspend(result)
+}
+
+function handleCb(config, command, context) {
+  return context
+}
+
 
 module.exports = function* executePlugin() {
   yield hookStart('execute', function* (config, request) {
+    this.source = this.tooter
     request = preprocessRequest(request, config)
     return yield next(config, request)
   })
 
   yield hookEnd('execute', function* (_, request) {
+    let processEvent = {
+      name: 'process',
+      cb: processCb,
+      source: this.source,
+    }
     let resumes = []
     let context
 
     for (let i = 0; i < request.length; i++) {
-      let result = yield tootWith('process', function* (_, command) {
-        validateCommand(command)
-        let resume = yield getResume()
-        let result = new ProcessingResult(command, resume)
-        return yield suspend(result)
-      }, request[i])
+      let result = yield yield toot(processEvent, request[i])
 
       // If the result is not an instance of ProcessingResult,
       // it means that a handler has returned early effectively
@@ -46,9 +58,13 @@ module.exports = function* executePlugin() {
     }
 
     for (let i = 0; i < request.length; i++) {
-      let event = (request[i + 1]) ? 'tap' : 'handle'
-      context = yield tootWith(event, (_, __, c) => c, request[i], context)
-      context = yield resolve(resumes[i](context))
+      let event = {
+        name: (request[i + 1]) ? 'tap' : 'handle',
+        cb: handleCb,
+        source: this.source,
+      }
+      context = yield yield toot(event, request[i], context)
+      context = yield resumes[i](context)
     }
 
     return context
