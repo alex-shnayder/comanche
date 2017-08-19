@@ -12,7 +12,7 @@ describe('camelize plugin', () => {
       effect: 'hook',
       event: 'process',
       mode: 'end',
-      handler: processHandler,
+      fn: processHandler,
     })
   })
 

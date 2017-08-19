@@ -14,7 +14,7 @@ describe('error plugin', () => {
       effect: 'hook',
       event: 'error',
       mode: 'start',
-      handler: errorStartHandler,
+      fn: errorStartHandler,
     })
 
     result = generator.next()
@@ -22,7 +22,7 @@ describe('error plugin', () => {
       effect: 'hook',
       event: 'error',
       mode: 'end',
-      handler: errorEndHandler,
+      fn: errorEndHandler,
     })
   })
 

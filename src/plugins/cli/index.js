@@ -75,12 +75,12 @@ module.exports = function* cliPlugin() {
   })
 
   yield hook('start', function* (config, ...args) {
-    yield fork(function* () {
+    yield fork('async', function* () {
       let args = process.argv.slice(2)
 
       try {
         let request = parseArgs(args, config)
-        let result = yield toot('execute', request)
+        let result = yield yield toot('execute', request)
         let command = request[request.length - 1]
         handleResult(command, result)
       } catch (err) {

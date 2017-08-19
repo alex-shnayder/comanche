@@ -12,7 +12,7 @@ describe('processTitle plugin', () => {
       effect: 'hook',
       event: 'configure',
       mode: 'start',
-      handler: configureHandler,
+      fn: configureHandler,
     })
   })
 

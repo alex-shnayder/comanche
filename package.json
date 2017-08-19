@@ -44,7 +44,7 @@
     "camelcase": "^4.1.0",
     "chalk": "^2.0.1",
     "columnify": "^1.5.4",
-    "hooter": "^0.17.0",
+    "hooter": "^0.18.0",
     "object-path-immutable": "^0.5.1",
     "read-pkg-up": "^2.0.0"
   }
