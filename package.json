@@ -2,6 +2,7 @@
   "name": "comanche",
   "version": "0.3.0",
   "description": "🐺 The CLI chief",
+  "author": "Alex Shnayder <alex@shnayder.pro>",
   "repository": "alex-shnayder/comanche",
   "homepage": "https://github.com/alex-shnayder/comanche#readme",
   "bugs": "https://github.com/alex-shnayder/comanche/issues",
@@ -20,8 +21,7 @@
     "getopt"
   ],
   "scripts": {
-    "precommit": "lint-staged",
-    "test": "mocha --require denude/register src/**/tests/*.js src/**/test.js"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.js": [
@@ -31,21 +31,14 @@
   },
   "main": "src/index.js",
   "devDependencies": {
-    "denude": "^0.2.1",
     "eslint": "^3.19.0",
     "eslint-plugin-import": "^2.2.0",
     "husky": "^0.13.3",
-    "lint-staged": "^3.4.0",
-    "mocha": "^3.4.2"
+    "lint-staged": "^3.4.0"
   },
   "dependencies": {
-    "ajv": "^5.1.5",
-    "ajv-keywords": "^2.1.0",
-    "camelcase": "^4.1.0",
-    "chalk": "^2.0.1",
-    "columnify": "^1.5.4",
-    "hooter": "^0.18.0",
-    "object-path-immutable": "^0.5.1",
-    "read-pkg-up": "^2.0.0"
+    "appache": "^0.1.0",
+    "appache-api-fluent": "^0.0.0",
+    "appache-cli": "^0.0.0"
   }
 }

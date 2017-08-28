@@ -1,1 +1,1 @@
-module.exports = require('./src/common')
+module.exports = require('appache/common')

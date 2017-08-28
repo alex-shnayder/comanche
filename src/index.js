@@ -1,12 +1,18 @@
-const comanche = require('./comanche')
-const pluginize = require('./pluginize')
+/* eslint-disable global-require */
+
+const appache = require('appache')
+const pluginize = require('appache/pluginize')
 
 
-module.exports = function defaultComanche(...args) {
-  if (Array.isArray(args[args.length - 1])) {
-    let plugins = pluginize(args.pop())
-    return comanche(args, plugins)
-  }
+const defaultPlugins = {
+  api: require('appache-api-fluent'),
+  cli: require('appache-cli'),
+}
 
-  return comanche(args, pluginize())
+
+module.exports = function comanche(...args) {
+  let userPlugins = (Array.isArray(args[args.length - 1])) ? args.pop() : null
+  let plugins = pluginize(null, defaultPlugins, userPlugins)
+  let app = appache(plugins)
+  return app.apply(null, args)
 }
