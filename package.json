@@ -37,8 +37,8 @@
     "lint-staged": "^3.4.0"
   },
   "dependencies": {
-    "appache": "^0.1.0",
-    "appache-api-fluent": "^0.0.0",
-    "appache-cli": "^0.0.0"
+    "appache": "^0.2.0",
+    "appache-api-fluent": "^0.2.0",
+    "appache-cli": "^0.2.0"
   }
 }
