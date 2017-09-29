@@ -39,6 +39,7 @@
   "dependencies": {
     "appache": "^0.3.0",
     "appache-api-fluent": "^0.2.0",
-    "appache-cli": "^0.2.0"
+    "appache-cli": "^0.2.0",
+    "appache-pretty-errors": "^0.1.0"
   }
 }

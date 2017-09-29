@@ -7,6 +7,7 @@ const pluginize = require('appache/pluginize')
 const defaultPlugins = {
   api: require('appache-api-fluent'),
   cli: require('appache-cli'),
+  prettyErrors: require('appache-pretty-errors'),
 }
 
 
