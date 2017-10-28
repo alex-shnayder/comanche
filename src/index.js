@@ -5,6 +5,8 @@ const defaultPlugins = [
   require('appache-api-fluent'),
   require('appache-cli'),
   require('appache-pretty-errors'),
+  require('./version'),
+  require('./help'),
 ]
 
 
