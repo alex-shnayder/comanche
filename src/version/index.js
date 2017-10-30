@@ -8,7 +8,7 @@ const OPTION = {
   id: 'version',
   name: 'version',
   aliases: ['v'],
-  description: 'Show the current version',
+  description: 'Show current version',
   type: 'boolean',
 }
 
