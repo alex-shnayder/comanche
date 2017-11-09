@@ -30,6 +30,11 @@
     ]
   },
   "main": "src/index.js",
+  "files": [
+    "src",
+    "common.js",
+    "effects.js"
+  ],
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-plugin-import": "^2.2.0",
@@ -37,11 +42,11 @@
     "lint-staged": "^3.4.0"
   },
   "dependencies": {
-    "appache": "^0.5.0",
-    "appache-api-fluent": "^0.3.0",
-    "appache-cli": "^0.2.0",
-    "appache-pretty-errors": "^0.1.0",
-    "appache-type-paths": "^0.1.0",
+    "appache": "^0.6.0",
+    "appache-api-fluent": "^0.4.0",
+    "appache-cli": "^0.3.1",
+    "appache-pretty-errors": "^0.1.1",
+    "appache-type-paths": "^0.1.1",
     "read-pkg-up": "^2.0.0"
   }
 }
