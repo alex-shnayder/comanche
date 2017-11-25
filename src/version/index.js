@@ -61,8 +61,13 @@ module.exports = function* version() {
 
   yield preHook({
     event: 'config',
-    tags: ['modifyConfig', 'modifyCommandConfig', 'createOptionConfig'],
-    goesAfter: ['createCommandConfig'],
+    tags: ['modifyCommandConfig', 'createOptionConfig'],
+    // It should be `goesAfter: ['modifyCommandConfig'] to ensure that
+    // the option will be among the last ones to be added to a command, but then
+    // it conflicts with the core config plugin. As a workaround, this ensures
+    // that the option is *created* after all the others. It will break if
+    // another option is first created and then added in separate handlers.
+    goesAfter: ['createOptionConfig'],
   }, (schema, config, ...args) => {
     config = injectOptions(schema, config)
     return [schema, config, ...args]

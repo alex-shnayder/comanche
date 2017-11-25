@@ -6,8 +6,8 @@ const defaultPlugins = [
   require('appache-cli'),
   require('appache-pretty-errors'),
   require('appache-type-paths'),
-  require('./version'),
   require('./help'),
+  require('./version'),
 ]
 
 
