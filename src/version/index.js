@@ -1,6 +1,6 @@
 const readPkgUp = require('read-pkg-up')
 const { next, preHook, hook } = require('appache/effects')
-const { createOption } = require('appache/common')
+const { Result, createOption } = require('appache/common')
 const modifySchema = require('./modifySchema')
 
 
@@ -90,10 +90,12 @@ module.exports = function* version() {
     let version = config && config.version
     version = (version === true) ? detectVersion() : version
 
-    if (version) {
-      return (version.charAt(0) === 'v') ? version : `v${version}`
-    } else {
-      return 'Unable to determine the current version'
+    if (version && version.charAt(0) !== 'v') {
+      version = `v${version}`
+    } else if (!version) {
+      version = 'Unable to determine the current version'
     }
+
+    return new Result(version)
   })
 }
