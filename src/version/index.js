@@ -27,8 +27,8 @@ function detectVersion() {
   return pkg.version
 }
 
-function injectOptions(schema, config) {
-  let needsVersionOption = false
+function injectOption(schema, config) {
+  let commandsChanged = false
   let commands = config.commands && config.commands.map((command) => {
     let { version, options } = command
 
@@ -36,18 +36,16 @@ function injectOptions(schema, config) {
       return command
     }
 
-    needsVersionOption = true
+    commandsChanged = true
     options = options ? options.concat(OPTION.id) : [OPTION.id]
     return Object.assign({}, command, { options })
   })
 
-  if (!needsVersionOption) {
-    return config
+  if (commandsChanged) {
+    config = Object.assign({}, config, { commands })
   }
 
-  let option = createOption(schema, OPTION)
-  let options = config.options ? config.options.concat(option) : [option]
-  return Object.assign({}, config, { commands, options })
+  return config
 }
 
 module.exports = function* version() {
@@ -61,22 +59,25 @@ module.exports = function* version() {
 
   yield preHook({
     event: 'config',
-    tags: ['modifyCommandConfig', 'createOptionConfig'],
-    // It should be `goesAfter: ['modifyCommandConfig'] to ensure that
-    // the option will be among the last ones to be added to a command, but then
-    // it conflicts with the core config plugin. As a workaround, this ensures
-    // that the option is *created* after all the others. It will break if
-    // another option is first created and then added in separate handlers.
-    goesAfter: ['createOptionConfig'],
-  }, (schema, config, ...args) => {
-    config = injectOptions(schema, config)
-    return [schema, config, ...args]
+    tags: ['createOptionConfig'],
+  }, (schema, config) => {
+    config = createOption(config, OPTION)
+    return [schema, config]
+  })
+
+  yield preHook({
+    event: 'config',
+    tags: ['modifyCommandConfig'],
+    goesAfter: ['modifyCommandConfig'],
+  }, (schema, config) => {
+    config = injectOption(schema, config)
+    return [schema, config]
   })
 
   yield hook({
     event: 'process',
     tags: ['handleCommand'],
-  }, function* (_, command, ...args) {
+  }, function* (_, command) {
     let { options, config } = command
 
     let isVersionAsked = options && options.some((option) => {
@@ -84,7 +85,7 @@ module.exports = function* version() {
     })
 
     if (!isVersionAsked) {
-      return yield next(_, command, ...args)
+      return yield next(_, command)
     }
 
     let version = config && config.version
