@@ -35,7 +35,7 @@ function injectOption(schema, config) {
 
 module.exports = function* help() {
   yield preHook({
-    event: 'schema',
+    event: 'schematize',
     tags: ['modifyCommandSchema'],
   }, (schema) => {
     schema = modifySchema(schema)
@@ -43,7 +43,7 @@ module.exports = function* help() {
   })
 
   yield preHook({
-    event: 'config',
+    event: 'configure',
     tags: ['createOptionConfig'],
   }, (schema, config) => {
     config = createOption(config, OPTION)
@@ -51,7 +51,7 @@ module.exports = function* help() {
   })
 
   yield preHook({
-    event: 'config',
+    event: 'configure',
     tags: ['modifyCommandConfig'],
     goesAfter: ['modifyCommandConfig'],
   }, (schema, config) => {
