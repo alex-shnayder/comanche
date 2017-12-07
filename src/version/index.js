@@ -1,6 +1,6 @@
 const readPkgUp = require('read-pkg-up')
 const { next, preHook, hook } = require('appache/effects')
-const { Result, createOption } = require('appache/common')
+const { injectOption, Result } = require('appache/common')
 const modifySchema = require('./modifySchema')
 
 
@@ -27,7 +27,7 @@ function detectVersion() {
   return pkg.version
 }
 
-function injectOption(schema, config) {
+function addOptionToCommands(schema, config) {
   let commandsChanged = false
   let commands = config.commands && config.commands.map((command) => {
     let { version, options } = command
@@ -61,7 +61,7 @@ module.exports = function* version() {
     event: 'configure',
     tags: ['createOptionConfig'],
   }, (schema, config) => {
-    config = createOption(config, OPTION)
+    config = injectOption(config, OPTION)
     return [schema, config]
   })
 
@@ -70,7 +70,7 @@ module.exports = function* version() {
     tags: ['modifyCommandConfig'],
     goesAfter: ['modifyCommandConfig'],
   }, (schema, config) => {
-    config = injectOption(schema, config)
+    config = addOptionToCommands(schema, config)
     return [schema, config]
   })
 

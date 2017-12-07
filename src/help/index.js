@@ -1,5 +1,5 @@
 const { next, preHook, hook } = require('appache/effects')
-const { createOption, Help } = require('appache/common')
+const { injectOption, Help } = require('appache/common')
 const modifySchema = require('./modifySchema')
 
 
@@ -12,7 +12,7 @@ const OPTION = {
 }
 
 
-function injectOption(schema, config) {
+function addOptionToCommands(schema, config) {
   let commandsChanged = false
   let commands = config.commands && config.commands.map((command) => {
     let { help, options } = command
@@ -46,7 +46,7 @@ module.exports = function* help() {
     event: 'configure',
     tags: ['createOptionConfig'],
   }, (schema, config) => {
-    config = createOption(config, OPTION)
+    config = injectOption(config, OPTION)
     return [schema, config]
   })
 
@@ -55,7 +55,7 @@ module.exports = function* help() {
     tags: ['modifyCommandConfig'],
     goesAfter: ['modifyCommandConfig'],
   }, (schema, config) => {
-    config = injectOption(schema, config)
+    config = addOptionToCommands(schema, config)
     return [schema, config]
   })
 
