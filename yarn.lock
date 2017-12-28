@@ -31,9 +31,9 @@ ajv@^4.7.0:
     co "^4.6.0"
     json-stable-stringify "^1.0.1"
 
-ajv@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-5.3.0.tgz#4414ff74a50879c208ee5fdc826e32c303549eda"
+ajv@^5.5.2:
+  version "5.5.2"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-5.5.2.tgz#73b5eeca3fab653e3d3f9422b341ad42205dc965"
   dependencies:
     co "^4.6.0"
     fast-deep-equal "^1.0.0"
@@ -66,39 +66,38 @@ app-root-path@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/app-root-path/-/app-root-path-2.0.1.tgz#cd62dcf8e4fd5a417efc664d2e5b10653c651b46"
 
-appache-api-fluent@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/appache-api-fluent/-/appache-api-fluent-0.4.0.tgz#1cf54a1301070d1770a814c48e716904d1d9b66b"
+appache-api-fluent@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/appache-api-fluent/-/appache-api-fluent-0.5.0.tgz#247ec8fb49c3c8a3bd1c876376a43c88e60d6e61"
 
-appache-cli@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/appache-cli/-/appache-cli-0.3.1.tgz#4054e16e751e4e5d7292fad3515d621b915d01f3"
+appache-cli@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/appache-cli/-/appache-cli-0.4.0.tgz#21e8bb5652956ccd9406a4fe99b54ea76c587a46"
   dependencies:
     chalk "^2.3.0"
     columnify "^1.5.4"
 
-appache-pretty-errors@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/appache-pretty-errors/-/appache-pretty-errors-0.1.1.tgz#3c19dfd153ee815208338207fea60147a4bb38bb"
+appache-pretty-errors@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/appache-pretty-errors/-/appache-pretty-errors-0.1.2.tgz#ad70a182d678a21df4fd2d692ced01150627cb4d"
   dependencies:
     pretty-error "^2.1.1"
 
-appache-type-paths@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/appache-type-paths/-/appache-type-paths-0.1.1.tgz#2caad6c0d8f86ef2c50d65b9d3d01bd588e376f6"
+appache-type-paths@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/appache-type-paths/-/appache-type-paths-0.1.2.tgz#08e8532680e9f2383a11d86c07d2b8d23b27a204"
   dependencies:
     globby "^6.1.0"
 
-appache@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/appache/-/appache-0.6.0.tgz#b4c122e64090d24caaeccf22f90541ec679428e7"
+appache@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/appache/-/appache-0.7.0.tgz#cde3e656c8531e92d42bdfe8e50233f9848f7a12"
   dependencies:
-    ajv "^5.3.0"
+    ajv "^5.5.2"
     ajv-keywords "^2.1.0"
     camelcase "^4.1.0"
-    hooter "^0.26.0"
+    hooter "^0.26.1"
     object-path-immutable "^0.5.2"
-    wildcard-match "^1.1.0"
 
 argparse@^1.0.7:
   version "1.0.9"
@@ -403,7 +402,7 @@ entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
-error-ex@^1.2.0:
+error-ex@^1.2.0, error-ex@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/error-ex/-/error-ex-1.3.1.tgz#f855a86ce61adc4e8621c3cda21e7a7612c3a8dc"
   dependencies:
@@ -728,9 +727,9 @@ has@^1.0.1:
   dependencies:
     function-bind "^1.0.2"
 
-hooter@^0.26.0:
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/hooter/-/hooter-0.26.0.tgz#fc7dc8c1b595e41fd27dff3675c631121a505746"
+hooter@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/hooter/-/hooter-0.26.1.tgz#58e1ec7d8c3cab2b204ba0df6d3de09bccdd7127"
   dependencies:
     corrie "^0.6.0"
     dag-map "^2.0.2"
@@ -906,6 +905,10 @@ js-yaml@^3.4.3, js-yaml@^3.5.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
+json-parse-better-errors@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/json-parse-better-errors/-/json-parse-better-errors-1.0.1.tgz#50183cd1b2d25275de069e9e71b467ac9eab973a"
+
 json-schema-traverse@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/json-schema-traverse/-/json-schema-traverse-0.3.1.tgz#349a6d44c53a51de89b40805c5d5e59b417d3340"
@@ -999,6 +1002,15 @@ load-json-file@^2.0.0:
     graceful-fs "^4.1.2"
     parse-json "^2.2.0"
     pify "^2.0.0"
+    strip-bom "^3.0.0"
+
+load-json-file@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-4.0.0.tgz#2f5f45ab91e33216234fd53adab668eb4ec0993b"
+  dependencies:
+    graceful-fs "^4.1.2"
+    parse-json "^4.0.0"
+    pify "^3.0.0"
     strip-bom "^3.0.0"
 
 locate-path@^2.0.0:
@@ -1181,6 +1193,13 @@ parse-json@^2.2.0:
   dependencies:
     error-ex "^1.2.0"
 
+parse-json@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/parse-json/-/parse-json-4.0.0.tgz#be35f5425be1f7f6c747184f98a788cb99477ee0"
+  dependencies:
+    error-ex "^1.3.1"
+    json-parse-better-errors "^1.0.1"
+
 path-exists@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/path-exists/-/path-exists-2.1.0.tgz#0feb6c64f0fc518d9a754dd5efb62c7022761f4b"
@@ -1213,9 +1232,19 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
+path-type@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/path-type/-/path-type-3.0.0.tgz#cef31dc8e0a1a3bb0d105c0cd97cf3bf47f4e36f"
+  dependencies:
+    pify "^3.0.0"
+
 pify@^2.0.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
+
+pify@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"
@@ -1267,6 +1296,13 @@ read-pkg-up@^2.0.0:
     find-up "^2.0.0"
     read-pkg "^2.0.0"
 
+read-pkg-up@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-3.0.0.tgz#3ed496685dba0f8fe118d0691dc51f4a1ff96f07"
+  dependencies:
+    find-up "^2.0.0"
+    read-pkg "^3.0.0"
+
 read-pkg@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/read-pkg/-/read-pkg-2.0.0.tgz#8ef1c0623c6a6db0dc6713c4bfac46332b2368f8"
@@ -1274,6 +1310,14 @@ read-pkg@^2.0.0:
     load-json-file "^2.0.0"
     normalize-package-data "^2.3.2"
     path-type "^2.0.0"
+
+read-pkg@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/read-pkg/-/read-pkg-3.0.0.tgz#9cbc686978fee65d16c00e2b19c237fcf6e38389"
+  dependencies:
+    load-json-file "^4.0.0"
+    normalize-package-data "^2.3.2"
+    path-type "^3.0.0"
 
 readable-stream@1.0:
   version "1.0.34"
@@ -1568,10 +1612,6 @@ which@^1.2.10, which@^1.2.9:
   resolved "https://registry.yarnpkg.com/which/-/which-1.3.0.tgz#ff04bdfc010ee547d780bec38e1ac1c2777d253a"
   dependencies:
     isexe "^2.0.0"
-
-wildcard-match@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/wildcard-match/-/wildcard-match-1.1.0.tgz#166a247a83581921867841c9dba03b75b98e9a3e"
 
 wordwrap@~1.0.0:
   version "1.0.0"

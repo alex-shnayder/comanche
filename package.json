@@ -42,11 +42,11 @@
     "lint-staged": "^3.4.0"
   },
   "dependencies": {
-    "appache": "^0.6.0",
-    "appache-api-fluent": "^0.4.0",
-    "appache-cli": "^0.3.1",
-    "appache-pretty-errors": "^0.1.1",
-    "appache-type-paths": "^0.1.1",
-    "read-pkg-up": "^2.0.0"
+    "appache": "^0.7.0",
+    "appache-api-fluent": "^0.5.0",
+    "appache-cli": "^0.4.0",
+    "appache-pretty-errors": "^0.1.2",
+    "appache-type-paths": "^0.1.2",
+    "read-pkg-up": "^3.0.0"
   }
 }
