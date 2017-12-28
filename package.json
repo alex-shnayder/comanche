@@ -3,9 +3,9 @@
   "version": "0.5.1",
   "description": "🐺 The CLI chief",
   "author": "Alex Shnayder <alex@shnayder.pro>",
-  "repository": "alex-shnayder/comanche",
-  "homepage": "https://github.com/alex-shnayder/comanche#readme",
-  "bugs": "https://github.com/alex-shnayder/comanche/issues",
+  "repository": "appache/comanche",
+  "homepage": "https://github.com/appache/comanche#readme",
+  "bugs": "https://github.com/appache/comanche/issues",
   "license": "ISC",
   "keywords": [
     "cli",
