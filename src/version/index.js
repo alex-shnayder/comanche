@@ -75,28 +75,30 @@ module.exports = function* version() {
   })
 
   yield hook({
-    event: 'process',
-    tags: ['handleCommand'],
-  }, function* (_, command) {
-    let { options, config } = command
+    event: 'execute',
+    tags: ['handleBatch'],
+  }, function* (config, batch) {
+    for (let i = 0; i < batch.length; i++) {
+      let { options, config } = batch[i]
 
-    let isVersionAsked = options && options.some((option) => {
-      return option.config && option.config.id === OPTION.id
-    })
+      let isVersionAsked = options && options.some((option) => {
+        return option.config && option.config.id === OPTION.id
+      })
 
-    if (!isVersionAsked) {
-      return yield next(_, command)
+      if (isVersionAsked) {
+        let version = config && config.version
+        version = (version === true) ? detectVersion() : version
+
+        if (version && version.charAt(0) !== 'v') {
+          version = `v${version}`
+        } else if (!version) {
+          version = 'Unable to determine the current version'
+        }
+
+        return new Result(version, batch[i])
+      }
     }
 
-    let version = config && config.version
-    version = (version === true) ? detectVersion() : version
-
-    if (version && version.charAt(0) !== 'v') {
-      version = `v${version}`
-    } else if (!version) {
-      version = 'Unable to determine the current version'
-    }
-
-    return new Result(version)
+    return yield next(config, batch)
   })
 }

@@ -60,17 +60,19 @@ module.exports = function* help() {
   })
 
   yield hook({
-    event: 'process',
-    tags: ['handleCommand'],
-  }, function* (_, command) {
-    let isHelpAsked = command.options && command.options.some((option) => {
-      return option.config && option.config.id === OPTION.id
-    })
+    event: 'execute',
+    tags: ['handleBatch'],
+  }, function* (config, batch) {
+    for (let i = 0; i < batch.length; i++) {
+      let isHelpAsked = batch[i].options && batch[i].options.some((option) => {
+        return option.config && option.config.id === OPTION.id
+      })
 
-    if (isHelpAsked) {
-      return new Help()
+      if (isHelpAsked) {
+        return new Help(batch[i])
+      }
     }
 
-    return yield next(_, command)
+    return yield next(config, batch)
   })
 }
