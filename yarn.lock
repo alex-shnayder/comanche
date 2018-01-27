@@ -66,13 +66,13 @@ app-root-path@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/app-root-path/-/app-root-path-2.0.1.tgz#cd62dcf8e4fd5a417efc664d2e5b10653c651b46"
 
-appache-api-fluent@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/appache-api-fluent/-/appache-api-fluent-0.5.0.tgz#247ec8fb49c3c8a3bd1c876376a43c88e60d6e61"
+appache-api-fluent@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/appache-api-fluent/-/appache-api-fluent-0.6.0.tgz#993b8f7d781037ba44e04b842134cbd3a01aa182"
 
-appache-cli@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/appache-cli/-/appache-cli-0.4.0.tgz#21e8bb5652956ccd9406a4fe99b54ea76c587a46"
+appache-cli@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/appache-cli/-/appache-cli-0.5.0.tgz#d4c5e65260e062e56e443f4adf363e931f4291b3"
   dependencies:
     chalk "^2.3.0"
     columnify "^1.5.4"
@@ -89,9 +89,9 @@ appache-type-paths@^0.1.2:
   dependencies:
     globby "^6.1.0"
 
-appache@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/appache/-/appache-0.7.0.tgz#cde3e656c8531e92d42bdfe8e50233f9848f7a12"
+appache@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/appache/-/appache-0.8.0.tgz#15cc69b1d08f7cb71e6355961e872c3b268bd59d"
   dependencies:
     ajv "^5.5.2"
     ajv-keywords "^2.1.0"
