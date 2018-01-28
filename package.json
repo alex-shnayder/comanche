@@ -42,7 +42,7 @@
     "lint-staged": "^3.4.0"
   },
   "dependencies": {
-    "appache": "^0.8.0",
+    "appache": "^0.8.1",
     "appache-api-fluent": "^0.6.0",
     "appache-cli": "^0.5.0",
     "appache-pretty-errors": "^0.1.2",

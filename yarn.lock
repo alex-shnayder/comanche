@@ -89,9 +89,9 @@ appache-type-paths@^0.1.2:
   dependencies:
     globby "^6.1.0"
 
-appache@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/appache/-/appache-0.8.0.tgz#15cc69b1d08f7cb71e6355961e872c3b268bd59d"
+appache@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/appache/-/appache-0.8.1.tgz#2e48b480a2c9089d2681452743e618a33f17e28a"
   dependencies:
     ajv "^5.5.2"
     ajv-keywords "^2.1.0"
