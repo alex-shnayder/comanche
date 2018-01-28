@@ -2,7 +2,7 @@
   "name": "comanche",
   "version": "0.6.1",
   "description": "🐺 The CLI chief",
-  "author": "Alex Shnayder <alex@shnayder.pro>",
+  "author": "Alex Schneider <me@schneider.ax>",
   "repository": "appache/comanche",
   "homepage": "https://github.com/appache/comanche#readme",
   "bugs": "https://github.com/appache/comanche/issues",
